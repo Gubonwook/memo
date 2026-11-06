@@ -6,7 +6,7 @@
 
 **가능합니다.** 병목은 데이터베이스가 아니라 추출 정확도와 이름·단위 정규화입니다. 논문 수백~수천 편의 저장·질의 부하는 개인 데스크톱에서도 크지 않을 것으로 보입니다(추정).
 
-ALD 논문 전용으로 표·figure·실험 데이터를 한 번에 뽑는 모델은 이번 조사에서 찾지 못했습니다. 대신 아래 조합을 권장합니다. 사내 LLM(DeepSeek)과 사외 LLM 두 방식으로 나눠 정리했고, 사내 모델의 이미지 입력 지원 여부가 figure 처리 방식을 가르며, 텍스트 전용이어도 사내 비전 모델로 figure를 처리할 수 있습니다.
+ALD 논문 전용으로 표·figure·실험 데이터를 한 번에 뽑는 모델은 이번 조사에서 찾지 못했습니다. 대신 아래 조합을 권장합니다. 자체 호스팅 LLM(DeepSeek)과 외부 API LLM 두 방식으로 나눠 정리했고, 자체 호스팅 모델의 이미지 입력 지원 여부가 figure 처리 방식을 가르며, 텍스트 전용이어도 자체 호스팅 비전 모델로 figure를 처리할 수 있습니다.
 
 - **파싱:** PaddleOCR-VL-1.6(OmniDocBench v1.6 96.34) 또는 MinerU2.5-Pro(95.75)로 본문·표·수식·figure 크롭을 뽑습니다.
 - **Figure 수치:** 범용 VLM(Qwen3-VL 계열)으로 같은 차트를 여러 번 추출해 앙상블하고, 핵심 그래프는 WebPlotDigitizer로 수동 확인합니다.
@@ -56,7 +56,7 @@ ALD 분야에는 추출 모델은 없지만 스키마와 LLM 파이프라인 수
 ```mermaid
 flowchart LR
   A[PDF] --> B[파싱: 본문·표·figure 크롭]
-  B --> C1[표·본문 → 스키마 JSON<br/>사내 DeepSeek]
+  B --> C1[표·본문 → 스키마 JSON<br/>자체 호스팅 DeepSeek]
   B --> C2[figure → 수치<br/>비전 모델 N회 앙상블]
   C1 --> D{검증<br/>인용·범위·단위·교차확인}
   C2 --> D
@@ -72,9 +72,9 @@ flowchart LR
 - **검증:** 본문·표의 같은 수치와 대조하고, 단위와 값 범위를 검사합니다.
 - **불일치:** 사람이 확인·수정한 뒤에만 저장합니다.
 
-## 방식 A: 사내 LLM(DeepSeek)으로 구현
+## 방식 A: 자체 호스팅 LLM(DeepSeek)으로 구현
 
-표·본문 처리는 사내 DeepSeek으로 가능하고, figure 처리는 사내 모델이 이미지를 받는지에 따라 갈립니다. 사내 서버에 어떤 DeepSeek 변종이 올라가 있는지 먼저 확인해야 합니다.
+표·본문 처리는 자체 호스팅 DeepSeek으로 가능하고, figure 처리는 자체 호스팅 모델이 이미지를 받는지에 따라 갈립니다. 서버에 어떤 DeepSeek 변종이 올라가 있는지 먼저 확인해야 합니다.
 
 | 모델 | 이미지 입력 | 비고 |
 |---|---|---|
@@ -85,16 +85,16 @@ flowchart LR
 
 > [다이어그램] 방식 A 분기(이미지 입력 테스트 → 분기 2개)는 위 표와 본문에 글로 정리되어 있으며, 도식은 원본 Claude Docs 문서에 있습니다.
 
-먼저 차트 이미지 한 장을 사내 모델에 보내 입력 가능 여부를 확인합니다. 텍스트 전용이면 사내 비전 모델이 figure를 표로 바꾸고 DeepSeek은 텍스트만 받습니다. 이미지를 텍스트로 바꿔 텍스트 모델에 넘기는 우회는 [DeepSeek 커뮤니티에서도 쓰이며](https://github.com/deepseek-ai/deepseek-harness/discussions/3512), 비전 결과는 검증 전까지 파생 증거로만 다뤄야 합니다.
+먼저 차트 이미지 한 장을 자체 호스팅 모델에 보내 입력 가능 여부를 확인합니다. 텍스트 전용이면 자체 호스팅 비전 모델이 figure를 표로 바꾸고 DeepSeek은 텍스트만 받습니다. 이미지를 텍스트로 바꿔 텍스트 모델에 넘기는 우회는 [DeepSeek 커뮤니티에서도 쓰이며](https://github.com/deepseek-ai/deepseek-harness/discussions/3512), 비전 결과는 검증 전까지 파생 증거로만 다뤄야 합니다.
 
-- **파싱:** 로컬 전용 모델(PaddleOCR-VL-1.6, MinerU2.5-Pro), 사내 비전 모델(표 판독 정확도는 비교 측정 필요) 또는 [DeepSeek-OCR-2](https://pypi.org/project/memect-ppx/0.0.2/)를 씁니다. DeepSeek-OCR-2는 약 3B 규모이고 vLLM 서빙에 VRAM 약 20GB가 안내됩니다. 라이선스는 자료마다 표기가 달라 확인이 필요합니다.
-- **표·본문 → 스키마:** 사내 DeepSeek이 맡습니다. 컨텍스트가 1M이라 논문 전문과 표 HTML을 한 번에 넣어 본문과 표를 교차 참조시킬 수 있습니다. 출력은 JSON으로 받아 Pydantic으로 검증합니다.
+- **파싱:** 로컬 전용 모델(PaddleOCR-VL-1.6, MinerU2.5-Pro), 자체 호스팅 비전 모델(표 판독 정확도는 비교 측정 필요) 또는 [DeepSeek-OCR-2](https://pypi.org/project/memect-ppx/0.0.2/)를 씁니다. DeepSeek-OCR-2는 약 3B 규모이고 vLLM 서빙에 VRAM 약 20GB가 안내됩니다. 라이선스는 자료마다 표기가 달라 확인이 필요합니다.
+- **표·본문 → 스키마:** 자체 호스팅 DeepSeek이 맡습니다. 컨텍스트가 1M이라 논문 전문과 표 HTML을 한 번에 넣어 본문과 표를 교차 참조시킬 수 있습니다. 출력은 JSON으로 받아 Pydantic으로 검증합니다.
 - **Figure:** 위 분기대로 처리하고, 어느 쪽이든 앙상블과 표·본문 대조를 거칩니다.
-- **호출 방식:** DeepSeek API는 OpenAI ChatCompletions와 Anthropic API 형식을 지원합니다. 사내 엔드포인트가 같은 형식인지 확인합니다.
-- **장점:** 사내 호스팅이라면 논문과 추출 결과가 사외로 나가지 않고, 컨텍스트 제약이 거의 없습니다.
-- **한계:** 텍스트 전용이면 figure 정확도는 사내 비전 모델에 달려 있고, 이 모델의 차트 수치 추출 정확도는 확인하지 못했습니다. Vision-Exp는 실험 단계입니다. 사내 모델의 추출 정확도는 이번 조사에서 근거를 찾지 못해 직접 측정해야 합니다.
+- **호출 방식:** DeepSeek API는 OpenAI ChatCompletions와 Anthropic API 형식을 지원합니다. 엔드포인트가 같은 형식인지 확인합니다.
+- **장점:** 자체 호스팅이라면 논문과 추출 결과가 외부로 나가지 않고, 컨텍스트 제약이 거의 없습니다.
+- **한계:** 텍스트 전용이면 figure 정확도는 자체 호스팅 비전 모델에 달려 있고, 이 모델의 차트 수치 추출 정확도는 확인하지 못했습니다. Vision-Exp는 실험 단계입니다. 자체 호스팅 모델의 추출 정확도는 이번 조사에서 근거를 찾지 못해 직접 측정해야 합니다.
 
-## 방식 B: 사외 LLM으로 구현
+## 방식 B: 외부 API LLM으로 구현
 
 멀티모달 API에 PDF 페이지 이미지와 스키마를 주면 파싱 모델 없이 표·figure·본문을 한 번에 구조화할 수 있고, 문헌에 정확도 근거가 보고돼 있습니다. 대신 논문 PDF가 외부로 나가므로 정책 확인이 먼저입니다.
 
@@ -112,29 +112,29 @@ flowchart LR
 
 위험 요소는 다음과 같습니다.
 
-- **보안·정책:** 공개 논문이라도 사내 환경에서 외부 API로 전송해도 되는지, 어떤 계정과 환경에서 쓸 수 있는지 확인해야 합니다. 미공개 데이터와 사내 공정 데이터는 함께 보내지 않습니다.
+- **보안·정책:** 공개 논문이라도 환경에 따라 외부 API로 전송해도 되는지, 어떤 계정과 환경에서 쓸 수 있는지 확인해야 합니다. 미공개 데이터와 공정 데이터는 함께 보내지 않습니다.
 - **약관·저작권:** 논문 PDF의 외부 전송이 출판사 약관에 맞는지 확인합니다.
 - **비용:** 논문 수와 페이지 수에 비례합니다. 정답셋 20편으로 편당 비용을 먼저 측정합니다.
 - **재현성:** 외부 모델이 업데이트되면 결과가 달라질 수 있습니다.
 
 ## 방식 비교와 권장 조합
 
-정책이 허용된다면 사외 모델로 정답셋의 사전 라벨을 만들고, 사내 방식의 정확도를 그 정답셋으로 측정해 운영 방식을 정하는 순서를 권장합니다.
+정책이 허용된다면 외부 API 모델로 정답셋의 사전 라벨을 만들고, 자체 호스팅 방식의 정확도를 그 정답셋으로 측정해 운영 방식을 정하는 순서를 권장합니다.
 
-| 항목 | 방식 A: 사내 DeepSeek | 방식 B: 사외 LLM |
+| 항목 | 방식 A: 자체 호스팅 DeepSeek | 방식 B: 외부 API LLM |
 |---|---|---|
-| 논문·결과의 외부 반출 | 없음(사내 호스팅 확인 시) | 있음, 정책·약관 확인 필요 |
-| 이미지 입력 | 변종에 따라 다름. 텍스트 전용이면 사내 비전 모델 활용 | 주요 멀티모달 모델이 지원 |
-| 구현 복잡도 | 중간: 파싱·비전·텍스트 모델을 조합하되 비전은 사내 모델 사용 | 낮음: 모델 1~2종과 스키마 |
+| 논문·결과의 외부 반출 | 없음(자체 호스팅 확인 시) | 있음, 정책·약관 확인 필요 |
+| 이미지 입력 | 변종에 따라 다름. 텍스트 전용이면 자체 호스팅 비전 모델 활용 | 주요 멀티모달 모델이 지원 |
+| 구현 복잡도 | 중간: 파싱·비전·텍스트 모델을 조합하되 비전은 자체 호스팅 모델 사용 | 낮음: 모델 1~2종과 스키마 |
 | 정확도 근거 | 이번 조사에서 찾지 못함. 직접 측정 필요 | 문헌 보고값 있음(94.69%, 92.2%) |
-| 비용 | 사내 API 비용(로컬 파싱 모델을 쓰면 GPU 필요) | 호출량에 비례 |
-| 재현성 | 사내에서 모델 버전을 고정하기 쉬움(추정) | 외부 업데이트 영향, 스냅샷 고정 필요 |
+| 비용 | API 비용(로컬 파싱 모델을 쓰면 GPU 필요) | 호출량에 비례 |
+| 재현성 | 자체 호스팅이라 모델 버전을 고정하기 쉬움(추정) | 외부 업데이트 영향, 스냅샷 고정 필요 |
 
-1. 사내 모델의 이미지 입력 지원 여부와 사외 API 사용 허용 여부를 먼저 확인합니다.
-2. 정책이 허용하면 공개 논문 20~30편을 사외 모델로 먼저 추출해 사전 라벨을 만들고, 사람이 검수해 정답셋으로 확정합니다. 정답은 사람이 확정해야 모델의 편향이 섞이지 않습니다.
+1. 자체 호스팅 모델의 이미지 입력 지원 여부와 외부 API 사용 허용 여부를 먼저 확인합니다.
+2. 정책이 허용하면 공개 논문 20~30편을 외부 API 모델로 먼저 추출해 사전 라벨을 만들고, 사람이 검수해 정답셋으로 확정합니다. 정답은 사람이 확정해야 모델의 편향이 섞이지 않습니다.
 3. 같은 정답셋으로 방식 A의 필드별 정확도를 측정해 방식 B와의 격차를 확인합니다.
 4. 격차가 작으면 방식 A로 운영하고, 크면 figure와 어려운 표만 방식 B로 처리하거나 로컬 모델을 보강합니다.
-5. 사외 사용이 불가하면 정답셋을 직접 라벨링하고 방식 A만 사용합니다.
+5. 외부 API 사용이 불가하면 정답셋을 직접 라벨링하고 방식 A만 사용합니다.
 
 ## 데이터베이스 설계
 
@@ -192,9 +192,9 @@ flowchart LR
 
 ## 개인 데스크톱 구현안
 
-**사내 PC 전제:** 사내 컴퓨터에는 GPU가 없고 LLM은 API로만 쓸 수 있습니다. 이 경우 아래 VRAM 표의 로컬 모델(PaddleOCR-VL, Qwen3-VL 등)은 사내에서 쓰지 않고, 파싱은 CPU로 도는 pdfplumber, 구조화는 사내 DeepSeek API, 그림과 스캔 페이지는 사내 비전 모델 API가 맡습니다. 구축 가이드의 키트는 이 구성을 기본으로 만들었습니다. 아래 VRAM 표는 GPU가 있는 개인 장비용 참고 자료입니다.
+**GPU 없는 PC 전제:** GPU가 없고 LLM은 API로만 쓸 수 있는 환경을 가정합니다. 이 경우 아래 VRAM 표의 로컬 모델(PaddleOCR-VL, Qwen3-VL 등)은 쓰지 않고, 파싱은 CPU로 도는 pdfplumber, 구조화는 자체 호스팅 DeepSeek API, 그림과 스캔 페이지는 자체 호스팅 비전 모델 API가 맡습니다. 구축 가이드의 키트는 이 구성을 기본으로 만들었습니다. 아래 VRAM 표는 GPU가 있는 개인 장비용 참고 자료입니다.
 
-방식 A에서 로컬 파싱·비전 모델이 필요할 때의 환경이며, 사내 비전 모델을 쓰면 비전 쪽 GPU는 필요 없습니다. 8GB VRAM이면 파싱과 figure 추출을 번갈아 돌리는 구성으로 시작할 수 있고, 24GB 이상이면 32B급 VLM까지 올라갑니다. 데스크톱 GPU 사양을 확인한 뒤 모델과 양자화를 확정해야 합니다.
+방식 A에서 로컬 파싱·비전 모델이 필요할 때의 환경이며, 자체 호스팅 비전 모델을 쓰면 비전 쪽 GPU는 필요 없습니다. 8GB VRAM이면 파싱과 figure 추출을 번갈아 돌리는 구성으로 시작할 수 있고, 24GB 이상이면 32B급 VLM까지 올라갑니다. 데스크톱 GPU 사양을 확인한 뒤 모델과 양자화를 확정해야 합니다.
 
 | VRAM | 파싱 모델 | Figure·표 추출 VLM | 운용 방식 |
 |---|---|---|---|
@@ -220,7 +220,7 @@ flowchart LR
 | Figure 수치의 낮은 정확도 | 가장 약한 필드 | 앙상블, 핵심 그래프 수동 확인, 최하위 신뢰도 표시, 표·본문과 대조 |
 | 전구체·기판·단위의 표기 불일치 | 같은 대상이 다른 노드로 갈라짐 | 정규 ID 표, 원래 표기와 정규값을 함께 보관 |
 | LLM 출력이 실행마다 달라짐 | 재현성 저하 | 저장된 JSON 값을 기준으로 삼고, 원문 근거를 같이 저장 |
-| 도구 라이선스 | 사내 배포 시 제약 | 개인 사용 단계에서는 영향이 작음. 배포 전 확인(MinerU 가중치는 조건부 Apache 2.0, WebPlotDigitizer는 AGPL, marker는 GPL-3.0) |
+| 도구 라이선스 | 배포 시 제약 | 개인 사용 단계에서는 영향이 작음. 배포 전 확인(MinerU 가중치는 조건부 Apache 2.0, WebPlotDigitizer는 AGPL, marker는 GPL-3.0) |
 | 신생 프로젝트의 성숙도 | 도구 교체 가능성 | docling-graph는 스타 약 756이고 Neo4j 직접 내보내기는 한 버전에서 예정으로 표기됨. 원본 JSON 중심으로 설계해 교체 비용을 줄임 |
 | 논문 PDF 보관·이용 범위 | 약관 위반 가능성 | 출판사 이용 약관 확인 필요 |
 
@@ -233,7 +233,7 @@ flowchart LR
 
 ## 단계별 실행 계획
 
-전체를 한 번에 만들지 말고, 정답셋부터 DB까지 5단계로 나눠 단계마다 정확도를 측정하며 진행합니다. 기간은 사용할 수 있는 시간을 확인한 뒤 정합니다. 단계 0 전에 사내 DeepSeek 엔드포인트가 이미지 입력을 받는지, 사내 비전 모델이 차트를 표로 바꿀 수 있는지 테스트하고, 사외 API 사용이 허용되는지 확인합니다.
+전체를 한 번에 만들지 말고, 정답셋부터 DB까지 5단계로 나눠 단계마다 정확도를 측정하며 진행합니다. 기간은 사용할 수 있는 시간을 확인한 뒤 정합니다. 단계 0 전에 자체 호스팅 DeepSeek 엔드포인트가 이미지 입력을 받는지, 자체 호스팅 비전 모델이 차트를 표로 바꿀 수 있는지 테스트하고, 외부 API 사용이 허용되는지 확인합니다.
 
 | 단계 | 할 일 | 산출물 | 통과 기준 |
 |---|---|---|---|
@@ -260,5 +260,5 @@ flowchart LR
 - 재료·ALD 추출: [MaTableGPT](https://arxiv.org/pdf/2406.05431), [Schema-Miner 스키마](https://research.tue.nl/en/datasets/atomic-layer-deposition-and-etching-process-schemas-extracted-wit/), [ALD/ALE ORKG 리뷰 표](https://web3.arxiv.org/pdf/2601.05051), [ChatGPT-4 ALD 파라미터 추출 워크숍](https://www.atomiclimits.com/2024/04/09/ai-serving-the-ald-community-using-chatgpt-4-to-extract-ald-parameters-from-scientific-papers), [우선순위 기반 재료 데이터 추출](https://arxiv.org/abs/2604.07584)
 - VRAM 요구량: [Qwen3-VL-32B](https://llmrun.dev/model/qwen-qwen3-vl-32b-instruct), [Qwen3-VL-8B](https://bestllmfor.com/catalog/qwen3-vl-8b/)
 
-- 사내 LLM(DeepSeek): [V4 프리뷰 릴리스 노트](https://api-docs.deepseek.com/news/news260424), [V4 변종별 이미지 입력(OpenRouter)](https://openrouter.ai/blog/insights/deepseek-v4-vision/), [V4.1 Flash 모델 카드](https://build.nvidia.com/deepseek-ai/deepseek-v4.1-flash/modelcard), [V4-Flash-Vision-Exp 해설](https://note.com/ai_driven/n/n206d96eeed94?hl=en), [텍스트 모델에 비전 결과를 넘기는 방식 논의](https://github.com/deepseek-ai/deepseek-harness/discussions/3512)
+- 자체 호스팅 LLM(DeepSeek): [V4 프리뷰 릴리스 노트](https://api-docs.deepseek.com/news/news260424), [V4 변종별 이미지 입력(OpenRouter)](https://openrouter.ai/blog/insights/deepseek-v4-vision/), [V4.1 Flash 모델 카드](https://build.nvidia.com/deepseek-ai/deepseek-v4.1-flash/modelcard), [V4-Flash-Vision-Exp 해설](https://note.com/ai_driven/n/n206d96eeed94?hl=en), [텍스트 모델에 비전 결과를 넘기는 방식 논의](https://github.com/deepseek-ai/deepseek-harness/discussions/3512)
 - DeepSeek-OCR-2: [SGLang 안내](https://docs.sglang.io/cookbook/autoregressive/DeepSeek/DeepSeek-OCR-2), [서빙 VRAM 안내](https://pypi.org/project/memect-ppx/0.0.2/), [라이선스 표기가 다른 소개 글](https://regolo.ai/?p=3286)

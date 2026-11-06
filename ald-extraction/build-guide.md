@@ -1,14 +1,14 @@
-# 구축 가이드: 사내 LLM으로 바로 실행하기
+# 구축 가이드: 자체 호스팅 LLM으로 바로 실행하기
 
-이 탭은 함께 전달한 `ald_extract_kit.zip`(파이썬 패키지, 테스트 10개 통과)을 사내 DeepSeek·비전 모델에 연결해 돌리는 절차입니다. 테스트는 가짜 LLM과 합성 PDF로 로직만 검증했고, 실제 사내 모델의 정확도는 아직 측정 전입니다.
+이 문서는 `code/` 폴더의 `ald_extract` 패키지(테스트 10개 통과)를 자체 호스팅 DeepSeek·비전 모델에 연결해 돌리는 절차입니다. 테스트는 가짜 LLM과 합성 PDF로 로직만 검증했고, 실제 자체 호스팅 모델의 정확도는 아직 측정 전입니다.
 
-**GPU 없는 사내 PC 기준입니다.** 키트는 순수 파이썬(CPU)과 사내 API 호출만 쓰므로 GPU 없이 그대로 돕니다. 무거운 처리는 모두 사내 LLM·비전 API가 하고, PC에서는 PDF 파싱과 검증만 합니다. GPU가 필요한 로컬 파서(PaddleOCR-VL, MinerU)는 사내에서는 쓰지 말고, 스캔본이 많을 때만 사내 비전 모델로 페이지 이미지를 읽게 `parse_pdf`를 교체하세요. 대량 처리는 API 호출 수와 속도 제한이 병목이므로, 처음에는 `--no-figures`로 표·본문만 10편 돌려 시간과 호출량을 먼저 측정해 보길 권합니다.
+**GPU 없는 PC 기준입니다.** 키트는 순수 파이썬(CPU)과 API 호출만 쓰므로 GPU 없이 그대로 돕니다. 무거운 처리는 모두 LLM·비전 API가 하고, PC에서는 PDF 파싱과 검증만 합니다. GPU가 필요한 로컬 파서(PaddleOCR-VL, MinerU)는 쓰지 말고, 스캔본이 많을 때만 자체 호스팅 비전 모델로 페이지 이미지를 읽게 `parse_pdf`를 교체하세요. 대량 처리는 API 호출 수와 속도 제한이 병목이므로, 처음에는 `--no-figures`로 표·본문만 10편 돌려 시간과 호출량을 먼저 측정해 보길 권합니다.
 
 ## 0. 시작 전 확인 (5분)
 
-- 사내 텍스트 LLM의 **엔드포인트 주소, 모델명, API 키**: 주소가 `.../v1/chat/completions` 형태(OpenAI 호환)인지 확인합니다. DeepSeek은 OpenAI 형식을 지원합니다.
-- 사내 비전 모델의 **엔드포인트와 모델명**: 이미지를 `image_url`(base64 data URL)로 받는지 확인합니다. 안 받으면 `llm.py`의 `image_message`만 고칩니다.
-- 사내 정책: 논문 PDF를 사내 모델에 넣어도 되는지(출판사 약관 포함), 로컬에 파이썬 패키지를 설치해도 되는지 확인합니다.
+- 자체 호스팅 텍스트 LLM의 **엔드포인트 주소, 모델명, API 키**: 주소가 `.../v1/chat/completions` 형태(OpenAI 호환)인지 확인합니다. DeepSeek은 OpenAI 형식을 지원합니다.
+- 자체 호스팅 비전 모델의 **엔드포인트와 모델명**: 이미지를 `image_url`(base64 data URL)로 받는지 확인합니다. 안 받으면 `llm.py`의 `image_message`만 고칩니다.
+- 이용 정책: 논문 PDF를 모델에 넣어도 되는지(출판사 약관 포함), 파이썬 패키지를 설치해도 되는지 확인합니다.
 - Python 3.10 이상.
 
 ## 1. 설치
@@ -17,7 +17,7 @@
 unzip ald_extract_kit.zip && cd ald_extract_kit
 python -m venv .venv && source .venv/bin/activate
 pip install -e ".[dev]"
-pytest -q            # 사내망 없이 10개 통과해야 정상
+pytest -q            # 외부 API 없이 10개 통과해야 정상
 ```
 
 ## 2. 환경 설정
@@ -25,10 +25,10 @@ pytest -q            # 사내망 없이 10개 통과해야 정상
 ```
 cp .env.example .env
 # .env 에 입력
-ALD_LLM_BASE_URL=https://<사내 LLM 주소>/v1
+ALD_LLM_BASE_URL=https://<LLM 서버 주소>/v1
 ALD_LLM_MODEL=<모델명>
 ALD_LLM_API_KEY=<키>
-ALD_VLM_BASE_URL=https://<사내 비전 주소>/v1
+ALD_VLM_BASE_URL=https://<비전 서버 주소>/v1
 ALD_VLM_MODEL=<비전 모델명>
 ALD_VLM_API_KEY=<키>
 ALD_FIG_SAMPLES=3
@@ -47,8 +47,8 @@ print(OpenAICompatLLM(c.llm).chat([{"role":"user","content":"JSON으로 {\"ok\":
 PY
 ```
 
-- 오류가 `response_format`이면: 사내 서버가 JSON 모드를 지원하지 않는 것입니다. `extract.py`의 `llm.chat(..., json_mode=True)`를 `json_mode=False`로 바꾸세요(파서가 코드 펜스와 잡설을 처리합니다).
-- 인증 오류면 키와 헤더 형식(`Authorization: Bearer`)을 확인합니다. 사내 게이트웨이가 다른 헤더를 쓰면 `llm.py`의 `headers`만 수정합니다.
+- 오류가 `response_format`이면: 서버가 JSON 모드를 지원하지 않는 것입니다. `extract.py`의 `llm.chat(..., json_mode=True)`를 `json_mode=False`로 바꾸세요(파서가 코드 펜스와 잡설을 처리합니다).
+- 인증 오류면 키와 헤더 형식(`Authorization: Bearer`)을 확인합니다. 게이트웨이가 다른 헤더를 쓰면 `llm.py`의 `headers`만 수정합니다.
 
 ## 4. 실행
 
@@ -58,7 +58,7 @@ ald-extract batch ./papers                 # 폴더 전체(한 편 실패해도 
 ald-extract batch ./papers --no-figures    # 그림 제외(빠름)
 ```
 
-처리 순서는 보고서의 파이프라인 그림과 같습니다: 파싱 → 표·본문 구조화(사내 DeepSeek, 논문 전체를 한 번에) → 그림 수치화(사내 비전 모델 N회) → 검증 → 저장. 결과는 `data/records/<paper_id>.json`에 쌓입니다.
+처리 순서는 보고서의 파이프라인 그림과 같습니다: 파싱 → 표·본문 구조화(자체 호스팅 DeepSeek, 논문 전체를 한 번에) → 그림 수치화(자체 호스팅 비전 모델 N회) → 검증 → 저장. 결과는 `data/records/<paper_id>.json`에 쌓입니다.
 
 ## 5. 검증 결과 읽는 법
 
@@ -79,7 +79,7 @@ ald-extract review      # 신뢰도 0.7 미만·플래그 항목만 JSONL로 출
 
 사람은 이 큐만 보면 됩니다. 전수 확인이 아니라 의심 항목만 확인하는 구조입니다.
 
-## 6. 정확도 측정 (사내 모델을 믿기 전에)
+## 6. 정확도 측정 (자체 호스팅 모델을 믿기 전에)
 
 1. 논문 20~30편을 골라, 손으로 `PaperRecord` 형식 JSON(`gold/<paper_id>.json`)을 만듭니다. 처음엔 표의 핵심 값(GPC, 두께, 온도, 사이클)부터 시작하세요.
 2. `ald-extract batch`로 같은 논문을 추출합니다(파일명 stem = `paper_id`).
@@ -116,7 +116,7 @@ RETURN p.temp_c, m.norm_value ORDER BY p.temp_c
 | 상황 | 고칠 파일·위치 |
 |---|---|
 | 엔드포인트가 OpenAI 호환이 아님 | `llm.py` `OpenAICompatLLM.chat` 교체 |
-| 스캔 PDF·복잡한 표가 많음 | `parse.py` `parse_pdf`를 사내 비전 모델/PaddleOCR-VL/MinerU로 교체 (같은 `ParsedPaper` 반환) |
+| 스캔 PDF·복잡한 표가 많음 | `parse.py` `parse_pdf`를 자체 호스팅 비전 모델/PaddleOCR-VL/MinerU로 교체 (같은 `ParsedPaper` 반환) |
 | ASD·특정 공정 항목 추가 | `schema.py`(필드)와 `verify.py`의 `UNIT_RULES`, `RANGES` |
 | 전구체 이름 표기 불일치 | `export.py` `canon()`을 동의어 사전으로 확장 |
 | 논문이 너무 길어 컨텍스트 초과 | `extract.py`에서 섹션 단위로 나눠 호출 후 병합 |
@@ -131,7 +131,7 @@ RETURN p.temp_c, m.norm_value ORDER BY p.temp_c
 
 ## 10. 아직 확인되지 않은 것
 
-- 사내 DeepSeek의 정확한 버전과 JSON 모드 지원 여부, 사내 비전 모델의 이름과 이미지 입력 방식
-- 사내 모델의 ALD 논문 추출 정확도 (6번의 gold 평가로 처음 알 수 있음)
-- 비전 모델의 그래프 수치 판독 정확도 (일반 VLM은 DePlot보다 낫다는 보고가 있으나 사내 모델은 별도 측정 필요)
+- 자체 호스팅 DeepSeek의 정확한 버전과 JSON 모드 지원 여부, 자체 호스팅 비전 모델의 이름과 이미지 입력 방식
+- 자체 호스팅 모델의 ALD 논문 추출 정확도 (6번의 gold 평가로 처음 알 수 있음)
+- 비전 모델의 그래프 수치 판독 정확도 (일반 VLM은 DePlot보다 낫다는 보고가 있으나 자체 호스팅 모델은 별도 측정 필요)
 - 실제 논문 PDF(2단 조판, 병합 셀)에서 기본 파서(pdfplumber)가 충분한지
