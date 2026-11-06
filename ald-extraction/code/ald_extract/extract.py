@@ -1,4 +1,4 @@
-"""본문+표 → PaperRecord. 자체 호스팅 DeepSeek(텍스트)에 전체 논문을 한 번에 넣고
+"""본문+표 → PaperRecord. 자체 호스팅 LLM(텍스트)에 전체 논문을 한 번에 넣고
 스키마에 맞는 JSON을 받는다. 검증 실패 시 오류 메시지를 되먹여 재시도."""
 import json
 
