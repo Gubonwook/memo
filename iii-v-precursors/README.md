@@ -13,3 +13,7 @@ No verified self-limiting ALD of InAs found; GaAs ALD is reported only for GaCl3
 Growth temperatures: `growth_temp_C` is the headline range per material/process; `growth_temp_basis` gives the system
 (ALD/ALE/MOVPE, co-reactant). Values depend strongly on reactor and co-reactant, so use them as starting points.
 "not verified" means no number was found in the sources checked.
+
+Icheon fab usability (`fab_usability_icheon`, As table only): rough judgment from general hazard properties
+(toxicity, pyrophoricity/flammability, vapor pressure, by-products, supply). It is NOT an official approval;
+actual use requires internal EHS / process-integration review.
