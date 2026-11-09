@@ -1,0 +1,14 @@
+name,abbreviation,formula,state_and_key_properties,deposited_material,process,source
+Trimethylindium,TMIn,In(CH3)3,White solid; mp 88 C; decomposes above 101 C; pyrophoric; log P(Torr)=10.98-3204/T; evaporation rate fluctuates (solid),InAs; InP; In2O3,MOVPE/ALD,https://www.wikiwand.com/en/trimethylindium
+Triethylindium,TEIn,In(C2H5)3,Liquid; mp -32 C; bp 92 C at 10 mmHg; pyrophoric (H250),InAs; In2O3,MOVPE/ALD,https://americanelements.com/triethylindium-923-34-2
+Cyclopentadienylindium(I),InCp,In(C5H5),Sublimes ~50 C at 0.01 mmHg; Cp byproducts raise carbon impurity,In2O3,ALD,https://chemicalbook.com/price-india/34822-89-4.htm
+Indium trichloride,InCl3,InCl3,HCl byproduct corrosive; window 300-500 C with H2O/H2O2,In2O3,ALD,https://pubs.rsc.org/en/content/articlehtml/2022/dt/d1dt03748j
+Indium acetylacetonate,In(acac)3,In(C5H7O2)3,Window 165-220 C with H2O; thermal decomposition tendency,In2O3,ALD,https://pubs.rsc.org/en/content/articlehtml/2022/dt/d1dt03748j
+Indium tris(tetramethylheptanedionate),In(tmhd)3,In(C11H19O2)3,mp 175 C; less volatile than In(acac)3,In2O3,ALD/MOCVD,https://ejournal.undip.ac.id/index.php/berkala_fisika/article/view/2455
+"Tris(N,N'-diisopropylformamidinato)indium",In(famd)3,In[HC(NiPr)2]3,ALD window 150-275 C with H2O; carbon-free films,In2O3,ALD,https://dash.harvard.edu/entities/publication/0f76bf22-b42b-4c7c-bfad-13c6e319dbbf
+"Tris(N,N'-diisopropylacetamidinato)indium",In(amd)3,In[CH3C(NiPr)2]3,Sublimes at 150 C; no melting up to 320 C (decomposes),In2S3; InN,ALD,https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/9382618
+Indium tris(guanidinate),In(guan)3,In[(CH3)2NC(NiPr)2]3,Window 230-300 C with H2O; significant decomposition above 110 C,In2O3; InN,ALD,https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/9382618
+Diethyl[bis(trimethylsilyl)amido]indium,Et2InN(TMS)2,(C2H5)2In[N(Si(CH3)3)2],Liquid In precursor; H2O process 175-250 C,In2O3,ALD,https://ssmd.kaist.ac.kr/_files/ugd/964b65_4b910d971e81472689340e32a12b189e.pdf
+[3-(Dimethylamino)propyl]dimethylindium,DADI,(CH3)2In[(CH2)3N(CH3)2],Liquid In precursor,In2O3,ALD,https://ssmd.kaist.ac.kr/_files/ugd/964b65_4b910d971e81472689340e32a12b189e.pdf
+"Tris(1,3-diisopropyltriazenide)indium",In(triaz)3,In[(iPr)NNN(iPr)]3,Hexacoordinated In-N precursor; H2O thermal ALD,InN; In2O3,ALD,https://pubs.rsc.org/en/content/articlehtml/2022/dt/d1dt03748j
+Trimethylindium-dimethylethylamine adduct,TMIn-DMEA,In(CH3)3.N(CH3)2(C2H5),High thermal stability; self-limiting InAs ALE 350-500 C,InAs,ALE,https://www.cambridge.org/core/journals/mrs-online-proceedings-library-archive/article/abs/growth-of-inas-and-inas1gaasl-superlattice-quantum-well-structures-on-gaas-by-atomic-layer-epitaxy-using-trimethylindiumdimethylethylamine-adduct/E428EBA14D45887ED2D896CD02536D5E

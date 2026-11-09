@@ -1,0 +1,10 @@
+name,abbreviation,formula,state_and_key_properties,deposited_material,process,source
+Trimethylgallium,TMGa,Ga(CH3)3,Liquid; mp -15 C; bp 55.7 C; pyrophoric; log P(mmHg)=7.620-1560/T,GaAs; GaN,MOVPE/ALE/ALD,https://en.wikipedia.org/wiki/Trimethylgallium
+Triethylgallium,TEGa,Ga(C2H5)3,Liquid; mp -82 C; bp 143 C; 2.80 torr at 10 C; ignites in air; lower carbon than TMGa,GaAs; GaN,MOVPE/ALD,https://www.nouryon.com/globalassets/inriver/resources/pds-tega-ssg-electronics-glo-en.pdf
+Triisobutylgallium,TIBGa,Ga[CH2CH(CH3)2]3,Liquid; bp 73 C at 5.25 mmHg; pyrophoric (H250),GaAs,ALE,https://americanelements.com/triisobutylgallium-17150-84-4
+Diethylgallium chloride,DEGaCl,(C2H5)2GaCl,bp 60-62 C (vendor); reacts very rapidly with moisture; vapor mainly dimer; log P(Torr)=8.943-3080/T (5-60 C),GaAs,MOVPE/ALE,https://chemicalbook.com/ProductChemicalPropertiesCB0366335_EN.htm
+Gallium trichloride,GaCl3,GaCl3 (solid Ga2Cl6),Deliquescent solid; mp 77.9 C; bp 201 C; dimer in solid,GaAs; GaN,CVD/ALD,https://wiki.riteme.site/wiki/GaCl3
+Tris(dimethylamido)gallium,TDMAG,[Ga(N(CH3)2)3]2,Dimer solid; mp 101-104 C; moisture sensitive; GaN ALD window 130-250 C with NH3 plasma,GaN; Ga2O3; Ga2S3,ALD,https://pubs.rsc.org/en/content/articlehtml/2020/tc/d0tc02085k
+"Tris(1,3-diisopropyltriazenide)gallium",Ga(triaz)3,Ga[(iPr)NNN(iPr)]3,Volatile hexacoordinated Ga-N precursor; epitaxial GaN on 4H-SiC,GaN,ALD,https://pub.epsilon.slu.se/id/document/20372868
+Amidinate gallium bis(dimethylamide),LGa(NMe2)2,"L = N,N'-di-tert-butylacetamidinato; LGa(N(CH3)2)2",Grows films with H2O/H2S (LGaMe2 analog did not),Ga2O3; Ga2S3,ALD,https://imec-publications.be/entities/publication/3e7c8c70-7ccf-4451-9a25-6f83ec14c3cd/full
+Gallium acetylacetonate,Ga(acac)3,Ga(C5H7O2)3,beta-diketonate; used in Ga ALD,Ga2O3-type,ALD,https://imec-publications.be/bitstreams/24f16fe1-21d4-4a6d-9dd3-d779a17f84f7/download

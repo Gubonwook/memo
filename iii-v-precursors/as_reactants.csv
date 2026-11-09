@@ -1,0 +1,10 @@
+name,abbreviation,formula,state_and_key_properties,deposited_material,process,source
+Arsine,AsH3,AsH3,Gas; bp -62.5 C; mp -111.2 C; extremely toxic; decomposition begins ~230-240 C,GaAs; InAs,MOVPE/ALE/HVPE,https://en.wikipedia.org/wiki/Arsine
+tert-Butylarsine,TBAs,(CH3)3CAsH2,Liquid; bp 65-67 C; decomposition onset ~350 C; GaAs surface lowers it by up to 200 C,GaAs; InAs,MOVPE/CBE,https://amp.chemicalbook.com/ProductChemicalPropertiesCB31104573_EN.htm
+Tris(dimethylamino)arsine,TDMAAs,As[N(CH3)2]3,Liquid; mp -53 C; bp 55 C at 10 mm; moisture sensitive; no As-H bonds,GaAs; As2S3,ALE/CVD/ALD,https://m.chemicalbook.com/ChemicalProductProperty_EN_CB9686003.htm
+Tris(trimethylsilyl)arsine,(Me3Si)3As,As[Si(CH3)3]3,bp 82-84 C at 4 Torr; with MX3 gives MAs + 3 Me3SiX,GaAs; InAs,CVD,https://apps.dtic.mil/sti/tr/pdf/ADA200887.pdf
+Tris(triethylsilyl)arsine,(Et3Si)3As,As[Si(C2H5)3]3,GaAs ALD with GaCl3; window 175-200 C; amorphous stoichiometric films; physical data not verified,GaAs,ALD,https://fitforthem.unipa.it/rep:6533b7d4fe1ef96bd12634ee
+Trimethylarsine,TMAs,As(CH3)3,Liquid; mp -87.3 C; bp 56 C; flash point -25 C; carbon contamination,GaAs; InGaAs,MOCVD/HVPE,https://en.wikipedia.org/wiki/Trimethylarsine
+Triethylarsine,TEAs,As(C2H5)3,bp 140 C (vendor value); carbon-contaminated GaAs,GaAs,MOCVD,https://www.myskinrecipes.com/shop/en/mocvd-precursors/242464-triethylarsine.html
+Diethylarsine,Et2AsH,(C2H5)2AsH,Liquid; bp 105 C,GaAs,MOCVD,https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/4900855
+Tris(trifluoromethyl)arsine,As(CF3)3,As(CF3)3,bp ~33 C; etches GaAs under most conditions; growth only at low V/III,GaAs,MOCVD,https://www.cambridge.org/core/journals/mrs-online-proceedings-library-archive/article/gas-phase-and-surface-reactions-of-organometallic-arsenic-sources/E7A40484A3618FBCB711E5CA461EEE53
