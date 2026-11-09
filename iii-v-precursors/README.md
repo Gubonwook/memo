@@ -26,3 +26,10 @@ Found in sources (secondary sources noted):
 - 수도권정비계획법: Icheon is entirely 자연보전권역 with 팔당 특별대책지역 overlap; large-company advanced-fab expansion capped (1,000 m2 in 2012 sources). SK hynix grandfathered building-area capacity (news).
 - 대기환경보전법: 비소 및 그 화합물 is a 특정대기유해물질 (KOSAE 2013); numeric emission limits not checked.
 Not verified: TBAs/TDMAAs/silylarsine legal classification, official 규정수량 for arsine, SK hynix internal approval status.
+
+### Water-protection rules (added 2026-11-09)
+- 수질 및 수생태계법 제33조: 폐수배출시설 중 특정수질유해물질(비소화합물 포함 25종) 발생 시설, 특별대책지역 내 시설, 배출시설 설치제한지역(상수원보호구역 상류 유하거리 10 km 등)은 허가 대상 (state.gwd.go.kr summary). Process change that newly generates a 특정수질유해물질 also triggers permit.
+- 2014 시행령 개정: 먹는물 수준 기준 미만으로 발생하는 시설은 허가 제외 및 제한지역 입지 허용 (news, 산업일보). The numeric threshold was not checked.
+- 한강수계법: 수변구역에서 특정수질유해물질 사용/발생 공장 입지 제한. Icheon is within 팔당 특별대책지역 (1998 환경부 문서).
+- Context: 2026-10 경기도 조사에서 이천 SK하이닉스 방류 하천(죽당천) 염소·황산이온이 FAO 권고 초과 -> 경기도가 기준 마련 건의. Water discharge from Icheon is currently politically sensitive.
+- Implication: the water-law burden is driven by total As generated in wastewater, not by which As source is used. Small-quantity ALD use is favorable, but this is my inference, not verified against the threshold.
