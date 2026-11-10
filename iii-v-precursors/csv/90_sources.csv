@@ -1,0 +1,111 @@
+﻿ID,출처,URL
+S1,"AtomicLimits ALD Database (사용자가 붙여준 In/Ga/As 페이지), DOI 10.6100/alddatabase",https://www.atomiclimits.com/alddatabase/
+S2,Wikipedia – Trimethylindium (Shenai-Khatkhate 2008 증기압식 인용),https://en.wikipedia.org/wiki/Trimethylindium
+S3,Wikipedia – Triethylindium,https://en.wikipedia.org/wiki/Triethylindium
+S4,Wikipedia – Trimethylgallium,https://en.wikipedia.org/wiki/Trimethylgallium
+S5,NIST SRD 134 – Trimethyl Gallium,https://www.nist.gov/node/431836
+S6,Nouryon TEGa SSG Product Data Sheet,https://www.nouryon.com/globalassets/inriver/resources/pds-tega-ssg-electronics-glo-en.pdf
+S7,Wikipedia – Triethylgallium,https://en.wikipedia.org/wiki/Triethylgallium
+S8,Indium Corp. GaCl3 Product Data Sheet,https://documents.indium.com/qdynamo/download.php?docid=3072
+S9,Wikipedia – Gallium(III) chloride,https://en.wikipedia.org/wiki/Gallium(III)_chloride
+S10,IBM Research – Vapor pressure of DEGaCl and DEAlCl,https://research.ibm.com/publications/vapor-pressure-and-vapor-composition-of-diethylgallium-chloride-and-diethylaluminum-chloride
+S11,"Use of tertiarybutylarsine for GaAs growth, APL 50, 218 (1987)",https://doi.org/10.1063/1.97666
+S12,American Elements – Tertiarybutylarsine,https://www.americanelements.com/tertiarybutylarsine-4262-43-5
+S13,Wikipedia – Arsine,https://en.wikipedia.org/wiki/Arsine
+S14,NRT Arsine Quick Reference Guide (2017),https://nrt.org/sites/2/files/Arsine%20SA%20QRG%20FINAL%202017%2004%2025.pdf
+S15,"Dapkus et al., ONR Annual Report – Atomic Layer Epitaxy (1986), DTIC ADA171723",https://apps.dtic.mil/sti/pdfs/ADA171723.pdf
+S16,DTIC ADA250666 – TIPIn/TMIn OMVPE report,https://apps.dtic.mil/sti/pdfs/ADA250666.pdf
+S17,"US Patent 4,734,514 (TEIn 열안정성 서술)",https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/4734514
+S18,"Mpofu et al., Dalton Trans. 51, 4712 (2022) – In triazenide + Table 1 (In2O3 공정 정리)",https://pubs.rsc.org/en/content/articlehtml/2022/dt/d1dt03748j
+S19,"Elam et al., InCp/O3 In2O3 ALD (Chem. Mater. 2006 원고)",https://corpora.tika.apache.org/base/docs/govdocs1/263/263968.pdf
+S20,"Ma et al., Nanoscale Res. Lett. 13, 4 (2018) – InCp/H2O2",https://link.springer.com/doi/10.1186/s11671-017-2414-0
+S21,"Libera, Hryn, Elam, Chem. Mater. (2011)",https://doi.org/10.1021/cm103637t
+S22,"Maeng et al., Ceram. Int. 41, 10782 (2015) – DADI/H2O",https://scholarworks.bwise.kr/hanyang/handle/2021.sw.hanyang/155986
+S23,"Maeng et al., J. Alloys Compd. (2015) – 액체 In 전구체/O3",https://dspace.kaist.ac.kr/handle/10203/205209
+S24,"Kim et al. (Gordon group), Chem. Eur. J. (2018) – In amidinate/formamidinate",https://gordon.faculty.chemistry.harvard.edu/resource/kimchemistryeurojnl249525-95292018pdf
+S25,Me2In(EDPA) PEALD In2O3 (KAIST),https://ssmd.kaist.ac.kr/_files/ugd/964b65_4b910d971e81472689340e32a12b189e.pdf
+S26,DADI vs DATI PEALD In2O3 비교 연구,https://biomed.reviewer.ly/app/publication/5057a97d-6b4f-4203-85cf-7b0bb4f12945
+S27,KIST – DBDMI In2O3 ALD (Nanotechnology),https://pubs.kist.re.kr/handle/201004/150209
+S28,"O'Donoghue et al., Dalton Trans. 46, 16551 (2017) – [Ga(NMe2)3]2/O2 plasma",https://pubs.rsc.org/en/content/articlelanding/2017/dt/c7dt03427j
+S29,"Ramachandran et al., J. Mater. Chem. A 2, 19232 (2014) – Ga(TMHD)3 PEALD + Ga 공정 정리",https://pubs.rsc.org/en/content/getauthorversionpdf/c4ta05007j
+S30,Lee et al. – DMGIP ALD/MOCVD Ga2O3 (Korea Univ.),https://scholar.korea.ac.kr/handle/2021.sw.korea/111674
+S31,"Donmez et al., JVST A 31 (2013) – TMGa/O2 plasma",https://repository.bilkent.edu.tr/items/39f3f358-0db8-44a1-ab30-75ebaaeec3d3
+S32,Ilhom et al. – TEG + Ar/O2 plasma Ga2O3,https://figshare.com/articles/journal_contribution/Low-Temperature_As-Grown_Crystalline_Ga_sub_2_sub_O_sub_3_sub_Films_via_Plasma-Enhanced_Atomic_Layer_Deposition/13863999
+S33,"Nanomaterials 12, 1510 (2022) – PEALD Ga2O3",https://mdpi.com/2079-4991/12/9/1510
+S34,"Roberts et al., arXiv:1908.06914 – TEGa/O2 plasma α-Ga2O3",https://arxiv.org/abs/1908.06914
+S35,"DenBaars et al., MRS Proc. (1988) – GaAs ALE TMGa/AsH3 445–485 °C",https://www.cambridge.org/core/journals/mrs-online-proceedings-library-archive/article/abs/growth-of-aigaasgaas-heterostructures-by-atomic-layer-epitaxy/A44FB5FDCB35205424E9CDE725A758C5
+S36,"Reid, Urdianyk, Bedair, APL 59, 2397 (1991)",https://doi.org/10.1063/1.106027
+S37,"Maa & Dapkus, J. Electron. Mater. 19, 289 (1990)",https://link.springer.com/article/10.1007/BF02651286
+S38,Atomic Layer Epitaxy of GaAs and InAs (MRS Proc.),https://core-cms.cambridgecore.org/core/journals/mrs-online-proceedings-library-archive/article/atomic-layer-epitaxy-of-gaas-and-inas/DA095A7D96AB8B5DF85C3AEBAFD8D920
+S39,"Ohno et al., APL 54, 2000 (1989) – TEGa/AsH3 ALE",https://doi.org/10.1063/1.101195
+S40,"Yu et al., MRS Proc. (1991) – Surface chemistry of GaAs ALE",https://www.cambridge.org/core/journals/mrs-online-proceedings-library-archive/article/abs/surface-chemistry-and-mechanism-of-atomic-layer-growth-of-gaas/03E6DD8024666B29C114B82E7F6D3E23
+S41,"Mori et al., APL 52, 27 (1988) – DEGaCl ALE","https://katalog.lib.cas.cz/KNAV/EdsRecord/edb,9825486"
+S42,Atomic Layer Epitaxy of GaAs Using GaCl3 and AsH3,https://scilit.com/publications/a399c6619ba4ab6be168a164371058f5
+S43,"Ishikawa et al., JJAP 31, 1716 (1992) – GaCl3/AsH3 1–2 ML/cycle",https://doi.org/10.1143/JJAP.31.1716
+S44,"Jow et al., J. Electron. Mater. 24, 25 (1995) – TMGa/TBAs vacuum ALE",https://link.springer.com/article/10.1007/BF02659722
+S45,"Fujii, Suemune, Yamanishi, APL (1992) – amino-As ALE",https://doi.org/10.1063/1.108132
+S46,"Li & Tu, MRS Proc. (1996) – TDMAAs selective-area CBE",https://www.cambridge.org/core/product/60D1740EF149FB6A027C311B53C736DE
+S47,"Ortion et al., JJAP 35, 5964 (1996) – TDMAAs in situ cleaning",https://acnpsearch.tweb-dev.unibo.it/singlejournalindex/3109275
+S48,"Fujitsu – InAs ALE, As 탈착 억제 (J. Cryst. Growth)",https://data.zhenzhi.com/details/1/991810063
+S49,J. Mater. Res. (1994) – Self-limited growth of InAs at 480 °C,https://resolve.cambridge.org/core/journals/journal-of-materials-research/article/selflimited-growth-of-inas-at-480-c/E130258426460BFBDBFDBD09C5C66C23
+S50,"Ohtsuka et al., MRS Proc. – TMIDMEA InAs ALE",https://resolve.cambridge.org/core/journals/mrs-online-proceedings-library-archive/article/growth-of-inas-and-inas1gaasl-superlattice-quantum-well-structures-on-gaas-by-atomic-layer-epitaxy-using-trimethylindiumdimethylethylamine-adduct/E428EBA14D45887ED2D896CD02536D5E
+S51,"Bedair et al., APL 51, 1830 (1987) – Ga-As-In-As superalloy ALE",https://doi.org/10.1063/1.98484
+S52,"Haraguchi, Ozeki, Takeuchi – InAs/GaAs·GaP/GaAs ALE 성장 기구 (宮崎大学 紀要)",https://miyazaki-u.repo.nii.ac.jp/records/2389
+S53,"Lum & Klingert (Bell Labs, 1989) – Low vapor pressure organoarsenic compounds",https://www.nokia.com/bell-labs/publications-and-media/publications/low-vapor-pressure-organoarsenic-compounds-as-alternatives-to-arsine-in-gaas-movpe
+S54,MRS Proc. review – Group V sources for OMVPE,https://core-cms.cambridgecore.org/core/journals/mrs-online-proceedings-library-archive/volume/A396D5C4794BE615B796B016BAA493F1?pageNum=2
+S55,"US Patent 4,368,098 (As 승화점 서술)",https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/4368098
+S56,"US Patent 5,270,247 (Fujitsu, InAs 350 °C / GaAs 500 °C ALE 온도 불일치)",https://patents.justia.com/patent/5270247
+S58,"Asikainen, Ritala, Leskelä (1994) – InCl3/H2O 400·500 °C",https://bvbvf1.bib-bvb.de/vufind/PrimoRecord/cdi_osti_scitechconnect_6734636
+S59,"Nanomaterials 11, 2047 (2021) – Et3In/O3 ALD 115–250 °C",https://pmc.ncbi.nlm.nih.gov/articles/PMC8399107
+S60,"Yu, APL 55, 1011 (1989) – TMGa chemisorption on GaAs(100)",https://doi.org/10.1063/1.101719
+S61,American Elements – Triethylindium (이전 세션 확인),https://americanelements.com/triethylindium-923-34-2
+S62,ChemicalBook – InCp 34822-89-4 (이전 세션 확인),https://chemicalbook.com/price-india/34822-89-4.htm
+S63,Berkala Fisika (Undip) – In(tmhd)3 (이전 세션 확인),https://ejournal.undip.ac.id/index.php/berkala_fisika/article/view/2455
+S64,"US Patent 9,382,618 – In amidinate/guanidinate (이전 세션 확인)",https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/9382618
+S65,American Elements – Triisobutylgallium (이전 세션 확인),https://americanelements.com/triisobutylgallium-17150-84-4
+S66,Trineopentylgallium GaAs ALE (이전 세션 확인),https://acnpsearch.tweb-dev.unibo.it/singlejournalindex/10385455
+S67,ChemicalBook DEGaCl + hot-wall MOVPE (이전 세션 확인),https://chemicalbook.com/ProductChemicalPropertiesCB0366335_EN.htm
+S68,"Rouf et al., J. Mater. Chem. C 8, 8457 (2020) – Ga(NMe2)3/NH3 plasma GaN",https://pubs.rsc.org/en/content/articlehtml/2020/tc/d0tc02085k
+S69,"J. Mater. Chem. C (2016) GaCl3/(Et3Si)3As GaAs ALD + US Patent 10,208,379 (이전 세션 확인)",https://pubs.rsc.org/en/Content/ArticleLanding/2016/TC/C5TC03079J
+S70,"TBAs 분해·MOVPE 온도 (J. Soc. Mater. Sci. Japan 56, 880 등, 이전 세션 확인)",https://www.jstage.jst.go.jp/article/jsms/56/9/56_9_880/_article/-char/en
+S71,Miyazaki Univ. repository – TDMAAs/TMGa ALE 500 °C (이전 세션 확인),https://miyazaki-u.repo.nii.ac.jp/records/2510
+S72,ChemicalBook – TDMAAs (이전 세션 확인),https://m.chemicalbook.com/ChemicalProductProperty_EN_CB9686003.htm
+S73,ChemicalBook – Arsine (분해 개시 230–240 °C 서술),https://chemicalbook.com/ChemicalProductProperty_EN_CB4375809.htm
+S74,DTIC ADA200887 – (Me3Si)3As (이전 세션 확인),https://apps.dtic.mil/sti/tr/pdf/ADA200887.pdf
+S75,Wikipedia – Trimethylarsine (이전 세션 확인),https://en.wikipedia.org/wiki/Trimethylarsine
+S76,MRS Proc. – Atmospheric-pressure OMCVD of GaAs using triethylarsenic (이전 세션 확인),https://resolve.cambridge.org/core/journals/mrs-online-proceedings-library-archive/article/abs/atmospheric-pressure-omcvd-growth-of-gaas-using-triethylarsenic-and-alkylgallium-organometallic-precursors/A2678E781DF6597EF2E06EDFCCD0DA01
+S77,"US Patent 4,900,855 – Diethylarsine (이전 세션 확인)",https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/4900855
+S78,MRS Proc. – Gas phase and surface reactions of organometallic arsenic sources (이전 세션 확인),https://www.cambridge.org/core/journals/mrs-online-proceedings-library-archive/article/gas-phase-and-surface-reactions-of-organometallic-arsenic-sources/E7A40484A3618FBCB711E5CA461EEE53
+S79,OSHA Occupational Chemical Database – Phosphine,https://www.osha.gov/chemicaldata/667
+S80,OSHA Method 1003 – Phosphine,https://osha.gov/sites/default/files/methods/osha-1003.pdf
+S81,ChemicalBook – Phosphine (분해 온도 서술),https://chemicalbook.com/ChemicalProductProperty_IN_CB8716837.htm
+S82,Wikipedia – Phosphine (Kiwix 사본),https://kiwix.lema.org/wikipedia_en_all_mini_2024-02/A/Phosphine
+S83,"Li, Larsen, Buchan, Stringfellow, J. Electron. Mater. 18, 457 (1989) – Pyrolysis of TBP",https://springerlink.bibliotecabuap.elogim.com/content/pdf/10.1007/BF02657995.pdf
+S84,ChemicalBook – tert-Butylphosphine 2501-94-2,https://m.chemicalbook.com/ChemicalProductProperty_EN_CB4184281.htm
+S85,UCC – Gas phase monitoring under InP MOVPE (TBP/TMIn FTIR),https://research.ucc.ie/en/publications/gas-phase-monitoring-of-reactions-under-inp-movpe-growth-conditio/
+S86,"J. Electron. Mater. 18, 355 (1989) – InP OMVPE with TMIn/TBP",https://link.springer.com/article/10.1007/BF02657983
+S87,"Otsuka, Nishizawa 외 – InP self-limiting growth, TEIn/TBP UHV",https://www.taylorfrancis.com/chapters/edit/10.1201/9781003063100-86/self-limiting-submonolayer-growth-inp-alternative-triethylindium-tertiarybutylphosphine-supply-ultra-high-vacuum-nobuyuki-otsuka-jun-ichi-nishizawab-hideyuki-kikuchib-yutaka-oyamac
+S88,Nanoscale (2025) d5nr00457h 서론 – P 전구체 정리 (TBP·TDMAP >320 °C),https://pubs.rsc.org/en/content/articlepdf/2025/nr/d5nr00457h
+S89,Charvot et al. (2022) – tris(trialkylsilyl)phosphides in ALD (발표 초록),https://fcht.upce.cz/en/publikace-detail/39887505
+S90,Univ. Pardubice – 금속 인화물 P 전구체 서술 (TMS3P Co2P),https://fcht.upce.cz/publikace-detail/39891577
+S91,"Harvard, MRS Proc. – InP from indium halides and P(SiMe3)3",https://www.cambridge.org/core/journals/mrs-online-proceedings-library-archive/article/abs/synthesis-of-inp-drom-indium-halides-and-tristrimethylsilylphosphine/5CDD6E03407A55EF4684595CC40DCE03
+S92,"Appl. Surf. Sci. 619, 156727 (2023) – GaP PE-ALD TEG/tri-TBP/atomic H",https://doi.org/10.1016/j.apsusc.2023.156727
+S93,"US Patent 6,020,253 – tertiarybutylbis(dimethylamino)phosphine",https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/6020253
+S94,"Choi et al., JVST A 11, 626 (1993) – GaP remote PECVD",https://acnpsearch.tweb-dev.unibo.it/singlejournalindex/1719015
+S95,Nanoscale (2025) – TiP ALD with TMT3P/TiCl4,https://fcht.upce.cz/publikace-detail/39891860
+S96,JVST A (2022) – O2 plasma exposure time in Ga2O3 PEALD (TMGa),https://bvbvf1.bib-bvb.de/vufind/PrimoRecord/cdi_scitation_primary_10_1116_6_0001207
+S97,"Sakuma et al., J. Appl. Phys. 68, 5660 (1990) – TMGa/EtMe2Ga/TEGa ALE 비교","https://katalog.lib.cas.cz/KNAV/EdsRecord/edb,7644199"
+S98,"US Patent 5,438,952 – TEGDEA/TMIDMEA ALE (Fujitsu)",https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/5438952
+S99,"Tran et al., APL 62, 2375 (1993) – HRXRD self-limiting InP·InAs/InP ALE",https://publications.polymtl.ca/70714/
+S100,"Sakuma et al., JJAP 27, L2189 (1988) – InP self-limited growth",https://doi.org/10.1143/jjap.27.l2189
+S101,"US Patent 5,166,092 – ALE apparatus (InP 320–440 °C)",https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/5166092
+S102,P. L. Liu – InP by alternate supply MOCVD (초록),https://www.sciencegate.app/document/10.1557/proc-449-85
+S103,NTT – SPA study of TMIn/PH3 pyrolysis on InP(001),https://data.zhenzhi.com/details/1/1004327906
+S104,J. Korean Phys. Soc. 34 (1999) – InP ALE SPA,https://inis.iaea.org/records/1d699-bdm91
+S105,"Uvarov et al., St. Petersburg Polytech. Univ. J. Phys. Math. 18 (2025) – InP PE-ALD",https://physmath.spbstu.ru/en/article/2025.82.49
+S106,"Sakuma, Kodama, Ozeki, APL 56, 827 (1990) – ALE of GaP",https://doi.org/10.1063/1.102675
+S107,"Gudovskikh et al., JVST A 36 (2018) – Low-T PE deposition of GaP on Si",https://hal-centralesupelec.archives-ouvertes.fr/hal-01777504
+S108,"Morozov et al., J. Phys. Conf. Ser. 741 (2016) – Thin film GaP",https://hal-centralesupelec.archives-ouvertes.fr/hal-02404610
+S109,"Gudovskikh et al., J. Renew. Sustain. Energy 10 (2018) – Si-doped GaP PE-ALD",https://hal.archives-ouvertes.fr/hal-01738008
+S110,"Ozeki et al., JVST B 8, 741 (1990) – GaAs-GaP SLS by ALE",https://data.zhenzhi.com/details/1/1008049075
+S111,"Sakuma, PhD thesis, Osaka Univ. (1997) – ALE of III-V (InGaAs·InGaP PJE)",https://ir.library.osaka-u.ac.jp/repo/ouka/all/2668/13490_Dissertation.pdf

@@ -1,4 +1,30 @@
-# In/Ga precursors and As reactants for InAs/GaAs deposition (ALD/CVD/ALE)
+# In/Ga precursors and As/P reactants for InGaAs(P) deposition (ALD/CVD/ALE)
+
+## v2 database (2026-11-10) — use this first
+
+`InGaAsP_precursor_DB.xlsx` (formulas live) + `csv/` (one CSV per sheet, UTF-8 with BOM) + `build_db.py` (regenerates the workbook).
+
+| Sheet / CSV | Content |
+|---|---|
+| In_O-free / In_O함유 (`10_`, `11_`) | 22 In precursors: formula, element counts, MW, metal wt%, C/M, heteroatom flag, ligand class, bonding, oxidation state (In(I)/In(III)), β-H, mp/bp, vapor-pressure equation, thermal stability, pyrophoricity, CAS |
+| Ga_O-free / Ga_O함유 (`20_`, `21_`) | 21 Ga precursors, same columns |
+| As_반응물 (`30_`) | 11 As reactants (6 in AtomicLimits + 5 MOVPE-only for reference) |
+| P_반응물 (`31_`) | 8 P reactants: PH3, TBP, TDMAP, P(SiMe3)3, P(tBu)3, tBuP(NMe2)2, elemental P, P(SnMe3)3 |
+| 공정기록 (`40_`) | 129 processes: temperature window, GPC, substrate, reactor/pressure/carrier, source temperature, pulse/purge sequence, crystallinity, composition/impurities, film properties |
+| 슈퍼사이클_매칭 (`50_`) | Temperature-window overlap for InAs/GaAs, InAs/InP, InP/GaP pairs (formulas) |
+| 출처 (`90_`) | 110 sources (S-numbers cited in every row) |
+
+Rules: "O-containing" means O inside the precursor molecule (co-reactant O does not count). Blank cell = not verified, never estimated.
+Vendor values and secondary citations are marked in the cell. The AtomicLimits P page was not available, so P reactants and phosphide processes come from the literature only.
+Three ligand assignments are uncertain (highlighted in the workbook): In(dpguan)3, In(triaz)3, and InMe2(NtBu(CH2)2(CH3)2OMe) (formula withheld).
+
+Key process finding: with standard TMIn/AsH3 (340–400 °C) and TMGa/AsH3 (445–485 °C) there is no common ALE temperature; TMIn·DMEA adduct (350–500 °C) gave (InAs)1(GaAs)1 at 460 °C.
+
+The v1 CSVs below (2026-11-09) are kept unchanged; their verified values were merged into v2 with source labels "이전 세션 확인".
+
+---
+
+## v1 (2026-11-09)
 
 Only compounds with documented deposition use are listed. Property values come from the linked sources
 (some are vendor values and differ between suppliers). Compiled 2026-11-09.

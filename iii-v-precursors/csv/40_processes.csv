@@ -1,0 +1,130 @@
+﻿막,금속(또는 주) 전구체,반응물 B,반응물 C,전구체 O 함유,반응물에 O 포함,V족 원소,공정 유형,Tmin (°C),Tmax (°C),창 폭 (°C),GPC / 성장률,기판,반응기·압력·캐리어,소스 온도,펄스·퍼지 순서,결정성·상,조성·불순물,막 물성,비고,AtomicLimits 문헌,출처
+In2O3,InCl3,H2O,,아니오,예,—,Thermal ALD,300.0,500.0,200.0,0.25–0.40 Å/cycle,,ALE 반응기 (400·500 °C 성장 보고),InCl3 285 °C,,,,,HCl 부산물이 장비·막 식각,Asikainen et al. 외,S18; S19; S58
+In2O3,InCl3,H2O2,,아니오,예,—,Thermal ALD,300.0,500.0,200.0,,,,,,,,,,Ritala et al.,S18
+In2O3,InMe3,H2O,,아니오,예,—,Thermal ALD,200.0,250.0,50.0,~0.39 Å/cycle,,,,,,,,200 °C 이상에서만 성장,"Ott, Lee, Niu 외",S18; S24
+In2O3,InMe3,O3,,아니오,예,—,Thermal ALD,100.0,200.0,100.0,,,,,,,,,,"Salami, Shan, Zhu 외",S18
+In2O3,InMe3,O2 plasma,,아니오,예,—,PEALD,,,,,,,,,,,,,"Lim, Mahmoodinezhad, Shi 외",미확인 (AtomicLimits 목록만)
+In2O3,InCp,O3,,아니오,예,—,Thermal ALD,200.0,450.0,250.0,1.2–1.4 Å/cycle (창 내); 사이클 수에 따라 1.3→2.0,,"점성류 ALD, N2 60 sccm","InCp 버블러 40 °C, 배관 200 °C",InCp 2 s – 퍼지 4 s – O3 2 s – 퍼지 2 s; O3 ~10% (O2 400 sccm),입방정 나노결정 In2O3,,투명 전도성,"200 °C 미만 급감(O3 분해 임계), 500 °C 전구체 분해","Elam, Martinson",S19
+In2O3,InCp,H2O,O2,아니오,예,—,Thermal ALD,100.0,350.0,250.0,,,,,동시 노출/H2O→O2/O2→H2O 세 모드 비교 (100–250 °C),,,,"H2O·O2 단독으로는 성장 거의 없음, 둘 다 필요","Libera, Keller",S18; S21
+In2O3,InCp,H2O2,,아니오,예,—,Thermal ALD,160.0,200.0,40.0,~1.46 Å/cycle,Si; TFT는 Al2O3/p+Si,,,,,"200 °C: In:O = 1:1.36, C 미검출",Eg 3.42→3.75 eV (150→200 °C); TFT 이동도 7.8 cm²/V·s (300 °C 공기 열처리 후),,Ma et al.,S20
+In2O3,InCp,O2 plasma,,아니오,예,—,PEALD,225.0,275.0,50.0,,,,,,,,,,"Zhao, Zhang",S18
+In2O3,In(EtCp),H2O,O2 plasma,아니오,예,—,PEALD,,,,,,,,,,,,,Mizutani et al.,미확인 (AtomicLimits 목록만)
+In2O3,In(EtCp),H2O,O2,아니오,예,—,Thermal ALD,,,,,,,,,,,,,Mizutani et al.,미확인 (AtomicLimits 목록만)
+In2O3,In(EtCp),O2 plasma,,아니오,예,—,PEALD,,,,,,,,,,,,,Mizutani et al.,미확인 (AtomicLimits 목록만)
+In2O3,In(EtCp),H2O,O3,아니오,예,—,Thermal ALD,,,,,,,,,,,,,Kobayashi et al.,미확인 (AtomicLimits 목록만)
+In2O3,In(acac)3,H2O,,예,예,—,Thermal ALD,165.0,220.0,55.0,,,,,,,,,,Nilsen et al.,S18
+In2O3,In(acac)3,O3,,예,예,—,Thermal ALD,160.0,225.0,65.0,,,,,,,,,,Nilsen et al.,S18
+In2O3,In(thd)3,O3,,예,예,—,Thermal ALD,,,,,,,,,,,,,Brahim et al.,미확인 (AtomicLimits 목록만)
+In2O3,In(thd)3,O2 plasma,,예,예,—,PEALD,100.0,400.0,300.0,0.014 nm/cycle,,,,,,,,,Ramachandran et al.,S18; S25
+In2O3,In(dmamp)3,O3,,예,예,—,Thermal ALD,100.0,300.0,200.0,,,,,,,,,,Han et al.,S18
+In2O3,In(dmamp)2(OiPr),O3,,예,예,—,Thermal ALD,,,,,,,,,,,,,Han et al.,미확인 (AtomicLimits 목록만)
+In2O3,In(dpguan)3,H2O,,아니오,예,—,Thermal ALD,230.0,300.0,70.0,0.45–0.55 Å/cycle (amd·famd·guan 공통),,,,,,,,'dpguan'=guan 대응은 추정,Gebhard et al.,S18
+In2O3,In(iPrAMD)3,H2O,,아니오,예,—,Thermal ALD,225.0,300.0,75.0,0.45–0.55 Å/cycle,,,,,,,,,Kim et al.,S18; S24
+In2O3,In(iPrFMD)3,H2O,,아니오,예,—,Thermal ALD,150.0,275.0,125.0,0.45–0.55 Å/cycle,,,~127 °C,,,C-free,,H2O 공정 중 최저 onset·최대 창,Kim et al.,S18; S24
+In2O3,In(triaz)3,H2O,,아니오,예,—,Thermal ALD,270.0,385.0,115.0,~1.0 Å/cycle,,,,,,저불순물,"0.2 mΩ·cm, 높은 투과율",,Mpofu et al.,S18
+In2O3,InEt2(N(SiMe3)2),H2O,,아니오,예,—,Thermal ALD,175.0,250.0,75.0,~0.7 Å/cycle,,,,,,,,200 °C 미만 C 잔류,Maeng et al.,S18; S24
+In2O3,InEt2(N(SiMe3)2),O3,,아니오,예,—,Thermal ALD,100.0,200.0,100.0,,,,,,,,150 °C 이상 비저항 <10⁻³ Ω·cm,,Maeng et al.,S18; S23
+In2O3,InEt2(N(SiMe3)2),O2 plasma,,아니오,예,—,PEALD,,,,,,,,,,,,,Yeom et al.,미확인 (AtomicLimits 목록만)
+In2O3,InEt2(N(SiMe3)2),H2O2,,아니오,예,—,Thermal ALD,,,,,,,,,,,,,Nguyen et al.,미확인 (AtomicLimits 목록만)
+In2O3,InEt3,O3,,아니오,예,—,Thermal ALD,100.0,200.0,100.0,"0.009→0.088 nm/cycle (115→250 °C, 계속 증가)",,"Ar 캐리어 50 sccm, 작업 압력 300 mTorr",,,≥200 °C 다결정 입방정,≥200 °C C 거의 없음,100 °C 미만에서 액체 전구체 중 최저 비저항 2×10⁻³ Ω·cm; 거칠기 <1.6 nm,뚜렷한 창 없음 (S59),Maeng et al.,S18; S23; S59
+In2O3,InEt3,O2 plasma,,아니오,예,—,PEALD,,,,,,,,,,,,,Kawato et al.,미확인 (AtomicLimits 목록만)
+In2O3,InMe2(PrNMe2),H2O,,아니오,예,—,Thermal ALD,275.0,275.0,0.0,0.6 Å/cycle,,,,,,,"비저항 9.2×10⁻⁵ Ω·cm, 420–700 nm 투과율 >80%",보고 온도 275 °C (창 양 끝 아님),Maeng et al.,S22
+In2O3,InMe2(PrNMe2),O3,,아니오,예,—,Thermal ALD,100.0,200.0,100.0,,,,,,,,,,Maeng et al.,S18; S23
+In2O3,InMe2(PrNMe2),O2 plasma,,아니오,예,—,PEALD,,,,DATI보다 낮음,,,,,,,,,Hong et al.,S26
+In2O3,InMe2(tBuAMD),O3,,아니오,예,—,Thermal ALD,200.0,350.0,150.0,0.06–0.1 nm/cycle,,,,,"200 °C 비정질, 300·350 °C 결정질",OH 관련 ~1% (고온),"TFT 이동도 온도에 따라 증가, Vth 변화 작음",200·300·350 °C 보고값 (창 정의 아님),Lee et al.,S27
+In2O3,InMe2(edpa),O2 plasma,,예,예,—,PEALD,70.0,250.0,180.0,0.053 nm/cycle,,,,,,,고이동도 TFT,원 논문은 90–180 °C,Kim et al.,S18; S25
+In2O3,InMe2(edpa),H2O,,예,예,—,Thermal ALD,,,,,,,,,,,,,Agbenyeke et al.,미확인 (AtomicLimits 목록만)
+In2O3,InMe2(NtBu(CH2)2(CH3)2OMe),O2 plasma,,예,예,—,PEALD,,,,,,,,,,,,,Choi et al.,미확인 (AtomicLimits 목록만)
+In2O3,InMe3(MeO(CH2)2NHtBu),H2O,,예,예,—,Thermal ALD,150.0,200.0,50.0,,,,,,,,,,Lee et al.,S18
+In2O3,InMe3(NMe2Bu),O2 plasma,,아니오,예,—,PEALD,100.0,200.0,100.0,DADI보다 높음,,,,,"DADI보다 결정성 우수, 결함 적음",,"FET 이동도 115.8 cm²/V·s, Vth −0.12 V, SS <70 mV/dec",,"Choi, Kim",S18; S26
+In2S3,In(acac)3,H2S,,예,아니오,—,Thermal ALD,,,,,,,,,,,,붙여주신 목록이 여기서 잘림,Yousfi 외,미확인 (AtomicLimits 목록만)
+In2S3,In(acac)3,H2S plasma,,예,아니오,—,PEALD,,,,,,,,,,,,,Van den Hoek et al.,미확인 (AtomicLimits 목록만)
+In2S3,In(iPrAMD)3 (DB 표기 외),H2S,,아니오,아니오,—,Thermal ALD,,,,,,,"150 °C 승화, 190 °C 공급",,,,,특허; 전구체 190 °C 공급,—,S64
+Ga2O3,(GaMe2NH2)3,O2 plasma,,아니오,예,—,PEALD,200.0,200.0,0.0,,,,,,,,,200 °C 부근으로 제한,"Shan, Seong, Liu",S29
+Ga2O3,GaMe2NH2,O2 plasma,,아니오,예,—,PEALD,,,,,,,,,,,,,Seong et al.,미확인 (AtomicLimits 목록만)
+Ga2O3,Ga(acac)3,O3,,예,예,—,Thermal ALD,370.0,370.0,0.0,,,,,,,,,"고온(~370 °C) 필요, 2차 인용","Nieminen, Utriainen 외",S29
+Ga2O3,Ga(acac)3,H2O,,예,예,—,Thermal ALD,,,,,,,,,,,,,Nieminen et al.,미확인 (AtomicLimits 목록만)
+Ga2O3,Ga(CpMe5),H2O,O2 plasma,아니오,예,—,PEALD,,,,,,,,,,,,,Mizutani et al.,미확인 (AtomicLimits 목록만)
+Ga2O3,Ga(CpMe5),O2 plasma,,아니오,예,—,PEALD,,,,,,,,,,,,,Mizutani et al.,미확인 (AtomicLimits 목록만)
+Ga2O3,Ga(iPr-triaz)3,H2O,,아니오,예,—,Thermal ALD,,,,,,,,,,,,,Mushore et al.,미확인 (AtomicLimits 목록만)
+Ga2O3,Ga(OiPr)3,H2O,,예,예,—,Thermal ALD,150.0,250.0,100.0,,,,,,,,,2차 인용,Choi et al.,S29; S33
+Ga2O3,Ga(thd)3,O2 plasma,,예,예,—,PEALD,100.0,400.0,300.0,0.1 Å/cycle,SiO2/Si,,,"전구체 5 s – O2 plasma 5 s (퍼지 가스 없음), 300 W",비정질,"화학량론, C 미검출",,H2O·O3로는 300 °C에서 거의 성장 없음,"Ramachandran, Wei",S29
+Ga2O3,Ga2(NMe2)6,H2O,,아니오,예,—,Thermal ALD,170.0,250.0,80.0,,,,,,,,,좁은 창,Dezelah et al.,S29
+Ga2O3,Ga2(NMe2)6,O2 plasma,,아니오,예,—,PEALD,60.0,160.0,100.0,1.5 Å/cycle,Si(100),,,,비정질 (1000 °C 열처리 시 β-Ga2O3),"거의 화학량론, C·N <2 at.%","Eg 4.9 eV, 투과율 >80%",초기 기판 억제 있음,O'Donoghue et al.,S28
+Ga2O3,GaCl3,H2O,,아니오,예,—,Thermal ALD,,,,,,,,,,,,,Qi et al.,미확인 (AtomicLimits 목록만)
+Ga2O3,GaEt3,O2 plasma,,아니오,예,—,PEALD,250.0,350.0,100.0,,사파이어,Ar 캐리어·퍼지 100 sccm,,"TEGa 0.1 s – 퍼지 5 s – O2 plasma 5 s – 퍼지 5 s; 최적 300 W, O2 20 sccm",α-Ga2O3,,,"250–350 °C에서 α-Ga2O3 우세 (상 기준, 창 아님); >350 °C α+ε 혼합","Shih, Roberts 외",S34
+Ga2O3,GaEt3,Ar+O2 plasma,,아니오,예,—,PEALD,150.0,240.0,90.0,0.69–1.31 Å/cycle,"Si, 사파이어, 유리","hollow-cathode 플라스마, 30–300 W",,매 사이클 후 in situ Ar plasma 20 s (50–300 W),"Ar plasma 없으면 비정질, 250 W Ar plasma로 β-Ga2O3","O/Ga ~1.44, C ~5 at.%",,연구 범위,Ilhom et al.,S32
+Ga2O3,GaEt3,O3,,아니오,예,—,Thermal ALD,,,,,,,,,,,,,"Wang, Li, Zhang 외",미확인 (AtomicLimits 목록만)
+Ga2O3,GaI3,O3,,아니오,예,—,Thermal ALD,,,,,,,,,,,,,Aarik et al.,미확인 (AtomicLimits 목록만)
+Ga2O3,GaMe2(OiPr),H2O,,예,예,—,Thermal ALD,280.0,300.0,20.0,~0.3 Å/cycle,Si(001),,상온 (~3 Torr),,비정질,화학량론,,,Lee et al.,S30
+Ga2O3,GaMe3,O3,,아니오,예,—,Thermal ALD,250.0,300.0,50.0,"0.4 (250 °C), 0.5 Å/cycle (300 °C)",,,,,,,,보고 온도 (창 정의 아님),"Comstock, Allen, Hiller 외",S33
+Ga2O3,GaMe3,O2 plasma,,아니오,예,—,PEALD,100.0,400.0,300.0,~0.53 Å/cycle,,,,,,,,,"Donmez, Allen, Ma 외",S31
+Ga2O3,GaMe3,O2 plasma,,아니오,예,—,PEALD,80.0,250.0,170.0,~0.6 Å/cycle,"Si, 사파이어",2500 W 플라스마,TMGa 0 °C,TMGa 0.2 s – N2 퍼지 4 s – O2 plasma 28 s – N2 퍼지 4 s,,,,"같은 공정, 다른 그룹 (2500 W)",—,S33
+Ga2O3,GaMe3,O2 plasma,,아니오,예,—,PEALD,200.0,200.0,0.0,0.65–0.70 Å/cycle,Si(100),,,,비정질,계면 SiOx 재성장 0.27 nm로 제한 (첫 3사이클),"플라스마 노출 길수록 누설전류 5자릿수 감소, εr ~14.2",O2 plasma 3–30 s 비교,—,S96
+Ga2O3,GaMe3,H2O,,아니오,예,—,Thermal ALD,,,,,,,,,,,,,"Hou, Yang",미확인 (AtomicLimits 목록만)
+Ga2O3,GaMe3,N2O plasma,,아니오,예,—,PEALD,,,,,,,,,,,,,Uvarov et al.,미확인 (AtomicLimits 목록만)
+Ga2O3,GaMe3(CH3OCH2CH2NHtBu),O2 plasma,,예,예,—,PEALD,,,,,,,,,,,,,Hong et al.,미확인 (AtomicLimits 목록만)
+GaN,[Ga(NMe2)3]2,NH3 plasma,,아니오,아니오,—,PEALD,130.0,250.0,120.0,1.4 Å/cycle,"Si(100), 4H-SiC",,,,Si 위 결정질; 4H-SiC 위 AlN 버퍼 없이 에피,"Ga/N 거의 화학량론, C·O 낮음","Eg ~3.42 eV, 비의도적 n형",붙여주신 목록이 여기서 잘림,Rouf et al.,S68
+GaN,GaCl3,NH3,,아니오,아니오,—,Thermal ALD,400.0,,,,,,,,,,,"400 °C 이상, Cl 불순물",—,S69
+GaAs,GaMe3,AsH3,,아니오,아니오,As,ALE (MOVPE형),445.0,485.0,40.0,1 ML/cycle,,MOCVD형 반응기,,,,,ALE 활성층으로 고품질 양자우물·저문턱 QW 레이저 (AlGaAs/GaAs),표준 반응기 기준,"Nishizawa, Bedair, Tischler 외 (62편)",S35
+GaAs,GaMe3,AsH3,,아니오,아니오,As,ALE (특수 반응기),450.0,700.0,250.0,1 ML/cycle,,"기체 가열 최소화, 짧은 노출, 급차단 가능한 ALE 반응기",,,,노출 시간·온도로 C 도핑 10¹⁵–10²⁰ cm⁻³ 조절,,노출 시간 단축으로 기상 분해 억제,"Reid, Urdianyk, Bedair",S36
+GaAs,GaMe3,AsH3,,아니오,아니오,As,ALE,400.0,400.0,0.0,1 ML/cycle,,,,TMGa 10 s,,,,TMGa 10 s 노출로 400 °C 포화,—,S38
+GaAs,GaMe3,(AsH3 없이 흡착만),,아니오,아니오,As,UHV 흡착 연구,440.0,530.0,90.0,Ga 1 ML 포화,As 안정화 GaAs(001),"UHV, TMGa 10⁻⁷–5×10⁻⁶ Torr, 5–15 s",,,2×4 → 4×1/4×2 Ga 안정화,XPS로 C 미검출,,320 °C에서는 반응 매우 느림,Maa & Dapkus,S37
+GaAs,GaMe3,tBuAsH2,,아니오,아니오,As,Vacuum ALE,,,,1 ML/cycle,,진공 ALE,,,,,"모두 p형, 운반자 농도는 노출 조건에 의존",창 폭 70 °C (양 끝 온도 미확인),"Maa, Chen 외",S44
+GaAs,GaMe3,EtAsH2,,아니오,아니오,As,ALE,,,,,,,,,,,,,Maa et al.,미확인 (AtomicLimits 목록만)
+GaAs,GaMe3,(Me2N)3As,,아니오,아니오,As,ALE (pulse-jet),500.0,500.0,0.0,,,,,,,,,보고 온도 (GaAs/GaMnAs),—,S71
+GaAs,GaEt3,AsH3,,아니오,아니오,As,ALE (상압 MOVPE),,,,,,상압 MOVPE,,,,,,좁은 온도·공급량 범위에서만 ALE; 일부 연구는 ALE 안 됨,"Mochizuki, Meguro, Ohno 외",S39; S40
+GaAs,GaEt3,(Me2N)3As,,아니오,아니오,As,ALE,,,,,,,,,,,,AsH3 대비 ALE 온도 범위 크게 확장 (값 미확인),"Fujii, Suemune",S45
+GaAs,GaEt3,(Me2N)3As,,아니오,아니오,As,CBE (선택 성장),470.0,470.0,0.0,,,CBE (UHV),,,,,,AsH3·As4는 같은 선택성에 600 °C 필요,—,S46
+GaAs,GaEt3,tBuAsH2,,아니오,아니오,As,ALE,,,,,,,,,,,,,"Aït-Lhouss, Arès",미확인 (AtomicLimits 목록만)
+GaAs,GaEt2Cl,AsH3,,아니오,아니오,As,ALE (저압 MOCVD),,,,1 ML/cycle,3인치 GaAs 웨이퍼 (균일),수평형 저압 MOCVD,,,,,"600 °C에서 n형, 77 K 이동도 22,400 cm²/V·s",넓은 조건에서 ML 성장,"Mori, Yu",S41
+GaAs,GaEt2Cl,AsH3,,아니오,아니오,As,Hot-wall MOVPE,350.0,700.0,350.0,,,,,,,,450 °C에서 운반자 <2.5×10¹⁴ cm⁻³,0.1–10 Torr,—,S67
+GaAs,GaEt2Cl,As,,아니오,아니오,As,ALE,,,,,,,,,,,,,Sasaoka et al.,미확인 (AtomicLimits 목록만)
+GaAs,GaEt2Me,AsH3,,아니오,아니오,As,ALE,,,,,,,,,,,,완벽한 self-limiting은 TMGa에서만 관찰 (TMGa·EtMe2Ga·TEGa 비교),Sakuma et al.,S97
+GaAs,GaiBu3,AsH3,,아니오,아니오,As,ALE,,,,,,,,,,,,,Ozeki et al.,미확인 (AtomicLimits 목록만)
+GaAs,GaNp3,tBuAsH2,,아니오,아니오,As,ALE,430.0,500.0,70.0,,,,,,,,,"TMGa처럼 뚜렷한 self-limiting, C 감소 크지 않음","Yeo, Arès",S66
+GaAs,GaCl3,AsH3,,아니오,아니오,As,ALE (할라이드 수송),200.0,500.0,300.0,300 °C 1 ML → 450 °C ~2 ML/cycle,GaAs (SiO2 마스크),"H2 캐리어 (GaCl3/H2, AsH3/H2)",GaCl3를 반응기 밖에서 공급,,300 °C 이상 단결정 (Raman),C 원천 없음,,300 °C 미만 다결정·SiO2 마스크에도 증착,"Jin, Kobayashi, Ishikawa 외",S42; S43
+GaAs,GaCl3,As,,아니오,아니오,As,ALE,,,,,,,,,,,,,Kobayashi et al.,미확인 (AtomicLimits 목록만)
+GaAs,GaCl3,(Et3Si)3As,,아니오,아니오,As,ALD (dehalosilylation),175.0,200.0,25.0,0.5–0.7 Å/cycle (특허 100·120 °C),,,As 소스 50–70 °C,,비정질,화학량론 (특허 예 Ga0.58As0.42),,특허 예는 100·120 °C,Sarnet et al.,S69
+GaAs,GaCl,AsH3,,아니오,아니오,As,Chloride ALE,,,,,,,,,,,,흡착 GaCl + H → HCl 이탈,"Usui, Koukitu 외 (16편)",S40
+GaAs,GaBr,AsH3,,아니오,아니오,As,ALE,,,,,,,,,,,,,Taki et al.,미확인 (AtomicLimits 목록만)
+GaAs,GaI,AsH3,,아니오,아니오,As,ALE,,,,,,,,,,,,,Taki et al.,미확인 (AtomicLimits 목록만)
+GaAs,"TEGa·DEA adduct (TEGDEA, DB 미수록)",AsH3,,아니오,아니오,As,ALE,400.0,,,1 ML/cycle,GaAs(100),,,TEGDEA 6 s – H2 0.5 s – AsH3 10 s (100 sccm) – H2 0.5 s,,,(GaAs)1(InAs)1 초격자 InGaAs 활성층에 사용,400 °C를 넘는 온도에서 self-limiting (특허),—,S98
+InAs,InMe3,AsH3,,아니오,아니오,As,ALE,340.0,340.0,0.0,1 ML/cycle,,,,TMIn 3 s,,,,TMIn 3 s 노출로 340 °C 포화,"Dapkus, Jeong, Jung 외",S38
+InAs,InMe3,AsH3,,아니오,아니오,As,ALE,350.0,400.0,50.0,1 ML/cycle,InAs(001),H2 또는 N2 퍼지,,,,AsH3 후 퍼지가 길면 최외각 As 탈착으로 성장률 감소; In 종단면은 안정,,"AsH3 뒤 퍼지를 짧게(365 °C <0.5 s, 400 °C <0.1 s) 해야 이상적 ALE",—,S48
+InAs,InMe3,AsH3,,아니오,아니오,As,ALE (pulse-jet),,,,1 ML/cycle (0.303 nm),InAs(001),"pulse-jet epitaxy, H2 퍼지, vent-and-run",,AsH3 8.0 s 고정,,,,360 °C에서는 TMIn 시간 늘려도 포화가 깨짐,"Haraguchi, Ozeki",S52
+InAs,InMe3,AsH3,,아니오,아니오,As,ALE (회전 기판),480.0,480.0,0.0,self-limited,,회전 기판·전용 서셉터로 잔류물·경계층 기계적 제거,,,,,,,—,S49
+InAs,InMe3,tBuAsH2,,아니오,아니오,As,ALE,,,,,,,,,,,,HRXRD로 self-limiting 확인 (InAs/InP),Tran et al.,S99
+InAs,InMe3,tBuAsH2,,아니오,아니오,As,MOVPE,480.0,540.0,60.0,,,,,,,,,경면 InAs 범위 (MOVPE),—,S70
+InAs,InEt3,AsH3,,아니오,아니오,As,ALE,,,,,,,,,,,,,"Tischler, McDermott",S51
+InAs,InClMe2,AsH3,,아니오,아니오,As,ALE,,,,,,,,,,,,,Mori et al.,미확인 (AtomicLimits 목록만)
+InAs,InCl,AsH3,,아니오,아니오,As,Chloride ALE,,,,,,,,,,,,,"Koukitu, Ahopelto",미확인 (AtomicLimits 목록만)
+InAs,"InMe3·NMe2Et (TMIDMEA, DB 미수록)",AsH3,,아니오,아니오,As,ALE,350.0,500.0,150.0,1 ML/cycle,GaAs(100),,,,,,"(InAs)1(GaAs)1 초격자 12주기를 460 °C 단일 온도로 성장, 상온 PL 1.3 µm",높은 열안정성으로 창 확장,—,S50
+InGaAs,InMe3 + GaMe3,AsH3,,아니오,아니오,As,ALE,,,,,,,,,,,,,Huang et al.,미확인 (AtomicLimits 목록만)
+Ga-As-In-As,GaMe3 + InEt3,AsH3,,아니오,아니오,As,ALE,,,,,InP,,,,,,,TMGa→AsH3→TEIn→AsH3 순차; 두께가 사이클 수와 일치,Bedair et al.,S51
+(InAs)m(GaAs)n,InMe3 + GaMe3,(Me2N)3As / AsH3,,아니오,아니오,As,Pulsed-jet ALE,,,,,"GaAs(001), InP(001)",,,,,,,격자 불일치와 원자 단위 표면 형상이 self-limiting에 크게 영향; 초격자로 유효 In 조성 높은 InGaAs,"Haraguchi, Ozeki",S52
+"(Ga,In)As",TEGa/TMIn,tBuAsH2,,아니오,아니오,As,MOVPE,570.0,650.0,80.0,,InP,,,,,,,"InP 위 (Ga,In)As",—,S70
+InP,InMe3,PH3,,아니오,아니오,P,ALE,350.0,350.0,0.0,self-limited,,,,,,,,저온 350 °C에서 ALE 모드 성장,Sakuma et al. (JJAP 1988),S100
+InP,InMe3,PH3,,아니오,아니오,P,ALE (특수 장치),320.0,440.0,120.0,1 분자층/cycle,,"20 Torr, 기판에 원료를 분사하는 특수 장치 (특허)",,,,,,기존 장치는 ~450 °C 이상에서 두께 증가; 20 Torr,—,S101
+InP,InMe3,PH3,,아니오,아니오,P,교대 공급 MOCVD,340.0,340.0,0.0,1 ML/cycle,,MOCVD,,,,,,"에피 하한 330 °C; 420–580 °C 물질전달 율속, 400 °C 미만 반응 율속",P. L. Liu,S102
+InP,InMe3,PH3,,아니오,아니오,P,ALE (SPA 관찰),350.0,350.0,0.0,<1 ML/cycle,InP(001),H2 퍼지,,,,,,P 안정화면에 TMIn 공급 시 350 °C에서 self-limitation; CH3 종단 In 위에서 PH3 분해 느림. H2 퍼지로 CH3 탈착 후 PH3를 주면 1 ML/cycle에 근접,NTT,S103
+InP,InMe3,PH3,,아니오,아니오,P,ALE (LP-MOCVD),,,,<1 ML/cycle,,LP-MOCVD,,,,,,CH3 종단 In 표면에서 PH3 불완전 분해가 원인 (SPA),서울대·경희대,S104
+InP,InEt3,tBuPH2,,아니오,아니오,P,분자층 에피 (UHV),320.0,340.0,20.0,~0.7 ML/cycle,InP(001) (부분 SiNx 마스크),"UHV, 사전 크래킹 없음",,,,,,경면 표면은 320–340 °C에서만; SiNx 위 다결정 증착 없음(선택 성장),"Otsuka, Nishizawa 외",S87
+InP,InMe3,PH3,,아니오,아니오,P,PE-ALD,250.0,350.0,100.0,안정 GPC (380 °C에서 증가),"n형 Si(100) (양면 연마, 5–10 Ω·cm)","Plasmalab 100, 13.56 MHz CCP 직접 플라스마; TMIn·PH3 모두 H2 희석",,,온도↑ 결정성↑ (Raman LO 강화),,"PL 1.36–1.39 eV, 고온에서 청색편이·선폭 감소",380 °C에서 비이상 성장 시작,Uvarov et al. (2025),S105
+InP,InMe3,tBuPH2,,아니오,아니오,P,OMVPE,,,,,,,,,,,,"V/III 15, TBP 분압 0.5 Torr, TBP 유량 램프 버퍼",—,S86
+InP,"InX3 (X=Cl, Br, I)",P(SiMe3)3,,아니오,아니오,P,용액/고상 합성 (참고),,,,,,,,,,,,Me3SiX 이탈로 InP 생성 — ALD 화학의 근거,Harvard,S91
+GaP,GaMe3,PH3,,아니오,아니오,P,ALE (LP-MOVPE),,,,self-limiting,,저압 MOVPE,,,,,,"최초 GaP ALE; 표면 P가 TMG를 선택 흡착하는 기구 (표면 Ga에 CH3 없음, XPS)","Sakuma, Kodama, Ozeki",S106
+GaP,GaMe3,PH3,H2 plasma,아니오,아니오,P,PE-ALD,250.0,380.0,130.0,,Si,"연속 H2 plasma, 시간 변조",,,저전력 비정질 (380 °C에서 3–5 nm 나노결정 일부),,"RMS 0.9→0.2 nm (250→380 °C, 비정질)","20 W에서 비정질, 100 W에서 미결정(RMS 6 nm); P 단계 후 H2 plasma로 과잉 P 제거해야 ALD형 성장",Gudovskikh et al.,S107
+GaP,GaMe3,PH3,H2 plasma,아니오,아니오,P,PE-ALD,350.0,350.0,0.0,,Si,,,,"균일 비정질, GaP/Si 계면 날카로움",,MBE GaP/Si보다 패시베이션 우수,,Morozov et al.,S108
+GaP:Si,GaMe3,PH3,SiH4 (0.1% in H2),아니오,아니오,P,PE-ALD,380.0,380.0,0.0,,p형 Si,연속 H2 플라스마,,,비정질·미결정,,"n-GaP/p-Si 이종접합, 광전 효과",Si 도핑 단계 별도,Gudovskikh et al.,S109
+GaP,GaEt3,P(tBu)3,원자 H,아니오,아니오,P,PE-ALD,,,,2.7 Å/cycle,"Si(100), 6° 미스컷 Si",,,,다결정 (미스컷 Si에서 국부 에피),P/Ga 비 높음 (P-rich),,Si 표면을 원자 H + tri-TBP로 기능화해야 핵생성,—,S92
+GaP,GaMe3,P(NMe2)3,,아니오,아니오,P,Thermal ALD,,,,,,,,,,,,320 °C 초과 필요,—,S88
+GaP / GaAs,GaMe3,P(NMe2)3 / PH3,,아니오,아니오,As,Pulse-jet ALE,,,,,"GaP(001), GaAs(001)",,,,,,,"GaP/GaP(001), GaP/GaAs(001) — 격자 불일치가 self-limiting에 영향","Haraguchi, Ozeki",S52
+GaAs-GaP SLS,GaMe3,AsH3 / PH3,,아니오,아니오,As,ALE,,,,,,,,,,,,GaAs–GaP 변형층 초격자,Ozeki et al.,S110
+InGaP,InMe3 + GaMe3,PH3,,아니오,아니오,P,Pulse-jet ALE,,,,,,,,,,,,3원계 PJE 성장 (학위논문),Sakuma,S111
+GaP,GaMe3,P (원격 H2 plasma),,아니오,아니오,P,Remote PECVD (참고),590.0,,,,"GaP, Si",,,,,,,ALD 아님; GaP·Si 위 에피,Choi et al.,S94
+AlAs,AlMe3,AsH3,,—,아니오,As,ALE (참고),,,,,,,,,,,,As 반응물 참고용,"Bedair, Ozeki 외",미확인 (AtomicLimits 목록만)
+AlAs,Me3N:AlH3,As(NMe2)3,,—,아니오,As,ALE (참고),,,,,,,,,,,,,"Fujii, Suemune",미확인 (AtomicLimits 목록만)
+As2S3,As(NMe2)3,H2S,,—,아니오,As,Thermal ALD (참고),,,,,,,,,,,,TDMAAs가 금속 전구체 역할,Färm et al.,미확인 (AtomicLimits 목록만)
+MnAs,Mn(CpMe)2,As(NMe2)3,,—,아니오,As,ALE (참고),,,,,,,,,,,,,Ozeki et al.,미확인 (AtomicLimits 목록만)
+TiP (참고),TiCl4,P(SnMe3)3,,—,아니오,—,Thermal ALD,175.0,225.0,50.0,,,,,,,,,"P-rich TiP, 조성이 온도·기판에 의존",—,S95

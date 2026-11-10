@@ -1,0 +1,16 @@
+﻿조합,목표 막,공정 A,A Tmin,A Tmax,공정 B,B Tmin,B Tmax,겹침 하한 (°C),겹침 상한 (°C),겹침 폭 (°C),판정,근거·주의
+C1,InGaAs,InAs: InMe3 / AsH3 (표준),340.0,400.0,GaAs: GaMe3 / AsH3 (표준),445.0,485.0,445.0,400.0,-45.0,겹침 없음,표준 조건에선 단일 온도 불가. Fujitsu 특허도 InAs 350 °C / GaAs 500 °C 불일치를 문제로 기술 [S38; S48; S35; S56]
+C2,InGaAs,InAs: InMe3 / AsH3 (표준),340.0,400.0,GaAs: GaMe3 / AsH3 (TMGa 10 s 장노출),400.0,400.0,400.0,400.0,0.0,한 점에서만 접함,400 °C 한 점에서만 접함. InAs 쪽은 400 °C에서 AsH3 후 퍼지 <0.1 s 요구 → 공정 마진 거의 없음 [S38; S48]
+C3,InGaAs,InAs: InMe3·NMe2Et (TMIDMEA) / AsH3,350.0,500.0,GaAs: GaMe3 / AsH3 (표준),445.0,485.0,445.0,485.0,40.0,겹침 있음,(InAs)1(GaAs)1을 460 °C 단일 온도에서 실증. TMIDMEA는 DB의 DATI(InMe3·NMe2Bu)와 다른 adduct [S50; S35]
+C4,InGaAs,InAs: InMe3 / AsH3 (회전 기판),480.0,480.0,GaAs: GaMe3 / AsH3 (표준),445.0,485.0,480.0,480.0,0.0,한 점에서만 접함,InAs 480 °C self-limiting은 회전 기판·전용 서셉터 조건 [S49; S35]
+C5,InGaAs,InAs: InMe3 / AsH3 (표준),340.0,400.0,GaAs: GaCl3 / AsH3,200.0,500.0,340.0,400.0,60.0,겹침 있음,온도는 겹치지만 GaCl3는 300 °C 이상에서 1→2 ML/cycle → Ga 쪽 self-limiting 깨질 수 있음. Cl 부산물 관리 [S38; S48; S42; S43]
+C6,InGaAs,InAs: InMe3 / AsH3 (표준),340.0,400.0,GaAs: GaMe3 / AsH3 (특수 반응기),450.0,700.0,450.0,400.0,-50.0,겹침 없음,GaAs 창이 넓어도 InAs 상한(400 °C)과 겹치지 않음 [S38; S48; S36]
+C7,InGaAs,InAs: InMe3 / AsH3 (표준),340.0,400.0,GaAs: GaNp3 / tBuAsH2,430.0,500.0,430.0,400.0,-30.0,겹침 없음,겹치지 않음 (As 원이 다른 점도 유의) [S38; S48; S66]
+C8,InAsP,InAs: InMe3 / AsH3 (표준),340.0,400.0,InP: InMe3 / PH3 (특수 장치),320.0,440.0,340.0,400.0,60.0,겹침 있음,"겹침 있음. 같은 TMIn이라 In 단계 공유 가능. 단 InP 320–440 °C는 특수 분사 장치 조건, 일반 장치는 InP ALE 350 °C·<1 ML/cycle 보고 [S38; S48; S101; S103]"
+C9,InAsP,InAs: InMe3 / AsH3 (표준),340.0,400.0,InP: InEt3 / tBuPH2 (UHV),320.0,340.0,340.0,340.0,0.0,한 점에서만 접함,340 °C 한 점에서만 접함; In 전구체가 서로 다름 (TMIn vs TEIn) [S38; S48; S87]
+C10,InGaP,InP: InMe3 / PH3 (PE-ALD),250.0,350.0,GaP: GaMe3 / PH3 + H2 plasma (PE-ALD),250.0,380.0,250.0,350.0,100.0,겹침 있음,"같은 그룹·같은 장비 계열(Si 기판). GaP는 저전력에서 비정질, 과잉 P 제거용 H2 plasma 단계 필요 [S105; S107]"
+,,,,,,,,,,,,
+■ 읽는 법: 파란 숫자는 문헌 온도(입력값) — 새 공정 조합을 행으로 추가하면 겹침이 자동 계산됨.,,,,,,,,,,,,
+■ TEGa/AsH3는 ALE 조건이 좁아 정량 창이 확인되지 않아 제외. TEGa+TDMAAs는 ALE 범위가 크게 확장된다는 보고(S45)가 있으나 수치 미확인.,,,,,,,,,,,,
+"■ TMGa/TBAs vacuum ALE는 창 폭 70 °C만 확인(S44), GaP ALE(TMGa/PH3, S106)는 온도 미확인 → 원문 확인 시 행 추가 권장.",,,,,,,,,,,,
+■ 이원계 각각이 한 온도에서 포화해도 이종 계면(격자 불일치·표면 형상)에서 self-limiting이 달라질 수 있음 (S52).,,,,,,,,,,,,
