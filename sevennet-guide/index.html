@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SevenNet 활용 가이드 — 할 수 있는 작업과 시뮬레이션</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f7f6f2; --card:#ffffff; --ink:#1d1d1b; --muted:#5f5e58; --line:#e3e1d9;
+  --a:#2f6fdb; --a-soft:#e6eefc; --b:#1f9d74; --b-soft:#e2f4ed; --c:#d9822b; --c-soft:#fbeedd;
+  --d:#8a4fd1; --d-soft:#efe6fa; --r:#c94a4a; --r-soft:#f9e4e4; --code:#f1efe8;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#141413; --card:#1e1e1c; --ink:#ecebe6; --muted:#a3a29b; --line:#33332f;
+    --a:#6c9cf0; --a-soft:#1d2a44; --b:#4cc79d; --b-soft:#17342a; --c:#eba45c; --c-soft:#3a2a17;
+    --d:#b48ef0; --d-soft:#2c2140; --r:#e47b7b; --r-soft:#3d1f1f; --code:#262622;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans KR",system-ui,sans-serif;line-height:1.7;font-size:16px}
+.wrap{max-width:960px;margin:0 auto;padding:28px 18px 80px}
+header.hero{padding:28px 0 8px}
+.kicker{font-size:13px;letter-spacing:.08em;color:var(--a);font-weight:700;text-transform:uppercase}
+h1{font-size:clamp(26px,5vw,38px);line-height:1.25;margin:8px 0 12px}
+h2{font-size:clamp(21px,3.6vw,27px);margin:56px 0 10px;padding-top:8px;border-top:1px solid var(--line)}
+h2 .num{color:var(--a);margin-right:8px}
+h3{font-size:18px;margin:26px 0 6px}
+p{margin:8px 0}
+.lead{color:var(--muted);font-size:17px}
+.toc{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 0}
+.toc a{font-size:14px;text-decoration:none;color:var(--ink);background:var(--card);border:1px solid var(--line);padding:6px 12px;border-radius:999px}
+.toc a:hover{border-color:var(--a);color:var(--a)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:14px 0}
+figure{margin:18px 0;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px}
+figure svg{width:100%;height:auto;display:block}
+figcaption{font-size:13.5px;color:var(--muted);margin-top:8px;padding:0 4px}
+.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+.sim{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:6px}
+.sim .ico{width:54px;height:54px}
+.sim h4{margin:2px 0 0;font-size:16.5px}
+.sim p{font-size:14.5px;color:var(--muted);margin:0}
+.tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:4px}
+.tag{font-size:12px;padding:2px 8px;border-radius:999px;font-weight:500}
+.t-ase{background:var(--a-soft);color:var(--a)} .t-lmp{background:var(--b-soft);color:var(--b)}
+.t-ts{background:var(--c-soft);color:var(--c)} .t-d3{background:var(--d-soft);color:var(--d)}
+table{width:100%;border-collapse:collapse;font-size:14.5px}
+.tbl{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:14px;margin:14px 0}
+th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{font-size:13px;color:var(--muted);font-weight:700;background:color-mix(in srgb,var(--card) 92%,var(--ink))}
+tr:last-child td{border-bottom:none}
+code,pre{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:13.5px}
+code{background:var(--code);padding:1px 6px;border-radius:5px}
+pre{background:var(--code);padding:14px 16px;border-radius:12px;overflow-x:auto;line-height:1.55;margin:10px 0;position:relative}
+pre code{background:none;padding:0}
+.copy{position:absolute;top:8px;right:8px;font-size:12px;border:1px solid var(--line);background:var(--card);color:var(--muted);border-radius:6px;padding:3px 8px;cursor:pointer;font-family:inherit}
+.note{border-left:4px solid var(--c);background:var(--c-soft);padding:12px 16px;border-radius:0 10px 10px 0;margin:14px 0;font-size:15px}
+.note.warn{border-color:var(--r);background:var(--r-soft)}
+.note.ok{border-color:var(--b);background:var(--b-soft)}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.tabs button{font-family:inherit;font-size:14px;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:7px 14px;border-radius:999px;cursor:pointer}
+.tabs button.on{background:var(--a);border-color:var(--a);color:#fff}
+.panel,.panel2{display:none} .panel.on,.panel2.on{display:block}
+.src{font-size:13.5px;color:var(--muted)}
+.src a{color:var(--a)}
+/* svg text */
+svg text{font-family:"Noto Sans KR",system-ui,sans-serif;fill:var(--ink)}
+svg .mut{fill:var(--muted)}
+svg .mono{font-family:"JetBrains Mono",monospace}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <div class="kicker">MLIP 학습 노트 · SevenNet v0.13.x 기준 · 2026-11-10 업데이트</div>
+  <h1>SevenNet으로 무엇을 할 수 있나</h1>
+  <p class="lead">SevenNet은 서울대 MDIL(한승우 교수 그룹)이 개발한 equivariant GNN 원자간 퍼텐셜 패키지입니다. 이 문서는 SevenNet의 동작 원리, 사전학습 모델 고르는 법, 돌릴 수 있는 시뮬레이션, 학습·fine-tuning 절차, 그리고 RTX PRO 6000 Blackwell(96GB) 세팅 방법을 그림 위주로 정리합니다. GitHub 저장소와 공식 문서를 기준으로 썼습니다(2026년 11월 확인).</p>
+  <nav class="toc">
+    <a href="#what">1. 원리</a><a href="#map">2. 전체 지도</a><a href="#models">3. 모델 선택</a>
+    <a href="#sims">4. 시뮬레이션</a><a href="#train">5. 학습·파인튜닝</a><a href="#engine">6. 실행 엔진</a>
+    <a href="#code">7. 코드 예시</a><a href="#ald">8. ALD 연구 적용</a><a href="#caution">9. 주의점</a><a href="#blackwell">10. RTX PRO 6000 세팅</a>
+  </nav>
+</header>
+
+<!-- 1 -->
+<h2 id="what"><span class="num">1</span>SevenNet은 어떻게 동작하나</h2>
+<p>원자 구조를 <b>그래프</b>로 바꿉니다. 원자는 노드가 되고, cutoff 반경 안에 있는 원자 쌍은 엣지가 됩니다. 그 위에서 회전에 대해 equivariant한 <b>메시지 패싱</b>을 여러 층 반복하면 원자마다 에너지가 나오고, 이를 모두 더하면 전체 에너지 E가 됩니다. 힘과 응력은 E를 위치와 변형으로 미분해서 얻습니다. 모델의 뼈대는 NequIP 구조입니다.</p>
+<figure>
+<svg viewBox="0 0 900 300" role="img" aria-label="SevenNet 구조 모식도">
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" fill="var(--muted)"/></marker>
+  </defs>
+  <!-- structure -->
+  <rect x="10" y="40" width="170" height="200" rx="14" fill="var(--a-soft)" stroke="var(--a)"/>
+  <text x="95" y="66" text-anchor="middle" font-weight="700" font-size="15">① 원자 구조</text>
+  <circle cx="60" cy="130" r="16" fill="var(--a)"/><circle cx="130" cy="110" r="12" fill="var(--c)"/>
+  <circle cx="110" cy="180" r="12" fill="var(--c)"/><circle cx="55" cy="200" r="16" fill="var(--a)"/>
+  <circle cx="150" cy="170" r="16" fill="var(--a)"/>
+  <text x="95" y="230" text-anchor="middle" font-size="12" class="mut">좌표 · 원소 · 셀</text>
+  <line x1="185" y1="140" x2="222" y2="140" stroke="var(--muted)" stroke-width="2" marker-end="url(#ar)"/>
+  <!-- graph -->
+  <rect x="228" y="40" width="170" height="200" rx="14" fill="var(--card)" stroke="var(--line)"/>
+  <text x="313" y="66" text-anchor="middle" font-weight="700" font-size="15">② 그래프 변환</text>
+  <circle cx="313" cy="150" r="58" fill="none" stroke="var(--muted)" stroke-dasharray="4 4"/>
+  <g stroke="var(--muted)" stroke-width="1.6">
+    <line x1="313" y1="150" x2="350" y2="118"/><line x1="313" y1="150" x2="280" y2="115"/>
+    <line x1="313" y1="150" x2="340" y2="190"/><line x1="313" y1="150" x2="275" y2="180"/>
+  </g>
+  <circle cx="313" cy="150" r="12" fill="var(--a)"/><circle cx="350" cy="118" r="9" fill="var(--c)"/>
+  <circle cx="280" cy="115" r="9" fill="var(--a)"/><circle cx="340" cy="190" r="9" fill="var(--c)"/>
+  <circle cx="275" cy="180" r="9" fill="var(--a)"/><circle cx="385" cy="215" r="8" fill="var(--line)"/>
+  <text x="313" y="230" text-anchor="middle" font-size="12" class="mut">cutoff 안 이웃만 연결</text>
+  <line x1="403" y1="140" x2="440" y2="140" stroke="var(--muted)" stroke-width="2" marker-end="url(#ar)"/>
+  <!-- layers -->
+  <rect x="446" y="40" width="200" height="200" rx="14" fill="var(--d-soft)" stroke="var(--d)"/>
+  <text x="546" y="66" text-anchor="middle" font-weight="700" font-size="15">③ 메시지 패싱 × N층</text>
+  <g font-size="12">
+    <rect x="470" y="84" width="152" height="30" rx="8" fill="var(--card)" stroke="var(--d)"/><text x="546" y="104" text-anchor="middle">Interaction 1</text>
+    <rect x="470" y="122" width="152" height="30" rx="8" fill="var(--card)" stroke="var(--d)"/><text x="546" y="142" text-anchor="middle">Interaction 2</text>
+    <text x="546" y="170" text-anchor="middle" class="mut">⋮</text>
+    <rect x="470" y="180" width="152" height="30" rx="8" fill="var(--card)" stroke="var(--d)"/><text x="546" y="200" text-anchor="middle">Interaction N</text>
+  </g>
+  <text x="546" y="230" text-anchor="middle" font-size="12" class="mut">E(3)-equivariant (l<tspan baseline-shift="sub" font-size="9">max</tspan>=2~3)</text>
+  <line x1="651" y1="140" x2="688" y2="140" stroke="var(--muted)" stroke-width="2" marker-end="url(#ar)"/>
+  <!-- output -->
+  <rect x="694" y="40" width="196" height="200" rx="14" fill="var(--b-soft)" stroke="var(--b)"/>
+  <text x="792" y="66" text-anchor="middle" font-weight="700" font-size="15">④ 출력</text>
+  <text x="792" y="102" text-anchor="middle" font-size="14">E = Σ<tspan font-style="italic">ε</tspan><tspan baseline-shift="sub" font-size="10">i</tspan></text>
+  <text x="792" y="138" text-anchor="middle" font-size="14">F<tspan baseline-shift="sub" font-size="10">i</tspan> = −∂E/∂r<tspan baseline-shift="sub" font-size="10">i</tspan></text>
+  <text x="792" y="174" text-anchor="middle" font-size="14">σ = (1/V)∂E/∂ε</text>
+  <text x="792" y="210" text-anchor="middle" font-size="12" class="mut">원자별 응력(virial)도 가능</text>
+  <text x="450" y="285" text-anchor="middle" font-size="13" class="mut">층 수 N을 늘리면 receptive field(= N × cutoff)가 넓어짐 → LAMMPS 병렬화도 층 단위로 통신</text>
+</svg>
+<figcaption>그림 1. 구조 → 그래프 → equivariant 메시지 패싱 → 에너지·힘·응력. 힘을 에너지의 미분으로 구하므로 에너지가 보존되어 MD에 안정적입니다.</figcaption>
+</figure>
+<div class="card">
+<b>SevenNet만의 특징</b>
+<ul style="margin:6px 0 0;padding-left:20px">
+  <li><b>공간 분할 병렬 MD</b>: 메시지 패싱 층마다 이웃 GPU와 정보를 주고받는 알고리즘으로, LAMMPS에서 여러 GPU로 대형 계를 돌릴 수 있습니다(JCTC 2024).</li>
+  <li><b>Multi-fidelity / multi-task 학습</b>: DFT 설정(PBE+U, r²SCAN, ωB97M-V 등)이 서로 다른 데이터셋을 한 모델로 학습하고, 추론할 때 <code>modal</code>로 원하는 기준을 고릅니다(JACS 2024).</li>
+  <li><b>망각 방지 fine-tuning(reEWC)</b>, <b>GPU D3 분산 보정</b>, <b>텐서곱 가속기</b>(FlashTP · cuEquivariance · OpenEquivariance · LunaTP)를 지원합니다.</li>
+</ul>
+</div>
+
+<!-- 2 -->
+<h2 id="map"><span class="num">2</span>전체 지도: 모델 → 엔진 → 시뮬레이션</h2>
+<p>SevenNet을 쓰는 경로는 세 가지입니다. ① 사전학습 모델을 그대로 쓰기, ② 내 DFT 데이터로 fine-tuning하기, ③ 처음부터 학습하기. 어느 경로로 만든 모델이든 같은 실행 엔진에 꽂아서 씁니다.</p>
+<figure>
+<svg viewBox="0 0 900 420" role="img" aria-label="SevenNet 워크플로 지도">
+  <defs><marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" fill="var(--muted)"/></marker></defs>
+  <text x="120" y="28" text-anchor="middle" font-weight="700" font-size="14" class="mut">모델 준비</text>
+  <text x="450" y="28" text-anchor="middle" font-weight="700" font-size="14" class="mut">실행 엔진</text>
+  <text x="770" y="28" text-anchor="middle" font-weight="700" font-size="14" class="mut">시뮬레이션</text>
+  <!-- left -->
+  <rect x="15" y="50" width="210" height="80" rx="12" fill="var(--a-soft)" stroke="var(--a)"/>
+  <text x="120" y="82" text-anchor="middle" font-weight="700" font-size="14">① 사전학습 모델</text>
+  <text x="120" y="106" text-anchor="middle" font-size="12" class="mono">7net-omni, nano …</text>
+  <rect x="15" y="160" width="210" height="80" rx="12" fill="var(--d-soft)" stroke="var(--d)"/>
+  <text x="120" y="192" text-anchor="middle" font-weight="700" font-size="14">② Fine-tuning</text>
+  <text x="120" y="216" text-anchor="middle" font-size="12">내 DFT + (reEWC)</text>
+  <rect x="15" y="270" width="210" height="80" rx="12" fill="var(--card)" stroke="var(--line)"/>
+  <text x="120" y="302" text-anchor="middle" font-weight="700" font-size="14">③ Scratch 학습</text>
+  <text x="120" y="326" text-anchor="middle" font-size="12">sevenn train</text>
+  <path d="M120 130 V160" stroke="var(--muted)" stroke-width="1.6" stroke-dasharray="4 3" marker-end="url(#ar2)"/>
+  <text x="128" y="150" font-size="11" class="mut">초기 가중치</text>
+  <!-- checkpoint hub -->
+  <circle cx="290" cy="200" r="34" fill="var(--card)" stroke="var(--ink)"/>
+  <text x="290" y="196" text-anchor="middle" font-size="12" font-weight="700">.pth</text>
+  <text x="290" y="212" text-anchor="middle" font-size="10" class="mut">checkpoint</text>
+  <g stroke="var(--muted)" stroke-width="1.6" fill="none">
+    <path d="M225 90 C255 90 255 175 258 185" marker-end="url(#ar2)"/>
+    <path d="M225 200 H254" marker-end="url(#ar2)"/>
+    <path d="M225 310 C255 310 255 225 258 215" marker-end="url(#ar2)"/>
+  </g>
+  <!-- engines -->
+  <g font-size="13">
+    <rect x="360" y="55" width="180" height="62" rx="12" fill="var(--a-soft)" stroke="var(--a)"/>
+    <text x="450" y="82" text-anchor="middle" font-weight="700">ASE Calculator</text>
+    <text x="450" y="102" text-anchor="middle" font-size="11" class="mut">Python · 소~중형 계</text>
+    <rect x="360" y="135" width="180" height="62" rx="12" fill="var(--b-soft)" stroke="var(--b)"/>
+    <text x="450" y="162" text-anchor="middle" font-weight="700">LAMMPS (Torch)</text>
+    <text x="450" y="182" text-anchor="middle" font-size="11" class="mut">e3gnn · 다중 GPU 병렬</text>
+    <rect x="360" y="215" width="180" height="62" rx="12" fill="var(--b-soft)" stroke="var(--b)"/>
+    <text x="450" y="242" text-anchor="middle" font-weight="700">LAMMPS (ML-IAP)</text>
+    <text x="450" y="262" text-anchor="middle" font-size="11" class="mut">Kokkos · cuEq/LunaTP</text>
+    <rect x="360" y="295" width="180" height="62" rx="12" fill="var(--c-soft)" stroke="var(--c)"/>
+    <text x="450" y="322" text-anchor="middle" font-weight="700">TorchSim</text>
+    <text x="450" y="342" text-anchor="middle" font-size="11" class="mut">배치 MD·relax · 고처리량</text>
+  </g>
+  <g stroke="var(--muted)" stroke-width="1.4" fill="none">
+    <path d="M324 192 C340 150 340 90 356 86" marker-end="url(#ar2)"/>
+    <path d="M324 198 C340 180 344 166 356 166" marker-end="url(#ar2)"/>
+    <path d="M324 206 C340 222 344 246 356 246" marker-end="url(#ar2)"/>
+    <path d="M322 214 C340 260 340 322 356 326" marker-end="url(#ar2)"/>
+  </g>
+  <text x="290" y="262" text-anchor="middle" font-size="11" class="mut">sevenn</text>
+  <text x="290" y="276" text-anchor="middle" font-size="11" class="mut">get_model</text>
+  <text x="290" y="290" text-anchor="middle" font-size="11" class="mut">(LAMMPS용)</text>
+  <!-- sims -->
+  <g font-size="12.5">
+    <rect x="640" y="50" width="250" height="34" rx="9" fill="var(--card)" stroke="var(--line)"/><text x="655" y="72">단일점 E·F·σ 계산</text>
+    <rect x="640" y="90" width="250" height="34" rx="9" fill="var(--card)" stroke="var(--line)"/><text x="655" y="112">구조·셀 최적화</text>
+    <rect x="640" y="130" width="250" height="34" rx="9" fill="var(--card)" stroke="var(--line)"/><text x="655" y="152">MD (NVE/NVT/NPT, 용융·결정화)</text>
+    <rect x="640" y="170" width="250" height="34" rx="9" fill="var(--card)" stroke="var(--line)"/><text x="655" y="192">포논 · 열전도 · 열팽창</text>
+    <rect x="640" y="210" width="250" height="34" rx="9" fill="var(--card)" stroke="var(--line)"/><text x="655" y="232">NEB · 확산 · 반응 장벽</text>
+    <rect x="640" y="250" width="250" height="34" rx="9" fill="var(--card)" stroke="var(--line)"/><text x="655" y="272">표면 흡착 · 계면 에너지</text>
+    <rect x="640" y="290" width="250" height="34" rx="9" fill="var(--card)" stroke="var(--line)"/><text x="655" y="312">EOS · 상안정성 · 탄성</text>
+    <rect x="640" y="330" width="250" height="34" rx="9" fill="var(--card)" stroke="var(--line)"/><text x="655" y="352">고처리량 스크리닝 · MC 결합</text>
+  </g>
+  <path d="M545 205 H630" stroke="var(--muted)" stroke-width="2" marker-end="url(#ar2)"/>
+  <text x="450" y="400" text-anchor="middle" font-size="12" class="mut">+ D3 분산 보정은 ASE와 LAMMPS 모두에서 GPU로 더할 수 있음</text>
+</svg>
+<figcaption>그림 2. 모델을 어떻게 준비했든 결과는 checkpoint(.pth) 하나이고, 이를 ASE·LAMMPS·TorchSim 중 하나에 연결해 시뮬레이션을 돌립니다.</figcaption>
+</figure>
+
+<!-- 3 -->
+<h2 id="models"><span class="num">3</span>사전학습 모델 고르기</h2>
+<p>공식 권장 모델은 <b>SevenNet-Omni</b>입니다. 15개 공개 ab initio 데이터셋을 함께 학습해서 결정, 분자, 표면, 계면, MOF를 모두 다룹니다. 계가 크고 속도가 중요하면 Omni를 지식 증류해 만든 <b>Nano</b>가 대안입니다.</p>
+
+<figure>
+<svg viewBox="0 0 900 340" role="img" aria-label="모델 선택 흐름도">
+  <defs><marker id="ar3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" fill="var(--muted)"/></marker></defs>
+  <rect x="330" y="10" width="240" height="46" rx="23" fill="var(--ink)"/>
+  <text x="450" y="39" text-anchor="middle" font-weight="700" font-size="14" style="fill:var(--bg)">어떤 모델을 쓸까?</text>
+  <path d="M450 56 V80" stroke="var(--muted)" stroke-width="1.6" marker-end="url(#ar3)"/>
+  <rect x="270" y="84" width="360" height="46" rx="10" fill="var(--card)" stroke="var(--line)"/>
+  <text x="450" y="112" text-anchor="middle" font-size="13.5">원자 수가 수만 개 이상이거나, 수 ns 이상의 MD?</text>
+  <path d="M290 130 C220 150 160 160 150 186" stroke="var(--muted)" stroke-width="1.6" fill="none" marker-end="url(#ar3)"/>
+  <text x="196" y="146" font-size="12.5" font-weight="700" style="fill:var(--c)">예</text>
+  <path d="M610 130 C680 150 740 160 750 186" stroke="var(--muted)" stroke-width="1.6" fill="none" marker-end="url(#ar3)"/>
+  <text x="690" y="146" font-size="12.5" font-weight="700" style="fill:var(--a)">아니오</text>
+  <rect x="30" y="190" width="240" height="120" rx="12" fill="var(--c-soft)" stroke="var(--c)"/>
+  <text x="150" y="218" text-anchor="middle" font-weight="700" font-size="15">SevenNet-Nano</text>
+  <text x="150" y="242" text-anchor="middle" font-size="12" class="mono">7net-nano-5.0 등</text>
+  <text x="150" y="266" text-anchor="middle" font-size="12">l<tspan baseline-shift="sub" font-size="9">max</tspan>=2, 3층 · 경량</text>
+  <text x="150" y="288" text-anchor="middle" font-size="12" class="mut">cutoff 4.5~6.0 Å 중 선택</text>
+  <rect x="330" y="190" width="240" height="120" rx="12" fill="var(--a-soft)" stroke="var(--a)"/>
+  <text x="450" y="218" text-anchor="middle" font-weight="700" font-size="15">SevenNet-Omni ★</text>
+  <text x="450" y="242" text-anchor="middle" font-size="12" class="mono">7net-omni, modal='mpa'</text>
+  <text x="450" y="266" text-anchor="middle" font-size="12">l<tspan baseline-shift="sub" font-size="9">max</tspan>=3, 5층 · 범용 기본값</text>
+  <text x="450" y="288" text-anchor="middle" font-size="12" class="mut">F1 0.889 · CPS 0.849</text>
+  <rect x="630" y="190" width="240" height="120" rx="12" fill="var(--d-soft)" stroke="var(--d)"/>
+  <text x="750" y="218" text-anchor="middle" font-weight="700" font-size="15">Omni-i8 / i12</text>
+  <text x="750" y="242" text-anchor="middle" font-size="12" class="mono">7net-omni-i8</text>
+  <text x="750" y="266" text-anchor="middle" font-size="12">8·12층 · 정확도 우선</text>
+  <text x="750" y="288" text-anchor="middle" font-size="12" class="mut">i8: F1 0.903 · CPS 0.859</text>
+  <text x="600" y="326" text-anchor="middle" font-size="11.5" class="mut">기본은 Omni → 정확도가 더 필요하면 i8/i12</text>
+</svg>
+<figcaption>그림 3. 모델 선택 흐름. Matbench Discovery 수치는 공식 문서에 나온 값입니다. Nano의 정확도·속도 수치는 문서 표에 없어서 적지 않았습니다.</figcaption>
+</figure>
+
+<div class="tbl"><table>
+<tr><th>모델</th><th>학습 데이터</th><th>구조</th><th>언제 쓰나</th></tr>
+<tr><td><b>SevenNet-Omni</b> ★</td><td>공개 데이터셋 15개</td><td>l<sub>max</sub>=3, 5층, multi-task</td><td>기본값. 대부분의 무기·표면·분자 계</td></tr>
+<tr><td>Omni-i8 / i12</td><td>동일</td><td>8 / 12층</td><td>속도를 조금 희생하고 정확도를 높일 때</td></tr>
+<tr><td>SevenNet-Nano</td><td>Omni <code>mpa</code>를 증류</td><td>l<sub>max</sub>=2, 3층</td><td>대규모·장시간 MD</td></tr>
+<tr><td>SevenNet-MF-ompa</td><td>MPtrj, sAlex, OMat24</td><td>l<sub>max</sub>=3, 5층, multi-task</td><td>이전 세대 범용 모델 (<code>mpa</code>/<code>omat24</code>)</td></tr>
+<tr><td>SevenNet-omat / l3i5 / 0</td><td>OMat24 / MPtrj / MPtrj</td><td>single-task</td><td>구형. 재현성 확인이나 reEWC 기반 모델로</td></tr>
+</table></div>
+
+<h3>Multi-task(modal)란?</h3>
+<p>Omni는 한 네트워크가 여러 DFT 기준을 함께 배웁니다. 추론할 때 <code>modal</code>로 “어느 데이터셋의 DFT 설정에 맞춘 답을 낼지”를 고릅니다. 같은 구조라도 task를 바꾸면 PBE+U 결과처럼, 또는 r²SCAN 결과처럼 출력합니다.</p>
+<figure>
+<svg viewBox="0 0 900 260" role="img" aria-label="multi-task 개념도">
+  <defs><marker id="ar4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" fill="var(--muted)"/></marker></defs>
+  <g font-size="12">
+    <rect x="15" y="20" width="170" height="30" rx="8" fill="var(--card)" stroke="var(--line)"/><text x="100" y="40" text-anchor="middle">MPtrj + sAlex (PBE+U)</text>
+    <rect x="15" y="58" width="170" height="30" rx="8" fill="var(--card)" stroke="var(--line)"/><text x="100" y="78" text-anchor="middle">OC20 / OC22 (표면 흡착)</text>
+    <rect x="15" y="96" width="170" height="30" rx="8" fill="var(--card)" stroke="var(--line)"/><text x="100" y="116" text-anchor="middle">MatPES r²SCAN</text>
+    <rect x="15" y="134" width="170" height="30" rx="8" fill="var(--card)" stroke="var(--line)"/><text x="100" y="154" text-anchor="middle">OMol25 (ωB97M-V)</text>
+    <rect x="15" y="172" width="170" height="30" rx="8" fill="var(--card)" stroke="var(--line)"/><text x="100" y="192" text-anchor="middle">ODAC23 (MOF, PBE-D3)</text>
+    <text x="100" y="226" text-anchor="middle" class="mut">… 총 15개</text>
+  </g>
+  <path d="M190 110 H258" stroke="var(--muted)" stroke-width="2" marker-end="url(#ar4)"/>
+  <rect x="265" y="50" width="250" height="120" rx="14" fill="var(--d-soft)" stroke="var(--d)"/>
+  <text x="390" y="92" text-anchor="middle" font-weight="700" font-size="15">공유 GNN 몸통</text>
+  <text x="390" y="116" text-anchor="middle" font-size="12">원소·결합에 대한 공통 지식</text>
+  <text x="390" y="140" text-anchor="middle" font-size="12" class="mut">+ task 인덱스로 기준 선택</text>
+  <path d="M520 110 H588" stroke="var(--muted)" stroke-width="2" marker-end="url(#ar4)"/>
+  <g font-size="12.5">
+    <rect x="595" y="30" width="290" height="36" rx="9" fill="var(--a-soft)" stroke="var(--a)"/><text x="610" y="53"><tspan class="mono" font-weight="700">mpa</tspan> → PBE(+U) · 기본 권장</text>
+    <rect x="595" y="74" width="290" height="36" rx="9" fill="var(--card)" stroke="var(--line)"/><text x="610" y="97"><tspan class="mono" font-weight="700">oc20 / oc22</tspan> → 표면·촉매 기준</text>
+    <rect x="595" y="118" width="290" height="36" rx="9" fill="var(--card)" stroke="var(--line)"/><text x="610" y="141"><tspan class="mono" font-weight="700">matpes_r2scan</tspan> → r²SCAN</text>
+    <rect x="595" y="162" width="290" height="36" rx="9" fill="var(--card)" stroke="var(--line)"/><text x="610" y="185"><tspan class="mono" font-weight="700">omol25_low</tspan> → 분자 하이브리드</text>
+  </g>
+  <text x="450" y="245" text-anchor="middle" font-size="12" class="mut">문서 권장: 대부분의 PBE(+U) 계는 mpa로 충분. 특정 범함수·데이터셋 기준과 맞춰야 할 때만 다른 task 선택</text>
+</svg>
+<figcaption>그림 4. multi-task 개념도. 데이터셋끼리 범함수, 스핀 처리, U 값이 달라도 하나의 모델로 공존시키는 것이 핵심입니다.</figcaption>
+</figure>
+
+<details class="card"><summary><b>Omni 전체 task 목록 (13개) 펼치기</b></summary>
+<div class="tbl" style="border:none;margin:10px 0 0"><table>
+<tr><th>task</th><th>기준</th><th>task</th><th>기준</th></tr>
+<tr><td><code>mpa</code></td><td>PBE(+U)</td><td><code>omol25_low</code></td><td>ωB97M-V</td></tr>
+<tr><td><code>omat24</code></td><td>PBE(+U)</td><td><code>omol25_high</code></td><td>ωB97M-V (고스핀만)</td></tr>
+<tr><td><code>matpes_pbe</code></td><td>PBE (U 없음)</td><td><code>spice</code></td><td>ωB97M</td></tr>
+<tr><td><code>oc20</code></td><td>RPBE</td><td><code>qcml</code></td><td>PBE0</td></tr>
+<tr><td><code>oc22</code></td><td>PBE(+U)</td><td><code>pet_mad</code></td><td>PBEsol</td></tr>
+<tr><td><code>odac23</code></td><td>PBE-D3</td><td><code>mp r2scan</code> · <code>matpes_r2scan</code></td><td>r²SCAN</td></tr>
+</table></div>
+<p class="src">고에너지·큰 힘이 걸린 구조에는 <code>omat24</code>나 <code>matpes_pbe</code>도 검토하라고 문서에 적혀 있습니다.</p>
+</details>
+
+<!-- 4 -->
+<h2 id="sims"><span class="num">4</span>돌릴 수 있는 시뮬레이션</h2>
+<p>SevenNet 자체는 “에너지·힘·응력을 빠르게 계산하는 계산기”입니다. 따라서 <b>ASE나 LAMMPS가 지원하는 시뮬레이션은 대부분 그대로 돌릴 수 있습니다</b>. DFT 대비 수천 배 빠르기 때문에, DFT로는 못 하던 크기와 시간 규모가 열립니다.</p>
+<p class="src">태그 표기: <span class="tag t-ase">ASE</span> <span class="tag t-lmp">LAMMPS</span> <span class="tag t-ts">TorchSim</span> <span class="tag t-d3">+D3 권장</span></p>
+
+<div class="grid">
+  <div class="sim">
+    <svg class="ico" viewBox="0 0 54 54"><rect width="54" height="54" rx="12" fill="var(--a-soft)"/><circle cx="27" cy="27" r="7" fill="var(--a)"/><g stroke="var(--a)" stroke-width="2.4" marker-end=""><line x1="27" y1="27" x2="44" y2="17"/><line x1="27" y1="27" x2="14" y2="40"/></g></svg>
+    <h4>단일점 계산 (E · F · σ)</h4>
+    <p>구조 하나의 에너지, 힘, 응력을 계산합니다. 원자별 virial도 나옵니다. <code>sevenn inference</code>로 수천 개 구조를 CSV로 한 번에 뽑을 수 있습니다.</p>
+    <div class="tags"><span class="tag t-ase">ASE</span><span class="tag t-ts">CLI</span></div>
+  </div>
+  <div class="sim">
+    <svg class="ico" viewBox="0 0 54 54"><rect width="54" height="54" rx="12" fill="var(--a-soft)"/><path d="M8 14 C18 14 18 42 27 42 C36 42 38 26 46 26" fill="none" stroke="var(--a)" stroke-width="2.6"/><circle cx="27" cy="42" r="4" fill="var(--a)"/></svg>
+    <h4>구조 · 셀 최적화</h4>
+    <p>원자 위치만, 또는 셀까지 함께 relax합니다(BFGS, FIRE, <code>FrechetCellFilter</code>). 후보 구조를 DFT 전에 걸러내는 단계로 많이 씁니다.</p>
+    <div class="tags"><span class="tag t-ase">ASE</span><span class="tag t-ts">TorchSim (배치)</span></div>
+  </div>
+  <div class="sim">
+    <svg class="ico" viewBox="0 0 54 54"><rect width="54" height="54" rx="12" fill="var(--b-soft)"/><polyline points="6,34 12,26 18,36 24,20 30,32 36,22 42,30 48,24" fill="none" stroke="var(--b)" stroke-width="2.4"/></svg>
+    <h4>분자동역학 (MD)</h4>
+    <p>NVE, NVT(Langevin·Nosé–Hoover), NPT를 돌릴 수 있습니다. 용융·결정화, 비정질 생성(melt-quench), 확산계수, RDF 분석이 가능하고, LAMMPS에서는 다중 GPU로 수십만 원자 규모까지 갑니다.</p>
+    <div class="tags"><span class="tag t-ase">ASE</span><span class="tag t-lmp">LAMMPS</span><span class="tag t-ts">TorchSim</span></div>
+  </div>
+  <div class="sim">
+    <svg class="ico" viewBox="0 0 54 54"><rect width="54" height="54" rx="12" fill="var(--c-soft)"/><path d="M8 44 Q16 10 27 27 T46 12" fill="none" stroke="var(--c)" stroke-width="2.4"/><path d="M8 44 Q20 30 27 34 T46 40" fill="none" stroke="var(--c)" stroke-width="2.4" opacity=".55"/></svg>
+    <h4>포논 · 열전도 · 열팽창</h4>
+    <p>phonopy나 phono3py와 ASE를 연결해 포논 분산과 격자 열전도도를 계산합니다. Matbench의 κ<sub>SRME</sub> 지표가 바로 이 성능입니다. QHA로 열팽창도 구할 수 있습니다.</p>
+    <div class="tags"><span class="tag t-ase">ASE + phonopy</span></div>
+  </div>
+  <div class="sim">
+    <svg class="ico" viewBox="0 0 54 54"><rect width="54" height="54" rx="12" fill="var(--r-soft)"/><path d="M6 40 C16 40 18 12 27 12 C36 12 38 34 48 34" fill="none" stroke="var(--r)" stroke-width="2.4"/><g fill="var(--r)"><circle cx="6" cy="40" r="3"/><circle cx="16" cy="32" r="3"/><circle cx="27" cy="12" r="3.5"/><circle cx="38" cy="24" r="3"/><circle cx="48" cy="34" r="3"/></g></svg>
+    <h4>NEB · 반응 장벽 · 확산</h4>
+    <p>ASE의 NEB·CI-NEB·Dimer로 전이상태를 탐색합니다. 공공(vacancy)이나 이온 확산, 상전이 경로, 표면 반응 단계별 장벽을 구할 수 있습니다. 이미지가 많아도 빠르게 돌아갑니다.</p>
+    <div class="tags"><span class="tag t-ase">ASE</span></div>
+  </div>
+  <div class="sim">
+    <svg class="ico" viewBox="0 0 54 54"><rect width="54" height="54" rx="12" fill="var(--d-soft)"/><g fill="var(--d)" opacity=".5"><circle cx="10" cy="42" r="5"/><circle cx="21" cy="42" r="5"/><circle cx="32" cy="42" r="5"/><circle cx="43" cy="42" r="5"/></g><circle cx="27" cy="25" r="6" fill="var(--d)"/><g stroke="var(--d)" stroke-width="2"><line x1="27" y1="25" x2="17" y2="14"/><line x1="27" y1="25" x2="37" y2="14"/><line x1="27" y1="31" x2="27" y2="37"/></g></svg>
+    <h4>표면 흡착 · 계면</h4>
+    <p>슬랩 위 분자 흡착에너지, 흡착 자리별 비교, 표면·계면 에너지를 계산합니다. 물리흡착이 중요한 계는 D3를 함께 켜는 것이 좋습니다.</p>
+    <div class="tags"><span class="tag t-ase">ASE</span><span class="tag t-d3">+D3</span></div>
+  </div>
+  <div class="sim">
+    <svg class="ico" viewBox="0 0 54 54"><rect width="54" height="54" rx="12" fill="var(--b-soft)"/><path d="M10 12 Q14 44 27 42 Q40 40 46 20" fill="none" stroke="var(--b)" stroke-width="2.4"/><circle cx="27" cy="42" r="3.5" fill="var(--b)"/></svg>
+    <h4>EOS · 상안정성 · 탄성</h4>
+    <p>부피-에너지 곡선으로 체적탄성률을, 다형체 간 에너지 차이로 상안정성을, 응력-변형 관계로 탄성상수를 구합니다. 형성에너지와 convex hull 판단도 할 수 있습니다.</p>
+    <div class="tags"><span class="tag t-ase">ASE</span></div>
+  </div>
+  <div class="sim">
+    <svg class="ico" viewBox="0 0 54 54"><rect width="54" height="54" rx="12" fill="var(--c-soft)"/><g fill="var(--c)"><rect x="8" y="10" width="10" height="10" rx="2"/><rect x="22" y="10" width="10" height="10" rx="2"/><rect x="36" y="10" width="10" height="10" rx="2"/><rect x="8" y="24" width="10" height="10" rx="2"/><rect x="22" y="24" width="10" height="10" rx="2" opacity=".4"/><rect x="36" y="24" width="10" height="10" rx="2"/><rect x="8" y="38" width="10" height="10" rx="2" opacity=".4"/><rect x="22" y="38" width="10" height="10" rx="2"/><rect x="36" y="38" width="10" height="10" rx="2"/></g></svg>
+    <h4>고처리량 스크리닝 · MC 결합</h4>
+    <p>TorchSim으로 여러 구조를 GPU 한 장에서 배치로 relax하거나 MD를 돌립니다. 에너지 평가가 싸기 때문에 Monte Carlo, 유전 알고리즘, 생성 모델(MatterGen 등)이 낸 후보의 검증 루프에 끼우기 좋습니다.</p>
+    <div class="tags"><span class="tag t-ts">TorchSim</span><span class="tag t-ase">ASE</span></div>
+  </div>
+</div>
+
+<h3>규모 감각</h3>
+<figure>
+<svg viewBox="0 0 900 230" role="img" aria-label="시뮬레이션 규모 비교">
+  <line x1="80" y1="170" x2="860" y2="170" stroke="var(--muted)" stroke-width="1.5"/>
+  <g font-size="12" class="mut" text-anchor="middle">
+    <text x="120" y="192" class="mut">10²</text><text x="300" y="192" class="mut">10³</text><text x="480" y="192" class="mut">10⁴</text>
+    <text x="660" y="192" class="mut">10⁵</text><text x="840" y="192" class="mut">10⁶</text>
+  </g>
+  <text x="470" y="218" text-anchor="middle" font-size="12.5" class="mut">원자 수 (log scale, 대략적인 감각)</text>
+  <rect x="90" y="30" width="250" height="30" rx="8" fill="var(--r-soft)" stroke="var(--r)"/>
+  <text x="215" y="50" text-anchor="middle" font-size="12.5">DFT (일상적 범위)</text>
+  <rect x="100" y="72" width="480" height="30" rx="8" fill="var(--a-soft)" stroke="var(--a)"/>
+  <text x="340" y="92" text-anchor="middle" font-size="12.5">SevenNet + ASE / 단일 GPU</text>
+  <rect x="260" y="114" width="590" height="30" rx="8" fill="var(--b-soft)" stroke="var(--b)"/>
+  <text x="555" y="134" text-anchor="middle" font-size="12.5">SevenNet + LAMMPS 다중 GPU 병렬 (Nano면 더 크게)</text>
+</svg>
+<figcaption>그림 5. 규모 비교. 실제 상한은 GPU 메모리, 모델 크기, 밀도에 따라 크게 달라지므로 감각을 잡는 용도로만 보세요. 문서에 따르면 가속기 성능은 약 10³ 원자 부근에서 FlashTP와 cuEquivariance의 우열이 바뀝니다.</figcaption>
+</figure>
+
+<!-- 5 -->
+<h2 id="train"><span class="num">5</span>학습 · Fine-tuning 파이프라인</h2>
+<p>사전학습 모델의 정확도가 부족한 계라면, DFT를 수백~수천 개 정도 계산해서 fine-tuning하는 것이 일반적인 경로입니다. CLI 다섯 개로 처음부터 끝까지 진행합니다.</p>
+<figure>
+<svg viewBox="0 0 900 200" role="img" aria-label="학습 파이프라인">
+  <defs><marker id="ar5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" fill="var(--muted)"/></marker></defs>
+  <g font-size="12">
+    <rect x="10" y="40" width="150" height="90" rx="12" fill="var(--card)" stroke="var(--line)"/>
+    <text x="85" y="70" text-anchor="middle" font-weight="700" font-size="13.5">DFT 데이터</text>
+    <text x="85" y="92" text-anchor="middle" class="mut">OUTCAR, extxyz</text>
+    <text x="85" y="110" text-anchor="middle" class="mut">ASE db 등</text>
+    <rect x="190" y="40" width="150" height="90" rx="12" fill="var(--a-soft)" stroke="var(--a)"/>
+    <text x="265" y="70" text-anchor="middle" font-weight="700" font-size="13.5">preset</text>
+    <text x="265" y="94" text-anchor="middle" class="mono" font-size="11">sevenn preset</text>
+    <text x="265" y="110" text-anchor="middle" class="mono" font-size="11">fine_tune</text>
+    <rect x="370" y="40" width="150" height="90" rx="12" fill="var(--a-soft)" stroke="var(--a)"/>
+    <text x="445" y="70" text-anchor="middle" font-weight="700" font-size="13.5">graph_build</text>
+    <text x="445" y="94" text-anchor="middle" class="mut">그래프 전처리</text>
+    <text x="445" y="110" text-anchor="middle" class="mut">(선택, 재사용용)</text>
+    <rect x="550" y="40" width="150" height="90" rx="12" fill="var(--d-soft)" stroke="var(--d)"/>
+    <text x="625" y="70" text-anchor="middle" font-weight="700" font-size="13.5">train</text>
+    <text x="625" y="94" text-anchor="middle" class="mut">다중 GPU(DDP)</text>
+    <text x="625" y="110" text-anchor="middle" class="mut">가속기 사용 가능</text>
+    <rect x="730" y="40" width="160" height="90" rx="12" fill="var(--b-soft)" stroke="var(--b)"/>
+    <text x="810" y="70" text-anchor="middle" font-weight="700" font-size="13.5">검증 · 배포</text>
+    <text x="810" y="94" text-anchor="middle" class="mono" font-size="11">inference</text>
+    <text x="810" y="110" text-anchor="middle" class="mono" font-size="11">get_model</text>
+  </g>
+  <g stroke="var(--muted)" stroke-width="2"><line x1="162" y1="85" x2="184" y2="85" marker-end="url(#ar5)"/><line x1="342" y1="85" x2="364" y2="85" marker-end="url(#ar5)"/><line x1="522" y1="85" x2="544" y2="85" marker-end="url(#ar5)"/><line x1="702" y1="85" x2="724" y2="85" marker-end="url(#ar5)"/></g>
+  <text x="450" y="170" text-anchor="middle" font-size="12.5" class="mut">preset 종류: base · fine_tune · multi_modal · reewc · sevennet-0 · sevennet-l3i5</text>
+</svg>
+<figcaption>그림 6. 학습 파이프라인. fine-tuning할 때는 모델 하이퍼파라미터 대부분을 바꿀 수 없습니다(preset 주석 참고).</figcaption>
+</figure>
+
+<h3>reEWC: “잊지 않는” fine-tuning</h3>
+<p>내 계에 맞춰 fine-tuning하면 그 계에서는 정확해지지만, 원래 잘 맞추던 다른 영역의 정확도가 떨어지기 쉽습니다(catastrophic forgetting). reEWC는 두 가지 장치로 이를 막습니다.</p>
+<figure>
+<svg viewBox="0 0 900 250" role="img" aria-label="reEWC 개념도">
+  <!-- left plot -->
+  <g transform="translate(40,20)">
+    <text x="170" y="10" text-anchor="middle" font-weight="700" font-size="14">일반 fine-tuning</text>
+    <line x1="30" y1="190" x2="330" y2="190" stroke="var(--muted)"/><line x1="30" y1="190" x2="30" y2="30" stroke="var(--muted)"/>
+    <text x="180" y="212" text-anchor="middle" font-size="11" class="mut">학습 진행 →</text>
+    <text x="20" y="110" text-anchor="middle" font-size="11" class="mut" transform="rotate(-90 20 110)">오차</text>
+    <path d="M30 60 C100 120 180 170 330 175" fill="none" stroke="var(--a)" stroke-width="2.6"/>
+    <path d="M30 170 C100 160 180 90 330 60" fill="none" stroke="var(--r)" stroke-width="2.6"/>
+    <text x="300" y="168" font-size="11.5" style="fill:var(--a)" text-anchor="end">내 계 ↓</text>
+    <text x="300" y="56" font-size="11.5" style="fill:var(--r)" text-anchor="end">원래 영역 ↑ (망각)</text>
+  </g>
+  <g transform="translate(500,20)">
+    <text x="170" y="10" text-anchor="middle" font-weight="700" font-size="14">reEWC fine-tuning</text>
+    <line x1="30" y1="190" x2="330" y2="190" stroke="var(--muted)"/><line x1="30" y1="190" x2="30" y2="30" stroke="var(--muted)"/>
+    <text x="180" y="212" text-anchor="middle" font-size="11" class="mut">학습 진행 →</text>
+    <path d="M30 60 C100 120 180 165 330 172" fill="none" stroke="var(--a)" stroke-width="2.6"/>
+    <path d="M30 170 C100 165 180 152 330 150" fill="none" stroke="var(--b)" stroke-width="2.6"/>
+    <text x="300" y="186" font-size="11.5" style="fill:var(--a)" text-anchor="end">내 계 ↓</text>
+    <text x="300" y="140" font-size="11.5" style="fill:var(--b)" text-anchor="end">원래 영역 유지</text>
+  </g>
+</svg>
+<figcaption>그림 7. reEWC 개념도(정성적 그림이며 실제 데이터가 아님). <b>Replay</b>: 학습할 때마다 기존 데이터 일부를 섞어 다시 보여줍니다. <b>EWC</b>: 중요도(Fisher 정보)가 큰 파라미터가 원래 값에서 멀어지지 않도록 페널티 λ/2·ΣF<sub>i</sub>(θ<sub>i</sub>−θ*<sub>i</sub>)²를 겁니다.</figcaption>
+</figure>
+<div class="note warn"><b>제약</b>: reEWC는 현재 <b>single-modal 모델</b>(SevenNet-0, Nano 등)에만 쓸 수 있습니다. Omni 같은 multi-task 모델은 아직 지원하지 않습니다. Fisher 행렬은 SevenNet이 계산해 주지 않으므로 직접 준비해야 하고, DDP 학습도 지원하지 않습니다.</div>
+
+<!-- 6 -->
+<h2 id="engine"><span class="num">6</span>실행 엔진 고르기</h2>
+<div class="tbl"><table>
+<tr><th>엔진</th><th>강점</th><th>가속기</th><th>D3</th><th>추천 용도</th></tr>
+<tr><td><b>ASE</b></td><td>설치가 쉽고 Python으로 자유롭게 조합</td><td>FlashTP · cuEq · OEq</td><td>✓ (GPU)</td><td>relax, NEB, 포논, 흡착, 프로토타이핑</td></tr>
+<tr><td><b>LAMMPS: Torch</b><br><code>e3gnn</code>, <code>e3gnn/parallel</code></td><td>검증된 다중 GPU 공간 분할 병렬</td><td>FlashTP · OEq</td><td>✓ (단일 GPU만)</td><td>대형 계 장시간 MD</td></tr>
+<tr><td><b>LAMMPS: ML-IAP</b><br><code>mliap unified</code></td><td>Kokkos 기반 최신 경로</td><td>FlashTP · cuEq · OEq · LunaTP</td><td>✓</td><td>단일 GPU 대형 계 (다중 rank는 아직 검증 부족)</td></tr>
+<tr><td><b>TorchSim</b></td><td>여러 구조를 GPU에서 배치 처리</td><td>FlashTP · cuEq · OEq</td><td>✓</td><td>고처리량 relax와 MD</td></tr>
+</table></div>
+<div class="note ok"><b>문서 팁</b>: 원자 약 10³개 미만의 작은 계는 <b>FlashTP + LAMMPS Torch</b>가, 그보다 큰 계는 <b>cuEquivariance + ML-IAP</b>가 더 빠릅니다. FlashTP는 학습과 추론 모두에서 최대 약 4배 빨라집니다.</div>
+
+<!-- 7 -->
+<h2 id="code"><span class="num">7</span>바로 쓰는 코드 예시</h2>
+<div class="tabs" id="tabs">
+  <button class="on" data-p="p1">설치</button><button data-p="p2">Relax</button><button data-p="p3">MD</button>
+  <button data-p="p4">NEB</button><button data-p="p5">흡착+D3</button><button data-p="p6">LAMMPS</button><button data-p="p7">Fine-tune</button>
+</div>
+<div class="panel on" id="p1"><pre><code>pip install sevenn
+pip install sevenn[cueq12]     # cuEquivariance 가속 (CUDA 12.x)
+pip install sevenn[torchsim]   # 배치 시뮬레이션 (Python ≥ 3.12)
+sevenn cp 7net-omni            # 모델 개요 확인</code></pre></div>
+<div class="panel" id="p2"><pre><code>from ase.io import read
+from ase.optimize import BFGS
+from ase.filters import FrechetCellFilter
+from sevenn.calculator import SevenNetCalculator
+
+atoms = read("POSCAR")
+atoms.calc = SevenNetCalculator(model="7net-omni", modal="mpa")
+BFGS(FrechetCellFilter(atoms)).run(fmax=0.02)   # 셀까지 함께 relax
+print(atoms.get_potential_energy())</code></pre></div>
+<div class="panel" id="p3"><pre><code>from ase import units
+from ase.md.langevin import Langevin
+from ase.md.velocitydistribution import MaxwellBoltzmannDistribution
+from sevenn.calculator import SevenNetCalculator
+
+atoms.calc = SevenNetCalculator(model="7net-omni", modal="mpa")
+MaxwellBoltzmannDistribution(atoms, temperature_K=1200)
+dyn = Langevin(atoms, 2*units.fs, temperature_K=1200, friction=0.01,
+               trajectory="md.traj")
+dyn.run(50000)   # 100 ps</code></pre></div>
+<div class="panel" id="p4"><pre><code>from ase.mep import NEB
+from ase.optimize import FIRE
+from ase.io import read
+from sevenn.calculator import SevenNetCalculator
+
+IS, FS = read("IS.vasp"), read("FS.vasp")
+images = [IS] + [IS.copy() for _ in range(7)] + [FS]
+for im in images:
+    im.calc = SevenNetCalculator(model="7net-omni", modal="mpa")
+neb = NEB(images, climb=True)
+neb.interpolate(method="idpp")
+FIRE(neb).run(fmax=0.05)</code></pre></div>
+<div class="panel" id="p5"><pre><code>from sevenn.calculator import SevenNetD3Calculator
+
+# 흡착에너지 E_ads = E(slab+mol) − E(slab) − E(mol), 세 구조 모두 같은 calc
+calc = SevenNetD3Calculator(model="7net-omni", modal="mpa",
+                            functional_name="pbe", damping_type="damp_bj",
+                            device="cuda")   # D3는 CUDA GPU 필수
+for a in (slab_mol, slab, mol):
+    a.calc = calc
+E_ads = (slab_mol.get_potential_energy()
+         - slab.get_potential_energy() - mol.get_potential_energy())</code></pre>
+<p class="src">D3를 쓸 때는 모델의 학습 범함수와 같은 <code>functional_name</code>을 지정해야 합니다. 예를 들어 SevenNet-0이면 pbe입니다. Omni의 task별로 어떤 D3 범함수를 써야 하는지는 문서에 별도 안내가 없으니, 해당 task가 어떤 범함수로 학습됐는지 확인하고 고르세요.</p></div>
+<div class="panel" id="p6"><pre><code># 1) 배포
+sevenn get_model 7net-omni --modal mpa                  # serial (e3gnn)
+sevenn get_model 7net-omni --modal mpa --use_mliap      # ML-IAP
+
+# 2) LAMMPS 입력 (단일 GPU, Torch 경로)
+units       metal
+atom_style  atomic
+pair_style  e3gnn
+pair_coeff  * * deployed_serial.pt Hf O
+
+# + D3 결합
+pair_style  hybrid/overlay e3gnn d3 9000 1600 damp_bj pbe
+pair_coeff  * * e3gnn deployed_serial.pt Hf O
+pair_coeff  * * d3    Hf O</code></pre>
+<p class="src">다중 GPU로 돌리려면 <code>e3gnn/parallel</code>을 쓰고 <code>pair_coeff * * {층 수} {배포 디렉토리} 원소…</code> 형식으로 적습니다. 서브도메인 중 원자가 하나도 없는 곳이 생기면 오류가 나므로 <code>fix balance</code>를 권장합니다.</p></div>
+<div class="panel" id="p7"><pre><code>sevenn preset fine_tune &gt; input.yaml   # checkpoint: 7net-omni 등 지정
+# input.yaml에서 데이터 경로, (multi-task면) modal 설정
+sevenn train input.yaml -s --enable_flash
+sevenn inference checkpoint_best.pth test_structures/*   # 검증
+sevenn get_model checkpoint_best.pth                     # LAMMPS 배포</code></pre></div>
+
+<!-- 8 -->
+<h2 id="ald"><span class="num">8</span>ALD/ASD 연구에 적용한다면</h2>
+<p>현재 진행 중인 주제들에 SevenNet을 어떻게 끼워 넣을 수 있는지 정리했습니다. 어디까지나 출발점을 제안하는 것이며, 각 계마다 DFT로 몇 점 찍어서 검증하는 단계가 반드시 필요합니다.</p>
+<div class="tbl"><table>
+<tr><th>주제</th><th>SevenNet 활용</th><th>모델 · 엔진 제안</th></tr>
+<tr><td>ALD 전구체 흡착·relax</td><td>슬랩 위 흡착 자리를 다수 스크리닝하고 흡착에너지 계산 → 상위 후보만 DFT로 확인</td><td>Omni <code>mpa</code>와 <code>oc20</code>/<code>oc22</code>를 비교, D3 사용 · ASE / TorchSim</td></tr>
+<tr><td>반쪽반응 NEB (TEMAHf/HZO 등)</td><td>NEB 초기 경로를 빠르게 만들고 장벽을 개략 추정 → DFT CI-NEB의 출발점으로 사용</td><td>Omni <code>mpa</code> · ASE NEB</td></tr>
+<tr><td>HfO₂ 결정화 MD / MC</td><td>대형 비정질 셀의 장시간 어닐링 MD와 MC 에너지 평가</td><td>Omni 또는 Nano · LAMMPS</td></tr>
+<tr><td>ASD inhibitor (nonanal/SiN)</td><td>SAM이나 inhibitor가 덮인 표면의 MD, 피복률에 따른 안정성 평가</td><td>Omni <code>mpa</code> + D3 · LAMMPS / ASE</td></tr>
+<tr><td>정확도가 부족할 때</td><td>해당 계의 DFT 수백 점으로 fine-tuning</td><td>Omni fine-tune(multi-task) 또는 Nano + reEWC</td></tr>
+</table></div>
+<div class="note">금속유기 전구체는 크게 보면 <b>분자</b> 영역에 속하고, 표면에 붙은 상태는 <b>표면 흡착</b> 영역에 걸칩니다. Omni는 이 두 영역을 잇는 학습(domain-bridging)을 했다고 하지만, 전구체 리간드가 해리되는 구조처럼 학습 데이터에 드문 배치에서는 오차가 커질 수 있습니다. 대표 구조 10~20개를 DFT와 맞대어 보는 것부터 시작하세요.</div>
+
+<!-- 9 -->
+<h2 id="caution"><span class="num">9</span>주의점 체크리스트</h2>
+<div class="card"><ul style="margin:0;padding-left:20px">
+  <li><b>D3</b>: CUDA GPU(compute capability ≥ 6.0)가 필요하고 CPU에서는 돌지 않습니다. 한 번에 최대 46,340 원자까지만 계산되며, 다중 GPU나 다중 코어 병렬은 지원하지 않습니다.</li>
+  <li><b>multi-task 모델</b>을 쓸 때는 <code>modal</code>을 반드시 지정해야 하고, LAMMPS로 배포할 때도 <code>--modal</code>이 필요합니다.</li>
+  <li><b>LAMMPS 버전</b>이 경로마다 다릅니다. Torch 경로는 <code>stable_2Aug2023_update3</code>, ML-IAP 경로는 <code>stable_22Jul2025_update4</code>를 권장합니다.</li>
+  <li><b>ML-IAP 다중 rank</b> 실행은 아직 검증이 부족합니다. 다중 GPU라면 Torch 경로의 <code>e3gnn/parallel</code>을 쓰세요.</li>
+  <li><b>cuEquivariance와 LunaTP</b>는 ML-IAP 경로에서만 쓸 수 있습니다.</li>
+  <li>v0.13에서 rescale layer의 기본 dtype이 double로 바뀌었습니다. 이전 버전과 결과를 비교할 때는 <code>SEVENN_SHIFT_SCALE_DTYPE</code> 설정을 확인하세요.</li>
+  <li>MLIP는 <b>학습 분포 밖</b>(극단적 압축, 결합이 끊어지는 순간, 희귀 원소 조합)에서 오차가 급증할 수 있습니다. MD 중 원자가 뭉치거나 에너지가 튀면 의심해야 합니다.</li>
+</ul></div>
+
+<!-- 10 -->
+<h2 id="blackwell"><span class="num">10</span>RTX PRO 6000 Blackwell (96GB)에서 세팅하기</h2>
+<div class="note ok"><b>결론: 세팅 가능합니다.</b> 다만 Blackwell 워크스테이션 GPU는 compute capability <b>12.0(sm_120)</b>이라서 <b>CUDA 12.8 이상</b>과 <b>sm_120 커널이 포함된 PyTorch(cu128 이상 휠)</b>가 꼭 필요합니다. SevenNet 본체는 PyTorch 위에서 돌기 때문에 PyTorch만 맞으면 그대로 동작합니다. 가속기와 LAMMPS는 빌드할 때 대상 아키텍처를 12.0으로 지정해야 합니다.</div>
+<p class="src">아래 내용은 SevenNet·FlashTP·LAMMPS 소스 코드와 공개 문서·포럼을 확인해서 정리한 것입니다. 실제 RTX PRO 6000에서 직접 돌려 검증한 결과는 아니므로, 설치 후 <code>check_env.py</code>로 반드시 확인하세요.</p>
+
+<figure>
+<svg viewBox="0 0 900 430" role="img" aria-label="Blackwell 소프트웨어 스택 호환성">
+  <g font-size="11.5">
+    <rect x="300" y="14" width="14" height="14" rx="3" fill="var(--b-soft)" stroke="var(--b)"/><text x="320" y="26">확인됨 (문서·소스)</text>
+    <rect x="460" y="14" width="14" height="14" rx="3" fill="var(--c-soft)" stroke="var(--c)"/><text x="480" y="26">설정 필요 (arch 12.0)</text>
+    <rect x="640" y="14" width="14" height="14" rx="3" fill="var(--card)" stroke="var(--muted)" stroke-dasharray="3 2"/><text x="660" y="26">공식 명시 없음 → 직접 검증</text>
+  </g>
+  <!-- hardware -->
+  <rect x="20" y="370" width="860" height="46" rx="10" fill="var(--ink)"/>
+  <text x="450" y="399" text-anchor="middle" font-weight="700" font-size="14" style="fill:var(--bg)">RTX PRO 6000 Blackwell · 96GB GDDR7 · CC 12.0 (sm_120) · NVLink 없음 · MIG 최대 4개</text>
+  <!-- driver -->
+  <rect x="20" y="318" width="860" height="42" rx="10" fill="var(--b-soft)" stroke="var(--b)"/>
+  <text x="450" y="344" text-anchor="middle" font-size="13.5"><tspan font-weight="700">NVIDIA 드라이버 R570+</tspan> (Linux: open kernel module) · <tspan font-weight="700">CUDA 12.8+</tspan> (nvcc 12.8+는 JIT·소스 빌드에 필요)</text>
+  <!-- torch -->
+  <rect x="20" y="266" width="860" height="42" rx="10" fill="var(--b-soft)" stroke="var(--b)"/>
+  <text x="450" y="292" text-anchor="middle" font-size="13.5"><tspan font-weight="700">PyTorch cu128 / cu130 휠</tspan> — <tspan class="mono">torch.cuda.get_arch_list()</tspan>에 sm_120 포함 (cu126 이하 ✗)</text>
+  <!-- sevenn -->
+  <rect x="20" y="214" width="860" height="42" rx="10" fill="var(--b-soft)" stroke="var(--b)"/>
+  <text x="450" y="240" text-anchor="middle" font-size="13.5"><tspan font-weight="700">SevenNet 본체</tspan> (e3nn 경로) · ASE calculator · TorchSim — 순수 PyTorch라서 그대로 동작</text>
+  <!-- accelerators -->
+  <g font-size="12.5" text-anchor="middle">
+    <rect x="20" y="130" width="205" height="74" rx="10" fill="var(--c-soft)" stroke="var(--c)"/>
+    <text x="122" y="158" font-weight="700">FlashTP</text><text x="122" y="178">CUDA_ARCH_LIST=120</text><text x="122" y="195" font-size="11" class="mut">README에 Blackwell 동작 명시</text>
+    <rect x="238" y="130" width="205" height="74" rx="10" fill="var(--card)" stroke="var(--muted)" stroke-dasharray="4 3"/>
+    <text x="340" y="158" font-weight="700">cuEquivariance</text><text x="340" y="178">sevenn[cueq12]</text><text x="340" y="195" font-size="11" class="mut">sm_120 명시 문서 못 찾음</text>
+    <rect x="456" y="130" width="205" height="74" rx="10" fill="var(--card)" stroke="var(--muted)" stroke-dasharray="4 3"/>
+    <text x="558" y="158" font-weight="700">OpenEq · LunaTP</text><text x="558" y="178">JIT 컴파일 방식</text><text x="558" y="195" font-size="11" class="mut">LunaTP: CC ≥ 8.0, 실험적</text>
+    <rect x="674" y="130" width="206" height="74" rx="10" fill="var(--c-soft)" stroke="var(--c)"/>
+    <text x="777" y="158" font-weight="700">GPU D3 (ASE)</text><text x="777" y="178">감지된 12.0 자동 추가</text><text x="777" y="195" font-size="11" class="mut">nvcc 12.8+ 필요</text>
+  </g>
+  <!-- lammps -->
+  <g font-size="12.5" text-anchor="middle">
+    <rect x="20" y="62" width="420" height="58" rx="10" fill="var(--c-soft)" stroke="var(--c)"/>
+    <text x="230" y="86" font-weight="700">LAMMPS: Torch (stable_2Aug2023_update3)</text>
+    <text x="230" y="106" font-size="11.5">libtorch 링크 · C++17 자동 패치 · D3 빌드 시 TORCH_CUDA_ARCH_LIST="12.0"</text>
+    <rect x="460" y="62" width="420" height="58" rx="10" fill="var(--c-soft)" stroke="var(--c)"/>
+    <text x="670" y="86" font-weight="700">LAMMPS: ML-IAP (stable_22Jul2025_update4)</text>
+    <text x="670" y="106" font-size="11.5">내장 Kokkos 4.6.2 → -D Kokkos_ARCH_BLACKWELL120=ON</text>
+  </g>
+  <text x="20" y="27" font-weight="700" font-size="14">Blackwell 소프트웨어 스택</text>
+</svg>
+<figcaption>그림 8. 아래층부터 차례로 맞춰야 합니다. 드라이버와 CUDA가 맞지 않으면 그 위의 PyTorch가 sm_120을 쓰지 못하고, 결국 SevenNet도 GPU를 쓰지 못합니다. LAMMPS ML-IAP의 Blackwell 옵션은 해당 LAMMPS 릴리스의 Kokkos 소스(<code>kokkos_arch.cmake</code>)에서 직접 확인했습니다.</figcaption>
+</figure>
+
+<h3>구성 요소별 호환성</h3>
+<div class="tbl"><table>
+<tr><th>구성 요소</th><th>상태</th><th>필요한 조치</th></tr>
+<tr><td>PyTorch</td><td>✅ cu128 이상 휠에 sm_120 포함</td><td><code>--index-url …/whl/cu128</code>로 설치. cu126 이하 휠은 “sm_120 is not compatible” 오류가 납니다.</td></tr>
+<tr><td>SevenNet + ASE / TorchSim</td><td>✅ 순수 PyTorch</td><td>없음</td></tr>
+<tr><td>GPU D3 (ASE)</td><td>✅ 첫 실행 때 JIT 컴파일</td><td>코드가 감지한 아키텍처 12.0을 자동으로 추가합니다. 컴파일에 <b>nvcc 12.8+</b>가 필요합니다. <code>TORCH_CUDA_ARCH_LIST</code>를 직접 지정할 때는 12.0을 꼭 포함하세요.</td></tr>
+<tr><td>FlashTP</td><td>✅ README에 Blackwell 동작 명시</td><td>최고 성능을 내려면 <code>CUDA_ARCH_LIST="120"</code>으로 재빌드하세요(빌드 시점에 GPU가 있으면 자동 감지).</td></tr>
+<tr><td>cuEquivariance</td><td>⚠️ sm_120 공식 명시는 확인 못 함</td><td>설치 후 <code>check_env.py</code>로 e3nn 결과와 일치하는지 확인하세요. 문제가 있으면 FlashTP나 OEq를 대신 쓰면 됩니다.</td></tr>
+<tr><td>OpenEquivariance · LunaTP</td><td>⚠️ JIT 방식이라 원리상 가능</td><td>직접 검증 필요. LunaTP는 실험적 기능이고 PyTorch ≥ 2.8이 필요합니다.</td></tr>
+<tr><td>LAMMPS: Torch</td><td>🔧 빌드 설정 필요</td><td><code>sevenn patch_lammps</code>가 C++17로 자동 패치합니다. D3를 넣을 때는 <code>TORCH_CUDA_ARCH_LIST="12.0"</code>을 지정하세요.</td></tr>
+<tr><td>LAMMPS: ML-IAP</td><td>🔧 빌드 설정 필요</td><td>cmake에 <code>-D Kokkos_ARCH_BLACKWELL120=ON</code>을 추가하세요(내장 Kokkos 4.6.2가 지원).</td></tr>
+</table></div>
+
+<h3>96GB를 잘 쓰는 법</h3>
+<div class="grid">
+  <div class="sim"><h4>🧱 큰 계를 한 장에</h4><p>메모리가 크기 때문에 다중 GPU 병렬 없이도 단일 GPU <code>e3gnn</code>이나 ML-IAP로 큰 셀을 돌릴 수 있습니다. 실제로 몇 원자까지 되는지는 모델 크기와 밀도에 따라 다르므로 <code>check_env.py --natoms</code>로 직접 재 보세요.</p></div>
+  <div class="sim"><h4>🔀 MIG로 나눠 쓰기</h4><p>GPU 한 장을 최대 4개 인스턴스로 나눌 수 있습니다. 흡착 자리 스크리닝처럼 작은 계산을 여러 개 동시에 돌릴 때 유용합니다. 큰 MD 하나를 돌릴 때는 MIG를 끄세요.</p></div>
+  <div class="sim"><h4>📦 TorchSim 배치</h4><p>구조 수백 개를 한 번에 relax하는 고처리량 작업에서 큰 메모리가 그대로 처리량으로 이어집니다.</p></div>
+  <div class="sim"><h4>⚠️ 그래도 남는 한계</h4><p>D3는 메모리와 관계없이 한 번에 <b>최대 46,340 원자</b>까지만 계산됩니다. NVLink가 없어서 카드 여러 장을 병렬로 쓰면 통신이 PCIe를 탑니다. FP64 성능이 낮지만, SevenNet은 기본이 FP32라서 영향이 적습니다.</p></div>
+</div>
+
+<h3>설치 순서</h3>
+<p>같은 내용을 스크립트로 묶은 <code>setup_blackwell.sh</code>와 검증용 <code>check_env.py</code>를 GitHub 폴더에 함께 올려 두었습니다.</p>
+<div class="tabs" id="tabs2">
+  <button class="on" data-p="b1">① 드라이버</button><button data-p="b2">② PyTorch</button><button data-p="b3">③ SevenNet</button>
+  <button data-p="b4">④ 가속기</button><button data-p="b5">⑤ 검증</button><button data-p="b6">⑥ LAMMPS ML-IAP</button><button data-p="b7">⑦ LAMMPS Torch</button>
+</div>
+<div class="panel2 on" id="b1"><pre><code># 드라이버 R570 이상, compute_cap 12.0 확인
+nvidia-smi --query-gpu=name,driver_version,compute_cap,memory.total --format=csv
+
+# JIT·소스 빌드(D3, FlashTP, LAMMPS)를 하려면 nvcc 12.8 이상
+nvcc --version          # 12.8 미만이면 CUDA toolkit 12.8+ 설치
+export CUDA_HOME=/usr/local/cuda-12.8</code></pre></div>
+<div class="panel2" id="b2"><pre><code>conda create -n sevenn python=3.12 -y     # TorchSim은 3.12 이상 필요
+conda activate sevenn
+pip install torch --index-url https://download.pytorch.org/whl/cu128
+
+python -c "import torch;print(torch.__version__, torch.cuda.get_arch_list())"
+# → 목록에 'sm_120'이 있어야 함</code></pre></div>
+<div class="panel2" id="b3"><pre><code>pip install sevenn
+echo 'export TORCH_CUDA_ARCH_LIST="12.0"' &gt;&gt; ~/.bashrc   # D3/LAMMPS JIT 대상 고정
+source ~/.bashrc
+sevenn cp 7net-omni     # 모델 다운로드와 개요 확인</code></pre></div>
+<div class="panel2" id="b4"><pre><code># cuEquivariance (CUDA 12.x 기준; cu130 휠이면 cueq13)
+pip install "sevenn[cueq12]"
+
+# FlashTP (소스 빌드)
+git clone https://github.com/SNU-ARC/flashTP.git &amp;&amp; cd flashTP
+pip install -r requirements.txt
+CUDA_ARCH_LIST="120" pip install . --no-build-isolation   # exit 137이면 MAX_JOBS=4
+
+# 기타
+pip install "sevenn[oeq]" "sevenn[torchsim]"</code></pre></div>
+<div class="panel2" id="b5"><pre><code>python check_env.py --model 7net-omni --modal mpa --natoms 5000
+# 1) sm_120 포함 여부  2) 가속기 사용 가능 여부
+# 3) 가속기 결과가 e3nn과 일치하는지(ΔE, ΔF)  4) D3 JIT  5) ms/step · peak 메모리</code></pre></div>
+<div class="panel2" id="b6"><pre><code>pip install "sevenn[mliap12]"
+git clone https://github.com/lammps/lammps lammps-mliap &amp;&amp; cd lammps-mliap
+git checkout stable_22Jul2025_update4
+cmake -B build -D CMAKE_BUILD_TYPE=Release \
+  -D CMAKE_CXX_COMPILER=$(pwd)/lib/kokkos/bin/nvcc_wrapper \
+  -D PKG_KOKKOS=ON -D Kokkos_ENABLE_CUDA=ON \
+  -D Kokkos_ARCH_BLACKWELL120=ON \
+  -D BUILD_MPI=ON -D PKG_ML-IAP=ON -D PKG_ML-SNAP=ON \
+  -D MLIAP_ENABLE_PYTHON=ON -D PKG_PYTHON=ON -D BUILD_SHARED_LIBS=ON cmake
+cmake --build build -j 16
+
+sevenn get_model 7net-omni --modal mpa --use_mliap --enable_cueq</code></pre>
+<p class="src"><code>Kokkos_ARCH_BLACKWELL120</code> 한 줄이 공식 문서 예시에 추가한 부분입니다. 나머지 옵션은 SevenNet 문서와 같습니다.</p></div>
+<div class="panel2" id="b7"><pre><code>export TORCH_CUDA_ARCH_LIST="12.0"
+git clone https://github.com/lammps/lammps.git lammps_sevenn \
+    --branch stable_2Aug2023_update3 --depth=1
+sevenn patch_lammps ./lammps_sevenn --d3 --enable_flash   # 필요한 옵션만
+cd lammps_sevenn &amp;&amp; mkdir build &amp;&amp; cd build
+cmake ../cmake -DCMAKE_PREFIX_PATH=$(python -c 'import torch;print(torch.utils.cmake_prefix_path)')
+make -j 16</code></pre>
+<p class="src">2023년 LAMMPS 버전을 최신 libtorch(cu128)와 엮는 조합이라서 빌드 오류가 날 가능성이 있습니다. 문제가 생기면 ML-IAP 경로를 먼저 시도해 보세요.</p></div>
+
+<h3>자주 나는 오류</h3>
+<div class="tbl"><table>
+<tr><th>증상</th><th>원인과 해결</th></tr>
+<tr><td><code>sm_120 is not compatible with the current PyTorch installation</code></td><td>설치된 PyTorch가 cu126 이하 휠입니다 → cu128 이상으로 재설치하세요.</td></tr>
+<tr><td><code>no kernel image is available for execution on the device</code></td><td>D3·FlashTP·LAMMPS를 12.0 없이 컴파일했습니다 → <code>TORCH_CUDA_ARCH_LIST="12.0"</code>이나 <code>CUDA_ARCH_LIST="120"</code>으로 재빌드하세요.</td></tr>
+<tr><td><code>nvcc fatal: Unsupported gpu architecture 'compute_120'</code></td><td>nvcc 버전이 12.8 미만입니다 → CUDA toolkit을 올리고 <code>CUDA_HOME</code>을 맞추세요.</td></tr>
+<tr><td>FlashTP 빌드 중 <code>ninja … exit status 137</code></td><td>컴파일 중 메모리가 부족합니다 → <code>MAX_JOBS=4</code>로 줄이세요.</td></tr>
+<tr><td>cuEquivariance <code>pynvml.NVMLError_NotSupported</code></td><td>SevenNet 문서에 일부 GPU에서 나는 문제로 나와 있습니다 → 하위 버전(예: 0.6.1)을 시도하거나 다른 가속기를 쓰세요.</td></tr>
+</table></div>
+
+<h2><span class="num">📚</span>참고 자료</h2>
+<ul class="src" style="padding-left:20px">
+  <li><a href="https://github.com/MDIL-SNU/SevenNet">GitHub: MDIL-SNU/SevenNet</a> — README, CHANGELOG (최신 커밋 2026-10-29)</li>
+  <li><a href="https://github.com/SNU-ARC/flashTP">FlashTP README</a> — Blackwell PTX/JIT 동작, CUDA_ARCH_LIST</li>
+  <li><a href="https://github.com/lammps/lammps/blob/stable_22Jul2025_update4/lib/kokkos/cmake/kokkos_arch.cmake">LAMMPS stable_22Jul2025_update4 · kokkos_arch.cmake</a> — BLACKWELL120 (Kokkos 4.6.2)</li>
+  <li><a href="https://forum.level1techs.com/t/wip-blackwell-rtx-6000-pro-max-q-quickie-setup-guide-on-ubuntu-24-04-lts-25-04/230521">Level1Techs: RTX 6000 Pro Blackwell 세팅 가이드</a> — cu128 휠 필요</li>
+  <li><a href="https://sevennet.readthedocs.io/en/latest/">공식 문서 (ReadTheDocs)</a> — 사전학습 모델, ASE, LAMMPS, D3, 가속기, reEWC, TorchSim</li>
+  <li>Park et al., <i>J. Chem. Theory Comput.</i> 20, 4857 (2024) — 병렬 알고리즘 · <a href="https://doi.org/10.1021/acs.jctc.4c00190">doi</a></li>
+  <li>Kim et al., <i>J. Am. Chem. Soc.</i> 147, 1042 (2024) — multi-fidelity · <a href="https://doi.org/10.1021/jacs.4c14455">doi</a></li>
+  <li>Kim et al., <i>Nat. Commun.</i> 17, 3432 (2026) — SevenNet-Omni · <a href="https://doi.org/10.1038/s41467-026-70195-8">doi</a></li>
+  <li>Oh et al., <i>J. Chem. Inf. Model.</i> (2026) — SevenNet-Nano · <a href="https://doi.org/10.1021/acs.jcim.6c01103">doi</a></li>
+  <li>Kim et al., <i>npj Comput. Mater.</i> 12, 26 (2026) — reEWC · <a href="https://doi.org/10.1038/s41524-025-01895-w">doi</a></li>
+</ul>
+<p class="src">그림 5와 그림 7은 개념을 설명하기 위한 정성적 도식입니다. 수치는 공식 문서에 명시된 값만 적었습니다.</p>
+
+</div>
+<script>
+document.querySelectorAll('#tabs button').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('#tabs button').forEach(x=>x.classList.remove('on'));
+  document.querySelectorAll('.panel').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on'); document.getElementById(b.dataset.p).classList.add('on');
+}));
+document.querySelectorAll('#tabs2 button').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('#tabs2 button').forEach(x=>x.classList.remove('on'));
+  document.querySelectorAll('.panel2').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on'); document.getElementById(b.dataset.p).classList.add('on');
+}));
+document.querySelectorAll('pre').forEach(p=>{
+  const btn=document.createElement('button'); btn.className='copy'; btn.textContent='복사';
+  btn.addEventListener('click',async()=>{
+    try{await navigator.clipboard.writeText(p.querySelector('code').innerText); btn.textContent='복사됨';}
+    catch(e){btn.textContent='복사 불가';}
+    setTimeout(()=>btn.textContent='복사',1500);
+  });
+  p.appendChild(btn);
+});
+</script>
+</body>
+</html>
