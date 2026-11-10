@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head data-own="1">
+<meta charset="utf-8" data-own="1">
+<meta name="viewport" content="width=device-width, initial-scale=1" data-own="1">
+<title data-own="1">ALD 공정 온도 창 계산기</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" data-own="1">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap" data-own="1">
+<script id="ald-user" type="application/json" data-own="1">{"entries":[],"hidden":[],"updated":0}</script>
+<style data-own="1">
+:root{
+  /* 레이아웃: 상단 탭 + 단일 컬럼 작업 영역, 온도축(°C)이 모든 차트의 공통 기준 */
+  --bg:#f2f5f7; --surface:#ffffff; --ink:#15202a; --muted:#5a6876; --line:#dbe2e8;
+  --accent:#0d6c8a; --accent-soft:#e0eff4; --heat:#d4500f;
+  --ok:#2b8a3e; --ok-soft:#e3f4e6; --warn:#b77900; --warn-soft:#fbf1d9; --fail:#c22a2a; --fail-soft:#fbe4e4;
+  --track:#edf1f4; --bar:#5aa7bf; --bar-strong:#0d6c8a;
+  --font-body:"IBM Plex Sans KR",system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --font-mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0e141a; --surface:#16202a; --ink:#e5ecf2; --muted:#93a2b1; --line:#283643;
+    --accent:#52b6d6; --accent-soft:#16323d; --heat:#ff7f45;
+    --ok:#5cc77a; --ok-soft:#143021; --warn:#e6b23c; --warn-soft:#352a10; --fail:#ff6b6b; --fail-soft:#3a1717;
+    --track:#1d2a35; --bar:#2f7f99; --bar-strong:#52b6d6; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0e141a; --surface:#16202a; --ink:#e5ecf2; --muted:#93a2b1; --line:#283643;
+  --accent:#52b6d6; --accent-soft:#16323d; --heat:#ff7f45;
+  --ok:#5cc77a; --ok-soft:#143021; --warn:#e6b23c; --warn-soft:#352a10; --fail:#ff6b6b; --fail-soft:#3a1717;
+  --track:#1d2a35; --bar:#2f7f99; --bar-strong:#52b6d6; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.55}
+.mono,.num{font-family:var(--font-mono);font-variant-numeric:tabular-nums}
+header.top{padding:20px 16px 0;max-width:1080px;margin:0 auto}
+header.top h1{font-size:22px;margin:0 0 2px;font-weight:700;letter-spacing:-.01em;text-wrap:balance}
+header.top p{margin:0;color:var(--muted);font-size:13.5px}
+nav.tabs{max-width:1080px;margin:14px auto 0;padding:0 16px;display:flex;gap:4px;overflow-x:auto;border-bottom:1px solid var(--line)}
+nav.tabs a{padding:10px 14px;color:var(--muted);text-decoration:none;font-weight:600;font-size:14px;border-bottom:2px solid transparent;white-space:nowrap}
+nav.tabs a[aria-current="page"]{color:var(--accent);border-color:var(--accent)}
+nav.tabs a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+main{max-width:1080px;margin:0 auto;padding:16px 16px 48px}
+section.view{display:none;flex-direction:column;gap:16px}
+section.view.on{display:flex}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px}
+.card h2{font-size:16px;margin:0 0 10px;text-wrap:balance}
+.card h3{font-size:14px;margin:0 0 8px;color:var(--muted);font-weight:600}
+.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+label.f{display:flex;flex-direction:column;gap:4px;font-size:12.5px;color:var(--muted);font-weight:600}
+select,input,textarea{font:inherit;font-size:14px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:7px;padding:8px 9px;width:100%}
+textarea{min-height:60px;resize:vertical}
+input[type=range]{padding:0;accent-color:var(--heat)}
+input[type=checkbox]{width:auto;accent-color:var(--accent)}
+button{font:inherit;font-size:14px;font-weight:600;border-radius:7px;padding:8px 14px;cursor:pointer;border:1px solid var(--accent);background:var(--accent);color:#fff}
+[data-theme="dark"] button,.btn-dark-fix{color:#0e141a}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) button{color:#0e141a}}
+button.ghost{background:transparent;color:var(--accent)}
+button.small{padding:4px 10px;font-size:12.5px}
+button:disabled{opacity:.45;cursor:not-allowed}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.temp-input{display:grid;grid-template-columns:1fr 92px;gap:10px;align-items:center}
+.muted{color:var(--muted)}
+.small-t{font-size:12.5px}
+/* verdict */
+.verdict{display:grid;grid-template-columns:6px 1fr;gap:14px;border-radius:10px;padding:14px 16px 14px 0;border:1px solid var(--line);background:var(--surface)}
+.verdict .stripe{border-radius:10px 0 0 10px}
+.verdict.ok .stripe{background:var(--ok)} .verdict.warn .stripe{background:var(--warn)} .verdict.fail .stripe{background:var(--fail)}
+.verdict h2{margin:0 0 4px;font-size:18px}
+.verdict ul{margin:6px 0 0;padding-left:18px}
+.verdict li{margin:2px 0}
+.kv{display:flex;gap:18px;flex-wrap:wrap;margin-top:8px}
+.kv div{display:flex;flex-direction:column}
+.kv span:first-child{font-size:11.5px;color:var(--muted);font-weight:600}
+.kv span:last-child{font-family:var(--font-mono);font-size:15px}
+.pill{display:inline-block;font-size:11.5px;font-weight:700;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.pill.ok{background:var(--ok-soft);color:var(--ok)} .pill.warn{background:var(--warn-soft);color:var(--warn)} .pill.fail{background:var(--fail-soft);color:var(--fail)}
+.pill.c-H{background:var(--ok-soft);color:var(--ok)} .pill.c-M{background:var(--warn-soft);color:var(--warn)} .pill.c-L{background:var(--fail-soft);color:var(--fail)}
+.pill.user{background:var(--accent-soft);color:var(--accent)}
+.pill.mode{background:var(--track);color:var(--muted)}
+/* window chart */
+.wchart{position:relative}
+.wrow{display:grid;grid-template-columns:minmax(120px,210px) 1fr;gap:10px;align-items:center;min-height:30px}
+.wrow .lab{font-size:12.5px;line-height:1.3;overflow-wrap:anywhere}
+.wrow .lab b{font-weight:600}
+.wrow .lab small{color:var(--muted);display:block;font-size:11px}
+.wrow.clickable{cursor:pointer}
+.wrow.clickable:hover .track{outline:1px solid var(--line)}
+.track{position:relative;height:16px;background:var(--track);border-radius:4px}
+.bar{position:absolute;top:2px;bottom:2px;border-radius:3px;background:var(--bar)}
+.bar.sel{background:var(--bar-strong)}
+.bar.lowc{background:repeating-linear-gradient(45deg,var(--bar) 0 5px,transparent 5px 8px);border:1px solid var(--bar)}
+.dec{position:absolute;top:-3px;bottom:-3px;width:0;border-left:2px dotted var(--fail)}
+.axis{display:grid;grid-template-columns:minmax(120px,210px) 1fr;gap:10px;margin-top:4px}
+.axis .ticks{position:relative;height:18px;border-top:1px solid var(--line)}
+.axis .ticks span{position:absolute;transform:translateX(-50%);font-family:var(--font-mono);font-size:10.5px;color:var(--muted);top:2px}
+.axis .ticks span:first-child{transform:none}
+.axis .ticks span:last-child{transform:translateX(-100%)}
+.overlay{position:absolute;top:0;bottom:22px;pointer-events:none}
+.tline{position:absolute;top:0;bottom:0;border-left:2px solid var(--heat)}
+.tline span{white-space:nowrap;position:absolute;top:-2px;left:4px;font-family:var(--font-mono);font-size:10.5px;color:var(--heat);font-weight:600;background:var(--surface);padding:0 3px;border-radius:3px}
+.budget{position:absolute;top:0;bottom:0;right:0;background:repeating-linear-gradient(135deg,transparent 0 6px,color-mix(in srgb,var(--fail) 14%,transparent) 6px 9px)}
+.ovband{position:absolute;top:0;bottom:0;background:color-mix(in srgb,var(--ok) 16%,transparent);border-left:1px dashed var(--ok);border-right:1px dashed var(--ok)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:11.5px;color:var(--muted);margin-top:8px}
+.legend i{display:inline-block;width:14px;height:8px;border-radius:2px;margin-right:5px;vertical-align:middle}
+/* table */
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:8px}
+table{border-collapse:collapse;width:100%;font-size:13px;min-width:820px}
+th,td{padding:7px 9px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{font-size:11.5px;color:var(--muted);font-weight:700;background:var(--track);position:sticky;top:0;cursor:pointer;white-space:nowrap}
+td.num{white-space:nowrap}
+tr:last-child td{border-bottom:0}
+tbody tr:hover{background:color-mix(in srgb,var(--accent) 5%,transparent)}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{font-size:13px;padding:5px 11px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;font-weight:500}
+.chip[aria-pressed="true"]{background:var(--accent);color:#fff;border-color:var(--accent)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .chip[aria-pressed="true"]{color:#0e141a}}
+[data-theme="dark"] .chip[aria-pressed="true"]{color:#0e141a}
+.combo{border:1px solid var(--line);border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;gap:6px}
+.combo-head{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:baseline}
+.combo-head b{font-family:var(--font-mono)}
+.notice{font-size:12.5px;color:var(--muted);border-left:3px solid var(--warn);padding:6px 10px;background:var(--warn-soft);border-radius:0 6px 6px 0}
+.status{font-size:12.5px;color:var(--muted)}
+.empty{color:var(--muted);font-size:13px;padding:8px 0}
+dialog{border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);max-width:min(560px,92vw)}
+dialog::backdrop{background:rgba(0,0,0,.35)}
+@media (max-width:520px){
+  .wrow,.axis{grid-template-columns:96px 1fr}
+  .temp-input{grid-template-columns:1fr 80px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body data-own="1">
+<header class="top" data-own="1">
+  <h1>ALD 공정 온도 창 계산기</h1>
+  <p>전구체·반응물·기판 조합의 ALD 창, 열분해 한계, 기판 영향을 한 온도축 위에서 확인합니다.</p>
+</header>
+<nav class="tabs" data-own="1" aria-label="보기">
+  <a href="#diagnose">공정 진단</a>
+  <a href="#database">공정 DB</a>
+  <a href="#overlap">공통 창 · 슈퍼사이클</a>
+  <a href="#data">데이터 관리</a>
+</nav>
+<main data-own="1">
+
+<!-- 1. 진단 -->
+<section class="view" id="v-diagnose">
+  <div class="card">
+    <h2>조건 입력</h2>
+    <div class="grid">
+      <label class="f" for="d-film">박막<select id="d-film"></select></label>
+      <label class="f" for="d-prec">전구체<select id="d-prec"></select></label>
+      <label class="f" for="d-reac">반응물<select id="d-reac"></select></label>
+      <label class="f" for="d-sub">기판<select id="d-sub"></select></label>
+      <label class="f" for="d-budget">추가 열예산 상한 (°C, 선택)<input id="d-budget" type="number" min="0" max="1000" step="5" placeholder="예: 소자 공정 한계"></label>
+    </div>
+    <div style="margin-top:12px">
+      <label class="f" for="d-T">목표 공정 온도 (°C)</label>
+      <div class="temp-input">
+        <input id="d-Trange" type="range" min="0" max="600" step="5" value="250" aria-label="목표 공정 온도 슬라이더">
+        <input id="d-T" type="number" min="0" max="1000" step="5" value="250" class="num">
+      </div>
+    </div>
+  </div>
+  <div id="d-verdict"></div>
+  <div class="card">
+    <h2 id="d-sub-title">기판별 적합성</h2>
+    <p class="muted small-t" style="margin-top:-4px">선택한 공정을 목표 온도에서 각 기판에 올렸을 때의 판정입니다. 행을 누르면 그 기판으로 바뀝니다.</p>
+    <div id="d-submatrix"></div>
+  </div>
+  <div class="card">
+    <h2 id="d-alt-title">같은 박막의 다른 공정</h2>
+    <div id="d-alt"></div>
+  </div>
+</section>
+
+<!-- 2. DB -->
+<section class="view" id="v-database">
+  <div class="card">
+    <div class="grid">
+      <label class="f" for="q-text">검색 (박막·전구체·반응물·메모)<input id="q-text" type="search" placeholder="예: Hf, O3, TDMA"></label>
+      <label class="f" for="q-cls">분류<select id="q-cls"><option value="">전체</option></select></label>
+      <label class="f" for="q-mode">방식<select id="q-mode"><option value="">전체</option><option>열</option><option>플라즈마</option></select></label>
+      <label class="f" for="q-T">이 온도에서 가능한 공정만 (°C)<input id="q-T" type="number" min="0" max="1000" step="5" placeholder="비우면 전체"></label>
+      <label class="f" for="q-conf">데이터 신뢰도<select id="q-conf"><option value="">전체</option><option value="H">높음만</option><option value="HM">높음+중간</option></select></label>
+    </div>
+  </div>
+  <div class="card">
+    <div class="row" style="justify-content:space-between;margin-bottom:8px">
+      <h2 style="margin:0">ALD 창 한눈에 보기 <span class="muted small-t" id="q-count"></span></h2>
+      <span class="status" id="q-selcount"></span>
+    </div>
+    <div id="q-chart"></div>
+  </div>
+  <div class="card">
+    <h2>공정 목록</h2>
+    <p class="muted small-t" style="margin-top:-4px">체크한 공정은 ‘공통 창’ 탭에서 겹치는 온도를 계산합니다. 행을 누르면 진단 탭으로 이동합니다.</p>
+    <div class="tablewrap"><table>
+      <thead><tr>
+        <th scope="col">비교</th><th scope="col" data-sort="film">박막</th><th scope="col" data-sort="prec">전구체</th><th scope="col" data-sort="reac">반응물</th><th scope="col" data-sort="mode">방식</th>
+        <th scope="col" data-sort="tmin">창 (°C)</th><th scope="col" data-sort="gpc">GPC (Å/cy)</th><th scope="col" data-sort="tdec">분해 ≈°C</th><th scope="col" data-sort="tsrc">소스 °C</th><th scope="col" data-sort="conf">신뢰도</th><th scope="col">메모</th>
+      </tr></thead>
+      <tbody id="q-body"></tbody>
+    </table></div>
+  </div>
+</section>
+
+<!-- 3. 공통 창 -->
+<section class="view" id="v-overlap">
+  <div class="card">
+    <h2>추천 조합 찾기</h2>
+    <p class="muted small-t" style="margin-top:-4px">나노라미네이트·슈퍼사이클로 섞을 박막을 2~4개 고르면, 가능한 전구체/반응물 조합을 모두 대입해 공통 온도 창이 넓은 순으로 보여줍니다.</p>
+    <div class="chips" id="o-films"></div>
+    <div class="grid" style="margin-top:12px">
+      <label class="f" for="o-sub">기판 (첫 층이 닿는 면)<select id="o-sub"></select></label>
+      <label class="f" for="o-budget">열예산 상한 (°C, 선택)<input id="o-budget" type="number" min="0" max="1000" step="5" placeholder="예: 400"></label>
+      <label class="f" for="o-mode">방식 제한<select id="o-mode"><option value="">제한 없음</option><option value="열">열 ALD만</option><option value="플라즈마">플라즈마만</option></select></label>
+      <label class="f" for="o-same">반응물<select id="o-same"><option value="">섞어도 됨</option><option value="1">모든 박막에 같은 반응물</option></select></label>
+    </div>
+  </div>
+  <div class="card">
+    <h2>결과 <span class="muted small-t" id="o-count"></span></h2>
+    <div id="o-result"></div>
+  </div>
+  <div class="card">
+    <h2>직접 고른 공정 비교</h2>
+    <div id="o-manual"></div>
+  </div>
+</section>
+
+<!-- 4. 데이터 관리 -->
+<section class="view" id="v-data">
+  <div class="card">
+    <h2>DB 파일 연동</h2>
+    <p class="muted small-t" style="margin-top:-4px">저장소의 <span class="mono">data/ald_window_db.md</span>가 원본 DB입니다. 페이지 옆에 이 파일이 있으면 열 때마다 자동으로 읽습니다 (GitHub Pages, <span class="mono">python -m http.server</span>, 이 아티팩트). 수정한 MD·엑셀·CSV 파일을 아래에서 직접 불러올 수도 있습니다.</p>
+    <div class="row" style="margin-bottom:10px">
+      <span class="pill" id="r-pill">저장소 파일 확인 중</span>
+      <span class="status" id="r-msg"></span>
+      <button type="button" class="ghost small" id="r-sync">다시 읽기</button>
+    </div>
+    <div id="x-drop" style="border:1.5px dashed var(--line);border-radius:8px;padding:14px">
+      <label class="f" for="x-file">파일 불러오기 (.md · .xlsx · .csv · .json, 여러 개 가능)<input id="x-file" type="file" multiple accept=".md,.markdown,.txt,.xlsx,.xls,.csv,.json"></label>
+      <p class="small-t muted" style="margin:6px 0 0">여기에 끌어다 놓아도 됩니다. 머리행 이름으로 공정 표인지 기판 표인지 알아서 구분하고, id가 같거나 박막·전구체·반응물·방식이 같은 행은 덮어씁니다. 불러온 내용은 ‘내 데이터’로 저장됩니다.</p>
+    </div>
+    <div class="row" style="margin-top:12px">
+      <button type="button" class="ghost" id="x-md">MD로 내보내기</button>
+      <button type="button" class="ghost" id="x-xlsx">Excel로 내보내기</button>
+      <button type="button" class="ghost" id="x-copy">MD 복사</button>
+      <button type="button" class="ghost" id="x-csv">공정 CSV</button>
+      <button type="button" class="ghost" id="x-json">내 데이터 JSON</button>
+    </div>
+    <p class="small-t muted" style="margin:6px 0 0">내보낸 MD·엑셀은 지금 화면의 전체 DB(기본 + 저장소 파일 + 내 데이터)입니다. 저장소의 <span class="mono">data/</span> 파일을 이것으로 바꿔 커밋하면 다른 컴퓨터와 동기화됩니다.</p>
+    <span class="status" id="x-msg" role="status"></span>
+    <div class="row" style="margin-top:10px">
+      <button type="button" class="ghost small" id="x-restore">숨긴 기본 공정 모두 되살리기</button>
+    </div>
+  </div>
+  <div class="card">
+    <h2 id="e-title">공정 추가</h2>
+    <form id="e-form" autocomplete="off">
+      <input type="hidden" id="e-id">
+      <div class="grid">
+        <label class="f" for="e-film">박막 *<input id="e-film" required placeholder="예: HfO₂ 또는 HfO2"></label>
+        <label class="f" for="e-cls">분류<select id="e-cls"><option>산화물</option><option>질화물</option><option>금속</option><option>황화물</option><option>기타</option></select></label>
+        <label class="f" for="e-prec">전구체 (약어) *<input id="e-prec" required placeholder="예: TEMAHf"></label>
+        <label class="f" for="e-precName">전구체 화학식/정식명<input id="e-precName" placeholder="예: Hf[N(CH₃)(C₂H₅)]₄"></label>
+        <label class="f" for="e-reac">반응물 *<input id="e-reac" required placeholder="예: H₂O, O₃, NH₃ plasma"></label>
+        <label class="f" for="e-mode">방식<select id="e-mode"><option>열</option><option>플라즈마</option></select></label>
+        <label class="f" for="e-tmin">창 하한 (°C) *<input id="e-tmin" type="number" required step="1"></label>
+        <label class="f" for="e-tmax">창 상한 (°C) *<input id="e-tmax" type="number" required step="1"></label>
+        <label class="f" for="e-gpc">GPC (Å/cycle)<input id="e-gpc" placeholder="예: 0.9–1.1"></label>
+        <label class="f" for="e-tdec">전구체 분해 시작 (°C)<input id="e-tdec" type="number" step="1"></label>
+        <label class="f" for="e-tsrc">소스(캐니스터) 온도 (°C)<input id="e-tsrc" type="number" step="1" placeholder="기체면 비움"></label>
+        <label class="f" for="e-state">상태<select id="e-state"><option>액체</option><option>고체</option><option>기체</option></select></label>
+        <label class="f" for="e-conf">신뢰도<select id="e-conf"><option value="H">높음</option><option value="M" selected>중간</option><option value="L">낮음</option></select></label>
+      </div>
+      <div class="grid" style="margin-top:12px;grid-template-columns:1fr">
+        <label class="f" for="e-src">출처 (DOI, 내부 실험 번호 등)<input id="e-src" placeholder="예: 10.1021/... 또는 Run#2311"></label>
+        <label class="f" for="e-note">메모<textarea id="e-note" placeholder="결정상, 불순물, 핵생성 지연 등"></textarea></label>
+      </div>
+      <div class="row" style="margin-top:12px">
+        <button type="submit" id="e-submit">추가</button>
+        <button type="button" class="ghost" id="e-cancel" hidden>편집 취소</button>
+        <span class="status" id="e-msg" role="status"></span>
+      </div>
+    </form>
+  </div>
+  <div class="card">
+    <h2 id="b-title">기판 추가</h2>
+    <form id="b-form" autocomplete="off">
+      <input type="hidden" id="b-id">
+      <div class="grid">
+        <label class="f" for="b-name">기판 이름 *<input id="b-name" required placeholder="예: SiN (LPCVD)"></label>
+        <label class="f" for="b-cat">분류<select id="b-cat"><option>반도체</option><option>절연체</option><option>금속</option><option>고분자</option><option>2D</option><option>기타</option></select></label>
+        <label class="f" for="b-term">표면 상태<select id="b-term">
+          <option value="OH">OH 종단 (산화물)</option><option value="H">H 종단 (HF-last 등)</option><option value="semi">자연산화막 반도체 (Ge, III-V)</option>
+          <option value="metal">금속·질화물 도전체</option><option value="polymer">고분자</option><option value="inert">반응 사이트 부족 (2D 기저면 등)</option></select></label>
+        <label class="f" for="b-tmax">허용 최고 온도 (°C) *<input id="b-tmax" type="number" required step="1"></label>
+        <label class="f" for="b-twarn">주의 시작 온도 (°C)<input id="b-twarn" type="number" step="1"></label>
+        <label class="f" for="b-conf">신뢰도<select id="b-conf"><option value="H">높음</option><option value="M" selected>중간</option><option value="L">낮음</option></select></label>
+      </div>
+      <div class="row" style="margin-top:12px;gap:16px">
+        <label class="row small-t" for="b-ox"><input type="checkbox" id="b-ox"> 산화제(O₃·O₂·O₂ plasma)에 산화됨</label>
+        <label class="row small-t" for="b-oxMild"><input type="checkbox" id="b-oxMild"> H₂O에도 산화됨</label>
+        <label class="row small-t" for="b-halide"><input type="checkbox" id="b-halide"> 할라이드 부산물(HCl·HF)에 부식</label>
+        <label class="row small-t" for="b-plasma"><input type="checkbox" id="b-plasma"> 플라즈마 손상에 민감</label>
+      </div>
+      <div class="grid" style="margin-top:12px;grid-template-columns:1fr">
+        <label class="f" for="b-twarnNote">주의 온도의 이유<input id="b-twarnNote" placeholder="예: H 종단 탈착 시작"></label>
+        <label class="f" for="b-oxNote">산화 시 일어나는 일 (비우면 ‘계면 산화층 형성’)<input id="b-oxNote" placeholder="예: 탄소 손실로 k 상승"></label>
+        <label class="f" for="b-note">메모<input id="b-note"></label>
+      </div>
+      <div class="row" style="margin-top:12px">
+        <button type="submit" id="b-submit">기판 추가</button>
+        <button type="button" class="ghost" id="b-cancel" hidden>편집 취소</button>
+        <span class="status" id="b-msg" role="status"></span>
+      </div>
+    </form>
+    <div id="b-list" style="margin-top:14px"></div>
+  </div>
+  <div class="card">
+    <h2>저장</h2>
+    <p class="muted small-t" id="s-desc" style="margin-top:-4px">추가·수정한 공정은 이 브라우저에 바로 저장됩니다.</p>
+    <div class="row">
+      <button type="button" id="s-publish" hidden>페이지에 영구 저장</button>
+      <span class="status" id="s-msg" role="status"></span>
+    </div>
+  </div>
+  <div class="card">
+    <h2>내 공정 · 수정한 기본 공정</h2>
+    <div id="u-list"></div>
+  </div>
+  <div class="notice">기본 공정·기판 데이터는 ALD 리뷰 문헌과 공정 상식에 자주 보고되는 대표 범위를 정리한 것으로, 항목별 원 논문 확인을 거치지 않았습니다. 창 경계와 분해 온도는 반응기·도즈·퍼지 조건에 따라 수십 °C 달라질 수 있으니, 공정 설계 전에 해당 원문으로 검증하고 출처 칸을 채워 두세요.</div>
+</section>
+
+</main>
+
+<script data-own="1">
+(function(){
+'use strict';
+const PRISTINE = document.documentElement.cloneNode(true);
+
+/* ───── 기본 데이터: 대표 문헌 범위 (개별 원문 확인 필요) ───── */
+const SRC0 = '대표 문헌 범위 (리뷰 종합, 원문 확인 필요)';
+const BASE = [
+ ['b01','Al₂O₃','산화물','TMA','Al(CH₃)₃','H₂O','열',100,300,'1.0–1.2',370,20,'액체','H','표준 공정. 33–400 °C에서도 성장하나 저온일수록 OH·H 잔류와 밀도 저하.'],
+ ['b02','Al₂O₃','산화물','TMA','Al(CH₃)₃','O₃','열',150,350,'0.8–1.0',370,20,'액체','M','H₂O 대비 퍼지 부담이 적음. 저온에서 탄소(포메이트·카보네이트) 잔류 가능.'],
+ ['b03','Al₂O₃','산화물','TMA','Al(CH₃)₃','O₂ plasma','플라즈마',25,300,'1.0–1.2',370,20,'액체','H','상온 증착 가능. 하부층 플라즈마 산화 주의.'],
+ ['b04','AlN','질화물','TMA','Al(CH₃)₃','NH₃ 또는 N₂/H₂ plasma','플라즈마',150,300,'0.7–1.0',370,20,'액체','L','산소·탄소 불순물에 민감. 플라즈마 소스에 따라 편차 큼.'],
+ ['b05','HfO₂','산화물','TEMAHf','Hf[N(CH₃)(C₂H₅)]₄','H₂O','열',150,300,'0.9–1.1',300,80,'액체','H','약 300 °C 이상에서 리간드 분해로 CVD 성분 증가. 저온 증착막은 비정질.'],
+ ['b06','HfO₂','산화물','TEMAHf','Hf[N(CH₃)(C₂H₅)]₄','O₃','열',200,320,'0.8–1.0',300,80,'액체','M','HZO 공정에 흔히 사용. O₃ 농도에 따라 상한 이동.'],
+ ['b07','HfO₂','산화물','TEMAHf','Hf[N(CH₃)(C₂H₅)]₄','O₂ plasma','플라즈마',100,300,'1.0–1.2',300,80,'액체','L','플라즈마 조건별 편차가 큼.'],
+ ['b08','HfO₂','산화물','TDMAHf','Hf[N(CH₃)₂]₄','H₂O','열',150,275,'1.0–1.3',275,75,'고체','M','TEMAHf보다 열안정성 낮음. 융점 근처 고체 소스.'],
+ ['b09','HfO₂','산화물','HfCl₄','HfCl₄','H₂O','열',250,500,'0.4–0.6',null,170,'고체','H','열안정성 높아 고온 결정질 성장 가능. Cl 잔류·HCl 부산물, 파티클 주의.'],
+ ['b10','HfO₂','산화물','CpHf(NMe₂)₃','CpHf[N(CH₃)₂]₃','O₃','열',250,350,'0.8–1.0',350,90,'액체','M','헤테로렙틱 Cp 계열. 알킬아마이드 대비 창 상한이 높음.'],
+ ['b11','ZrO₂','산화물','TEMAZr','Zr[N(CH₃)(C₂H₅)]₄','H₂O','열',150,250,'0.9–1.1',250,75,'액체','H','Hf 유사체보다 분해가 낮은 온도에서 시작.'],
+ ['b12','ZrO₂','산화물','TEMAZr','Zr[N(CH₃)(C₂H₅)]₄','O₃','열',200,280,'0.8–1.0',260,75,'액체','M','HZO 슈퍼사이클에서 TEMAHf/O₃와 함께 사용.'],
+ ['b13','ZrO₂','산화물','CpZr(NMe₂)₃','CpZr[N(CH₃)₂]₃','O₃','열',250,350,'0.8–1.0',350,90,'액체','M','DRAM 유전막용 고온 창 전구체 계열.'],
+ ['b14','ZrO₂','산화물','ZrCl₄','ZrCl₄','H₂O','열',250,500,'0.4–0.6',null,165,'고체','H','HfCl₄와 거동 유사. Cl 잔류.'],
+ ['b15','TiO₂','산화물','TiCl₄','TiCl₄','H₂O','열',100,400,'0.3–0.5',null,20,'액체','H','약 150–200 °C 이상에서 anatase 결정화 경향. HCl 부산물.'],
+ ['b16','TiO₂','산화물','TTIP','Ti(OCH(CH₃)₂)₄','H₂O','열',150,250,'0.2–0.4',250,50,'액체','M','250 °C 부근부터 분해로 GPC 증가.'],
+ ['b17','TiO₂','산화물','TDMAT','Ti[N(CH₃)₂]₄','H₂O','열',100,200,'0.4–0.6',200,50,'액체','M','저온 창. 200 °C 이상에서 분해.'],
+ ['b18','TiN','질화물','TiCl₄','TiCl₄','NH₃','열',350,500,'0.2–0.4',null,20,'액체','H','저온일수록 Cl 잔류·비저항 증가. 400–450 °C 운용이 일반적.'],
+ ['b19','TiN','질화물','TDMAT','Ti[N(CH₃)₂]₄','N₂/H₂ plasma','플라즈마',150,250,'0.5–0.8',200,50,'액체','L','전구체 분해 온도 이상에서는 CVD 성분 혼입. C·O 불순물 주의.'],
+ ['b20','SiO₂','산화물','BDEAS','SiH₂[N(C₂H₅)₂]₂','O₂ plasma','플라즈마',50,300,'1.0–1.3',null,30,'액체','M','저온 PEALD SiO₂ 대표 공정. 스페이서·패터닝 용도.'],
+ ['b21','SiO₂','산화물','BDEAS','SiH₂[N(C₂H₅)₂]₂','O₃','열',250,350,'0.8–1.1',null,30,'액체','L','열 ALD SiO₂는 반응성이 낮아 높은 O₃ 도즈 필요.'],
+ ['b22','SiNₓ','질화물','SiH₂Cl₂ (DCS)','SiH₂Cl₂','NH₃ plasma','플라즈마',300,500,'0.2–0.4',null,null,'기체','L','고온일수록 막질 향상. Cl·H 잔류.'],
+ ['b23','ZnO','산화물','DEZ','Zn(C₂H₅)₂','H₂O','열',100,180,'1.6–2.0',250,20,'액체','H','좁은 창. 상한 넘으면 GPC 감소. 자연발화성.'],
+ ['b24','MgO','산화물','Mg(EtCp)₂','Mg(C₅H₄C₂H₅)₂','H₂O','열',150,300,'1.2–1.5',null,70,'액체','M','흡습성 막.'],
+ ['b25','Y₂O₃','산화물','Y(MeCp)₃','Y(C₅H₄CH₃)₃','H₂O','열',200,400,'1.2–1.7',null,130,'고체','L','Cp 계열 희토류 전구체. 흡습성.'],
+ ['b26','La₂O₃','산화물','La(iPrCp)₃','La(C₅H₄iPr)₃','O₃','열',200,300,'0.8–1.0',null,150,'고체','L','흡습·탄산화 경향. 캐핑 필요.'],
+ ['b27','Ta₂O₅','산화물','PDMAT','Ta[N(CH₃)₂]₅','H₂O','열',150,250,'0.5–0.7',250,85,'고체','M','고체 소스. 250 °C 이상 분해.'],
+ ['b28','Ta₂O₅','산화물','TaCl₅','TaCl₅','H₂O','열',250,450,'0.3–0.5',null,90,'고체','M','고온 창. Cl 잔류·에칭 반응 주의.'],
+ ['b29','SnO₂','산화물','TDMASn','Sn[N(CH₃)₂]₄','H₂O','열',50,200,'0.6–0.9',null,40,'액체','M','저온 창. O₃·H₂O₂ 사용 시 막질 변화.'],
+ ['b30','Ga₂O₃','산화물','TMGa','Ga(CH₃)₃','O₂ plasma','플라즈마',100,250,'0.5–0.7',null,0,'액체','L','TMGa는 H₂O와 반응성 낮아 플라즈마 사용.'],
+ ['b31','Ru','금속','Ru(EtCp)₂','Ru(C₅H₄C₂H₅)₂','O₂','열',270,350,'0.4–0.5',350,80,'액체','H','기판 의존 핵생성 지연이 큼. O₂ 도즈가 크면 RuO₂ 생성.'],
+ ['b32','Pt','금속','MeCpPtMe₃','(CH₃C₅H₄)Pt(CH₃)₃','O₂','열',200,300,'0.4–0.5',null,60,'고체','H','연소형 반응. 저온에서는 O₂ 도즈 의존성 큼, 핵생성 지연.'],
+ ['b33','Pt','금속','MeCpPtMe₃','(CH₃C₅H₄)Pt(CH₃)₃','O₂ plasma','플라즈마',100,300,'0.4–0.5',null,60,'고체','M','플라즈마 사용 시 저온 확장. PtOₓ 생성 가능.'],
+ ['b34','Ir','금속','Ir(acac)₃','Ir(C₅H₇O₂)₃','O₂','열',225,375,'0.2–0.4',null,150,'고체','M','고체 소스, 낮은 GPC.'],
+ ['b35','W','금속','WF₆','WF₆','Si₂H₆','열',180,325,'4–7',null,null,'기체','M','핵생성층 용도. Si 불순물·불소 기판 공격 주의. GPC가 도즈에 민감.']
+];
+const KEYS=['id','film','cls','prec','precName','reac','mode','tmin','tmax','gpc','tdec','tsrc','state','conf','note'];
+const BASE_OBJ = BASE.map(a=>{const o={};KEYS.forEach((k,i)=>o[k]=a[i]);o.src=SRC0;o.base=true;return o;});
+const CONF_LABEL={H:'높음',M:'중간',L:'낮음'};
+
+/* ───── 기판 데이터: 대표 값 (공정·소자 조건에 따라 달라짐) ───── */
+// term: OH | H | semi | metal | polymer | inert
+const SUBS0 = [
+ {id:'s01',name:'Si (자연산화막)',cat:'반도체',term:'OH',tmax:1000,conf:'H',note:'대부분의 산화물 공정에 무난한 기준 기판.'},
+ {id:'s02',name:'SiO₂ (열산화막)',cat:'절연체',term:'OH',tmax:1000,conf:'H',note:'OH 밀도는 전처리·어닐 이력에 따라 달라짐.'},
+ {id:'s03',name:'Si–H (HF-last)',cat:'반도체',term:'H',tmax:1000,twarn:400,twarnNote:'H 종단 탈착이 시작될 수 있음',ox:true,conf:'H',note:'대기 노출 시 재산화. 계면층 최소화가 목적일 때 사용.'},
+ {id:'s04',name:'Ge',cat:'반도체',term:'semi',tmax:550,twarn:400,twarnNote:'GeO 휘발로 계면 열화 가능',ox:true,oxMild:true,conf:'M',note:'GeOₓ 계면 품질이 소자 특성을 좌우.'},
+ {id:'s05',name:'InGaAs · III-V',cat:'반도체',term:'semi',tmax:400,twarn:300,twarnNote:'As 탈착·계면 결함 증가 가능',ox:true,oxMild:true,selfClean:true,conf:'M',note:'자연산화막(As·Ga 산화물) 제어가 핵심.'},
+ {id:'s06',name:'TiN',cat:'금속',term:'metal',tmax:1000,ox:true,oxNote:'TiOₓNᵧ 계면층이 생겨 저항·일함수가 변할 수 있음',conf:'H',note:'장벽·전극.'},
+ {id:'s07',name:'Cu (BEOL)',cat:'금속',term:'metal',tmax:400,ox:true,oxMild:true,halide:true,conf:'M',note:'BEOL 열예산(약 400 °C) 기준.'},
+ {id:'s08',name:'W',cat:'금속',term:'metal',tmax:1000,ox:true,conf:'M',note:''},
+ {id:'s09',name:'Ru',cat:'금속',term:'metal',tmax:1000,ox:true,oxNote:'RuO₂ 형성, 강한 산화 조건(O₃)에서는 휘발성 RuO₄로 에칭될 수 있음',conf:'M',note:''},
+ {id:'s10',name:'Pt',cat:'금속',term:'metal',tmax:1000,conf:'M',note:'산화에 안정.'},
+ {id:'s11',name:'Al₂O₃ · HfO₂ (high-k)',cat:'절연체',term:'OH',tmax:1000,conf:'H',note:'나노라미네이트 하부층.'},
+ {id:'s12',name:'Low-k (SiCOH)',cat:'절연체',term:'OH',tmax:400,ox:true,oxNote:'탄소가 빠져 k 값이 오를 수 있음',plasma:true,conf:'M',note:'다공성이면 전구체 침투 주의.'},
+ {id:'s13',name:'폴리이미드 (PI)',cat:'고분자',term:'polymer',tmax:350,plasma:true,conf:'M',note:''},
+ {id:'s14',name:'PET · PEN',cat:'고분자',term:'polymer',tmax:120,twarn:80,twarnNote:'PET 유리전이(약 70–80 °C) 부근, 치수 변형 가능',plasma:true,conf:'M',note:''},
+ {id:'s15',name:'포토레지스트',cat:'고분자',term:'polymer',tmax:120,plasma:true,conf:'L',note:'레지스트 종류별 허용 온도 차이가 큼.'},
+ {id:'s16',name:'유리 (소다라임)',cat:'절연체',term:'OH',tmax:500,conf:'M',note:''},
+ {id:'s17',name:'그래핀 · MoS₂ (2D)',cat:'2D',term:'inert',tmax:400,plasma:true,conf:'M',note:'기저면에 반응 사이트가 거의 없음.'}
+];
+const SUB_KEYS=['name','cat','term','tmax','twarn','twarnNote','ox','oxMild','halide','plasma','oxNote','conf','note'];
+const LS_KEY='ald-window-user-v1';
+
+/* ───── 사용자 데이터 ───── */
+function parseEmbedded(){try{return JSON.parse(document.getElementById('ald-user').textContent)}catch(e){return null}}
+let user = parseEmbedded() || {entries:[],hidden:[],updated:0};
+try{const ls=JSON.parse(localStorage.getItem(LS_KEY)||'null'); if(ls && (ls.updated||0)>(user.updated||0)) user=ls;}catch(e){}
+user.entries=user.entries||[]; user.hidden=user.hidden||[]; user.subs=user.subs||[];
+let dirty=false;
+function allSubs(){ return layered(SUBS0,[[repo.subs,'repo'],[user.subs,'user']],skey); }
+
+/* 레이어: 기본 → 저장소 파일(data/ald_window_db.md) → 내 데이터 */
+const repo={procs:[],subs:[],loaded:false};
+const pkey=p=>norm([p.film,p.prec,p.reac,p.mode].join('|'));
+const skey=s=>norm(s.name);
+function layered(base,layers,keyFn,hidden){
+  const map=new Map(), kidx=new Map();
+  base.forEach(b=>{map.set(b.id,Object.assign({},b,{origin:'base',base:true,override:false}));kidx.set(keyFn(b),b.id);});
+  layers.forEach(([rows,origin])=>rows.forEach(r=>{
+    const id=r.id||kidx.get(keyFn(r))||('k_'+keyFn(r));
+    if(r.hide){map.delete(id);return;}
+    const prev=map.get(id);
+    if(!prev&&(keyFn===pkey?(r.tmin==null||r.tmax==null):(r.tmax==null)))return; // 새 행인데 필수 온도 없음
+    if(prev){const ks=Object.keys(r).filter(k=>!['id','origin','base','override','hide'].includes(k));
+      if(ks.every(k=>String(prev[k]==null?'':prev[k])===String(r[k]==null?'':r[k]))){kidx.set(keyFn(r),id);return;}}
+    map.set(id,Object.assign({},prev||DEFAULTS[keyFn===pkey?'p':'s'],r,{id,origin,base:false,override:!!prev}));
+    kidx.set(keyFn(r),id);
+  }));
+  (hidden||[]).forEach(id=>map.delete(id));
+  return [...map.values()];
+}
+const DEFAULTS={p:{cls:'기타',conf:'M',state:'',gpc:'',tdec:null,tsrc:null,precName:'',note:'',src:''},s:{cat:'기타',term:'OH',conf:'M',note:''}};
+function allProcs(){ return layered(BASE_OBJ,[[repo.procs,'repo'],[user.entries,'user']],pkey,user.hidden); }
+function saveLocal(){
+  user.updated=Date.now(); dirty=true;
+  try{localStorage.setItem(LS_KEY,JSON.stringify(user))}catch(e){}
+  updateSaveUI();
+}
+
+/* ───── 유틸 ───── */
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const norm=s=>String(s||'').toLowerCase().replace(/[₀-₉]/g,c=>String('₀₁₂₃₄₅₆₇₈₉'.indexOf(c))).replace(/ₓ/g,'x').replace(/\s+/g,'');
+const numOrNull=v=>{if(v===''||v==null)return null;const n=Number(v);return isFinite(n)?n:null};
+const procLabel=p=>`${p.prec} + ${p.reac}`;
+const RANK={ok:0,warn:1,fail:2};
+
+/* ───── 판정 ───── */
+function assess(p,T,budget){
+  const msgs=[]; let level='ok';
+  const up=l=>{if(RANK[l]>RANK[level])level=l};
+  if(budget!=null && p.tmin>budget){up('fail');msgs.push(`열예산 ${budget} °C가 창 하한 ${p.tmin} °C보다 낮아 이 공정은 쓸 수 없습니다.`);}
+  if(budget!=null && T>budget){up('fail');msgs.push(`목표 온도가 열예산 ${budget} °C를 넘습니다.`);}
+  if(T<p.tmin){up('fail');msgs.push(`창 하한보다 ${p.tmin-T} °C 낮습니다. 반응 불완전, 전구체 물리흡착·응축, 리간드 잔류(C·N·Cl·OH) 위험.`);}
+  else if(T>p.tmax){
+    up('fail');
+    if(p.tdec!=null && T>=p.tdec) msgs.push(`전구체 분해 시작(≈${p.tdec} °C) 이상입니다. CVD 성장이 섞여 자기제한성과 컨포멀리티가 깨집니다.`);
+    else msgs.push(`창 상한보다 ${T-p.tmax} °C 높습니다. 표면 반응기 탈착에 따른 GPC 감소나 분해 시작 가능성이 있습니다.`);
+  } else {
+    const m=Math.min(T-p.tmin,p.tmax-T);
+    if(m<15){up('warn');msgs.push(`창 경계까지 ${m} °C. 히터 편차·웨이퍼 온도 오프셋을 고려하면 여유가 작습니다.`);}
+    else msgs.push(`창 안쪽, 경계까지 여유 ${m} °C.`);
+    if(p.tdec!=null && T>p.tdec-25 && T<=p.tmax){up('warn');msgs.push(`전구체 분해 시작(≈${p.tdec} °C)에 가깝습니다. 퍼지·도즈 시간을 늘려 포화 곡선을 확인하세요.`);}
+  }
+  if(p.tsrc!=null && T<p.tsrc+10){up('warn');msgs.push(`반응기 온도가 소스 온도(${p.tsrc} °C)와 비슷하거나 낮아 챔버 내 응축 위험. 라인·밸브는 소스보다 10–20 °C 높게 유지.`);}
+  if(p.conf==='L') msgs.push('이 항목은 데이터 신뢰도가 낮습니다. 원문 확인 후 사용하세요.');
+  const margin = (T>=p.tmin && T<=p.tmax) ? Math.min(T-p.tmin,p.tmax-T) : -Math.min(Math.abs(T-p.tmin),Math.abs(T-p.tmax));
+  return {level,msgs,margin};
+}
+const LEVEL_TXT={ok:'공정 가능',warn:'가능, 주의 필요',fail:'공정 불가'};
+
+/* ───── 기판 판정 ───── */
+function traits(p){
+  const r=norm(p.reac), pr=norm(p.prec+' '+p.precName);
+  const oxid=/o3/.test(r)?'strong':(/o2/.test(r)?'strong':(/h2o/.test(r)?'mild':'none'));
+  return {oxid, halide:/cl\d|f\d|cl[^a-z]|cl$/.test(pr), plasma:p.mode==='플라즈마', metal:p.cls==='금속',
+          tma:norm(p.prec)==='tma', wf6:/wf6/.test(pr), oxideFilm:p.cls==='산화물'};
+}
+function assessSub(p,s,T){
+  const msgs=[]; let level='ok'; const up=l=>{if(RANK[l]>RANK[level])level=l};
+  const t=traits(p);
+  if(T>s.tmax){up('fail');msgs.push(`${s.name} 허용 온도(≈${s.tmax} °C)를 ${T-s.tmax} °C 넘습니다.`);}
+  else if(s.twarn!=null && T>s.twarn){up('warn');msgs.push(`${s.twarn} °C 이상: ${s.twarnNote||'기판 열화 가능'}.`);}
+  if(p.tmin>s.tmax){up('fail');msgs.push(`ALD 창 하한(${p.tmin} °C)이 기판 허용 온도보다 높아 이 조합은 성립하지 않습니다.`);}
+  // 핵생성
+  if(t.metal){
+    if(t.wf6 && s.term==='H'){up('warn');msgs.push('WF₆가 Si를 직접 환원하며 Si를 소모합니다. 의도한 경우가 아니면 TiN 등 장벽층이 필요합니다.');}
+    else if(t.wf6 && s.term!=='metal'){up('warn');msgs.push('WF₆/Si₂H₆는 절연체 위 핵생성이 어려워 보통 TiN이나 핵생성층 위에 올립니다.');}
+    else if(s.term==='metal') msgs.push('도전체 표면이라 금속 핵생성이 빠른 편입니다.');
+    else {up('warn');msgs.push('비금속 표면에서는 핵생성 지연과 섬 성장이 나타납니다. 연속막까지 사이클 손실이 크므로 시드층·표면 처리를 검토하세요.');}
+  } else {
+    if(s.term==='H'){
+      if(t.halide){up('warn');msgs.push('H 종단 표면에는 OH가 없어 염화물 전구체의 초기 핵생성 지연이 큽니다 (섬 성장, 계면 불균일).');}
+      else if(t.tma) msgs.push('TMA는 Si–H 표면에서도 비교적 잘 반응합니다.');
+      else {up('warn');msgs.push('H 종단 표면이라 초기 핵생성이 늦어질 수 있습니다.');}
+    }
+  }
+  if(s.term==='inert'){up('warn');msgs.push('반응 사이트가 적은 기저면이라 결함·가장자리 위주로 성장합니다. 시드층이나 표면 기능화가 필요합니다.');}
+  if(s.term==='polymer'){up('warn');msgs.push('전구체가 고분자 표면 아래로 침투해 혼합층을 만들 수 있습니다'+(t.tma?' (TMA에서 특히 뚜렷).':'.'));}
+  // 산화
+  if(s.ox && t.oxid==='strong'){up('warn');msgs.push(`${p.reac}: ${s.oxNote||'기판이 산화되어 계면층이 생길 수 있습니다'}. H₂O 공정으로 첫 층을 깔거나 보호층을 검토하세요.`);}
+  else if(s.oxMild && t.oxid==='mild'){up('warn');msgs.push(`H₂O에서도 ${s.oxNote||'계면 산화'}가 일부 진행됩니다.`);}
+  if(s.selfClean && t.tma) msgs.push('TMA 선행 펄스가 III-V 자연산화막을 일부 제거하는 self-cleaning 효과가 보고되어 있습니다.');
+  if(s.halide && t.halide){up('warn');msgs.push('할라이드 부산물(HCl·HF)로 기판이 부식·에칭될 수 있습니다.');}
+  if(s.plasma && t.plasma){up('warn');msgs.push('플라즈마(이온·UV)로 기판이 손상될 수 있습니다. 원격 플라즈마·저전력 조건을 검토하세요.');}
+  if(s.conf==='L') msgs.push('기판 데이터 신뢰도가 낮습니다.');
+  return {level,msgs:msgs.filter(Boolean)};
+}
+
+/* ───── 온도창 차트 (HTML 막대) ───── */
+function axisRange(rows,extra){
+  let hi=0; rows.forEach(r=>{hi=Math.max(hi,r.tmax,r.tdec||0)}); (extra||[]).forEach(v=>{if(v!=null)hi=Math.max(hi,v)});
+  hi=Math.max(400,Math.ceil((hi+30)/100)*100); return [0,hi];
+}
+function chart(rows,opt){
+  opt=opt||{};
+  if(!rows.length) return '<div class="empty">표시할 공정이 없습니다.</div>';
+  const [a,b]=opt.axis||axisRange(rows,[opt.T,opt.budget]);
+  const pct=v=>((Math.min(Math.max(v,a),b)-a)/(b-a)*100).toFixed(2)+'%';
+  let h='<div class="wchart">';
+  rows.forEach(r=>{
+    const cls=['bar']; if(r.sel)cls.push('sel'); if(r.conf==='L')cls.push('lowc');
+    const lv=r.level?`<span class="pill ${r.level}" style="margin-left:4px">${r.level==='ok'?'가능':r.level==='warn'?'주의':'불가'}</span>`:'';
+    h+=`<div class="wrow${opt.click?' clickable':''}" ${opt.click?`data-go="${esc(r.id)}" role="button" tabindex="0"`:''}>
+      <div class="lab"><b>${esc(r.title)}</b>${lv}<small>${esc(r.sub||'')}</small></div>
+      <div class="track" title="${r.tmin}–${r.tmax} °C${r.tdec!=null?' · 분해≈'+r.tdec+' °C':''}">
+        <div class="${cls.join(' ')}" style="left:${pct(r.tmin)};width:calc(${pct(r.tmax)} - ${pct(r.tmin)})"></div>
+        ${r.tdec!=null?`<div class="dec" style="left:${pct(r.tdec)}"></div>`:''}
+      </div></div>`;
+  });
+  const step=(b-a)<=300?50:((b-a)<=1000?100:200); let ticks='';
+  for(let v=a;v<=b;v+=step) ticks+=`<span style="left:${pct(v)}">${v}</span>`;
+  h+=`<div class="axis"><div class="small-t muted" style="text-align:right">°C</div><div class="ticks">${ticks}</div></div>`;
+  // overlay (target line, budget, overlap)
+  let ov='';
+  if(opt.overlap && opt.overlap[1]>=opt.overlap[0]) ov+=`<div class="ovband" style="left:${pct(opt.overlap[0])};width:calc(${pct(opt.overlap[1])} - ${pct(opt.overlap[0])})"></div>`;
+  if(opt.budget!=null) ov+=`<div class="budget" style="left:${pct(opt.budget)}"></div>`;
+  if(opt.T!=null) ov+=`<div class="tline" style="left:${pct(opt.T)}"><span>${opt.T} °C</span></div>`;
+  if(ov) h+=`<div class="overlay" data-ov>${ov}</div>`;
+  h+='</div>';
+  h+=`<div class="legend"><span><i style="background:var(--bar)"></i>ALD 창</span><span><i style="background:repeating-linear-gradient(45deg,var(--bar) 0 4px,transparent 4px 6px);border:1px solid var(--bar)"></i>낮은 신뢰도</span><span><i style="border-left:2px dotted var(--fail);width:2px;height:10px"></i>전구체 분해 ≈</span>${opt.T!=null?'<span><i style="background:var(--heat);width:3px"></i>목표 온도</span>':''}${opt.budget!=null?'<span><i style="background:repeating-linear-gradient(135deg,transparent 0 3px,var(--fail) 3px 4px)"></i>열예산 초과</span>':''}${opt.overlap?'<span><i style="background:color-mix(in srgb,var(--ok) 30%,transparent)"></i>공통 창</span>':''}</div>`;
+  return h;
+}
+// overlay를 트랙 영역에 맞추기
+function fitOverlays(root){
+  root.querySelectorAll('.wchart').forEach(w=>{
+    const ov=w.querySelector('[data-ov]'); const tr=w.querySelector('.track'); if(!ov||!tr)return;
+    const wr=w.getBoundingClientRect(), r=tr.getBoundingClientRect();
+    ov.style.left=(r.left-wr.left)+'px'; ov.style.width=r.width+'px';
+  });
+}
+function bindGo(root){
+  root.querySelectorAll('[data-go]').forEach(el=>{
+    const go=()=>{selectProc(el.dataset.go);location.hash='diagnose'};
+    el.addEventListener('click',go); el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}});
+  });
+}
+function toRow(p,extra){return Object.assign({id:p.id,title:`${p.film}`,sub:`${procLabel(p)} · ${p.mode}`,tmin:p.tmin,tmax:p.tmax,tdec:p.tdec,conf:p.conf},extra||{})}
+
+/* ───── 진단 ───── */
+const st={film:'',prec:'',reac:'',sub:'s01',osub:'',T:250,budget:null,sort:'film',dir:1,checked:new Set(),ofilms:new Set(['HfO₂','ZrO₂'])};
+function films(){return [...new Set(allProcs().map(p=>p.film))].sort((x,y)=>x.localeCompare(y))}
+function fillSelect(sel,vals,cur,allLabel){
+  sel.innerHTML=(allLabel?`<option value="">${allLabel}</option>`:'')+vals.map(v=>`<option${v===cur?' selected':''}>${esc(v)}</option>`).join('');
+}
+function syncDiagSelects(){
+  const P=allProcs(); const fl=films();
+  if(!fl.includes(st.film)) st.film=fl.includes('HfO₂')?'HfO₂':fl[0]||'';
+  fillSelect($('d-film'),fl,st.film);
+  const precs=[...new Set(P.filter(p=>p.film===st.film).map(p=>p.prec))];
+  if(!precs.includes(st.prec)) st.prec=precs[0]||'';
+  fillSelect($('d-prec'),precs,st.prec);
+  const reacs=[...new Set(P.filter(p=>p.film===st.film&&p.prec===st.prec).map(p=>p.reac))];
+  if(!reacs.includes(st.reac)) st.reac=reacs[0]||'';
+  fillSelect($('d-reac'),reacs,st.reac);
+  const S=allSubs(); if(st.sub && !S.some(s=>s.id===st.sub)) st.sub='';
+  $('d-sub').innerHTML='<option value="">지정 안 함</option>'+S.map(s=>`<option value="${esc(s.id)}"${s.id===st.sub?' selected':''}>${esc(s.name)}</option>`).join('');
+}
+function curSub(){return allSubs().find(s=>s.id===st.sub)||null}
+function effBudget(b,s){const v=[b,s?s.tmax:null].filter(x=>x!=null);return v.length?Math.min(...v):null}
+function currentProc(){return allProcs().find(p=>p.film===st.film&&p.prec===st.prec&&p.reac===st.reac)}
+function selectProc(id){const p=allProcs().find(x=>x.id===id); if(!p)return; st.film=p.film;st.prec=p.prec;st.reac=p.reac; renderDiag();}
+function renderDiag(){
+  syncDiagSelects();
+  $('d-T').value=st.T; $('d-Trange').value=Math.min(st.T,600);
+  const p=currentProc(); const box=$('d-verdict');
+  if(!p){box.innerHTML='<div class="card empty">공정을 선택하세요.</div>';$('d-alt').innerHTML='';return;}
+  const r=assess(p,st.T,st.budget); const S=curSub(); const rs=S?assessSub(p,S,st.T):null;
+  const lvl=rs&&RANK[rs.level]>RANK[r.level]?rs.level:r.level;
+  box.innerHTML=`<div class="verdict ${lvl}"><div class="stripe"></div><div>
+    <div class="row" style="justify-content:space-between"><h2>${LEVEL_TXT[lvl]}</h2><span class="pill c-${p.conf}">신뢰도 ${CONF_LABEL[p.conf]}</span></div>
+    <div class="muted small-t">${esc(p.film)} · ${esc(p.prec)} <span class="mono">${esc(p.precName||'')}</span> + ${esc(p.reac)} · ${esc(p.mode)} ALD${S?` · 기판 ${esc(S.name)}`:''}</div>
+    <h3 style="margin:10px 0 0">공정 조건 <span class="pill ${r.level}">${r.level==='ok'?'가능':r.level==='warn'?'주의':'불가'}</span></h3>
+    <ul>${r.msgs.map(m=>`<li>${esc(m)}</li>`).join('')}</ul>
+    ${rs?`<h3 style="margin:10px 0 0">기판 영향 <span class="pill ${rs.level}">${rs.level==='ok'?'가능':rs.level==='warn'?'주의':'불가'}</span></h3>
+    <ul>${(rs.msgs.length?rs.msgs:['특별한 상호작용 없음.']).map(m=>`<li>${esc(m)}</li>`).join('')}</ul>${S.note?`<p class="small-t muted" style="margin:4px 0 0">${esc(S.note)}</p>`:''}`:'<p class="small-t muted" style="margin:8px 0 0">기판을 고르면 핵생성·산화·열예산 영향까지 판정합니다.</p>'}
+    <div class="kv">
+      <div><span>ALD 창</span><span>${p.tmin}–${p.tmax} °C</span></div>
+      <div><span>GPC</span><span>${esc(p.gpc||'—')} Å</span></div>
+      <div><span>분해 시작</span><span>${p.tdec!=null?'≈'+p.tdec+' °C':'—'}</span></div>
+      <div><span>소스 온도</span><span>${p.tsrc!=null?p.tsrc+' °C':'기체'}</span></div>
+      <div><span>권장 중심</span><span>${Math.round((p.tmin+Math.min(p.tmax,p.tdec!=null?p.tdec-15:p.tmax))/2/5)*5} °C</span></div>
+    </div>
+    ${p.note?`<p class="small-t" style="margin:10px 0 0">${esc(p.note)}</p>`:''}
+    <p class="small-t muted" style="margin:6px 0 0">출처: ${esc(p.src||'—')}</p>
+  </div></div>`;
+  const both=(x)=>{const a=assess(x,st.T,st.budget);if(S){const b=assessSub(x,S,st.T);if(RANK[b.level]>RANK[a.level])a.level=b.level;}return a;};
+  const same=allProcs().filter(x=>x.film===p.film).map(x=>({p:x,a:both(x)}))
+    .sort((x,y)=>RANK[x.a.level]-RANK[y.a.level]||y.a.margin-x.a.margin);
+  $('d-alt-title').textContent=`${p.film} 공정 비교 · ${st.T} °C${S?' · '+S.name:''} 기준`;
+  $('d-alt').innerHTML=chart(same.map(s=>toRow(s.p,{title:procLabel(s.p),sub:s.p.mode+(s.p.gpc?' · '+s.p.gpc+' Å/cy':''),sel:s.p.id===p.id,level:s.a.level})),{T:st.T,budget:effBudget(st.budget,S),click:true});
+  fitOverlays($('d-alt')); bindGo($('d-alt'));
+  // 기판 매트릭스
+  const mat=allSubs().map(s=>({s,a:assessSub(p,s,st.T)})).sort((x,y)=>RANK[x.a.level]-RANK[y.a.level]);
+  $('d-sub-title').textContent=`기판별 적합성 · ${p.prec} + ${p.reac}, ${st.T} °C`;
+  $('d-submatrix').innerHTML='<div class="tablewrap"><table style="min-width:520px"><thead><tr><th>기판</th><th>판정</th><th>허용 °C</th><th>주요 이유</th></tr></thead><tbody>'+
+    mat.map(({s,a})=>`<tr data-sub="${esc(s.id)}" style="cursor:pointer${s.id===st.sub?';background:var(--accent-soft)':''}">
+      <td><b>${esc(s.name)}</b>${s.origin==='repo'?' <span class="pill mode">파일</span>':(s.origin==='user'?' <span class="pill user">내 기판</span>':'')}<br><span class="muted small-t">${esc(s.cat)}</span></td>
+      <td><span class="pill ${a.level}">${a.level==='ok'?'가능':a.level==='warn'?'주의':'불가'}</span></td>
+      <td class="num">${s.tmax}</td>
+      <td class="small-t">${esc(a.msgs.filter(m=>!/신뢰도/.test(m))[0]||'특별한 상호작용 없음.')}${a.msgs.length>1?` <span class="muted">외 ${a.msgs.length-1}건</span>`:''}</td></tr>`).join('')+'</tbody></table></div>';
+  $('d-submatrix').querySelectorAll('tr[data-sub]').forEach(tr=>tr.addEventListener('click',()=>{st.sub=tr.dataset.sub;renderDiag();$('d-verdict').scrollIntoView({behavior:'smooth',block:'start'});}));
+}
+
+/* ───── DB ───── */
+function filtered(){
+  const q=norm($('q-text').value), cls=$('q-cls').value, mode=$('q-mode').value, T=numOrNull($('q-T').value), conf=$('q-conf').value;
+  return allProcs().filter(p=>{
+    if(q && !norm([p.film,p.prec,p.precName,p.reac,p.note,p.src].join(' ')).includes(q)) return false;
+    if(cls && p.cls!==cls) return false;
+    if(mode && p.mode!==mode) return false;
+    if(T!=null && (T<p.tmin||T>p.tmax)) return false;
+    if(conf && !conf.includes(p.conf)) return false;
+    return true;
+  });
+}
+function renderDB(){
+  const clsSel=$('q-cls'), cur=clsSel.value; const cl=[...new Set(allProcs().map(p=>p.cls))];
+  clsSel.innerHTML='<option value="">전체</option>'+cl.map(c=>`<option${c===cur?' selected':''}>${esc(c)}</option>`).join('');
+  const k=st.sort, d=st.dir;
+  const rows=filtered().sort((x,y)=>{
+    let a=x[k],b=y[k]; if(k==='gpc'){a=parseFloat(a)||0;b=parseFloat(b)||0}
+    if(a==null)return 1; if(b==null)return -1;
+    return (typeof a==='number'?a-b:String(a).localeCompare(String(b)))*d;
+  });
+  $('q-count').textContent=`${rows.length}개`;
+  const T=numOrNull($('q-T').value);
+  $('q-chart').innerHTML=chart(rows.map(p=>toRow(p,{sel:st.checked.has(p.id)})),{T,click:true});
+  fitOverlays($('q-chart')); bindGo($('q-chart'));
+  $('q-body').innerHTML=rows.map(p=>`<tr data-id="${esc(p.id)}">
+    <td><input type="checkbox" aria-label="${esc(p.film+' '+procLabel(p))} 비교에 추가" ${st.checked.has(p.id)?'checked':''}></td>
+    <td><b>${esc(p.film)}</b>${p.origin==='repo'?' <span class="pill mode">파일</span>':(p.origin==='user'?` <span class="pill user">${p.override?'수정':'내 공정'}</span>`:'')}</td>
+    <td>${esc(p.prec)}<br><span class="muted mono" style="font-size:11px">${esc(p.precName||'')}</span></td>
+    <td>${esc(p.reac)}</td><td><span class="pill mode">${esc(p.mode)}</span></td>
+    <td class="num">${p.tmin}–${p.tmax}</td><td class="num">${esc(p.gpc||'—')}</td>
+    <td class="num">${p.tdec!=null?'≈'+p.tdec:'—'}</td><td class="num">${p.tsrc!=null?p.tsrc:'기체'}</td>
+    <td><span class="pill c-${p.conf}">${CONF_LABEL[p.conf]||'—'}</span></td>
+    <td class="small-t" style="min-width:220px">${esc(p.note||'')}</td></tr>`).join('') || '<tr><td colspan="11" class="empty">조건에 맞는 공정이 없습니다.</td></tr>';
+  $('q-selcount').textContent=st.checked.size?`비교에 ${st.checked.size}개 선택됨`:'';
+  $('q-body').querySelectorAll('tr[data-id]').forEach(tr=>{
+    tr.addEventListener('click',e=>{
+      const id=tr.dataset.id;
+      if(e.target.type==='checkbox'){ e.target.checked?st.checked.add(id):st.checked.delete(id); renderDB(); return; }
+      selectProc(id); location.hash='diagnose';
+    });
+  });
+  document.querySelectorAll('th[data-sort]').forEach(th=>{
+    th.textContent=th.textContent.replace(/ [▲▼]$/,'')+(th.dataset.sort===k?(d>0?' ▲':' ▼'):'');
+  });
+}
+
+/* ───── 공통 창 ───── */
+function overlapOf(list){return [Math.max(...list.map(p=>p.tmin)),Math.min(...list.map(p=>p.tmax))]}
+function renderOverlap(){
+  const fl=films();
+  [...st.ofilms].forEach(f=>{if(!fl.includes(f))st.ofilms.delete(f)});
+  $('o-films').innerHTML=fl.map(f=>`<button type="button" class="chip" aria-pressed="${st.ofilms.has(f)}" data-f="${esc(f)}">${esc(f)}</button>`).join('');
+  $('o-films').querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>{
+    const f=c.dataset.f; if(st.ofilms.has(f))st.ofilms.delete(f); else if(st.ofilms.size<4)st.ofilms.add(f); renderOverlap();
+  }));
+  const S=allSubs(); if(st.osub&&!S.some(s=>s.id===st.osub))st.osub='';
+  $('o-sub').innerHTML='<option value="">지정 안 함</option>'+S.map(s=>`<option value="${esc(s.id)}"${s.id===st.osub?' selected':''}>${esc(s.name)} (≤${s.tmax} °C)</option>`).join('');
+  const OS=S.find(s=>s.id===st.osub)||null;
+  const budget=effBudget(numOrNull($('o-budget').value),OS), mode=$('o-mode').value, same=$('o-same').value==='1';
+  const sel=[...st.ofilms]; const out=$('o-result');
+  if(sel.length<2){out.innerHTML='<div class="empty">박막을 2개 이상 고르세요.</div>';$('o-count').textContent='';}
+  else{
+    const groups=sel.map(f=>allProcs().filter(p=>p.film===f&&(!mode||p.mode===mode)));
+    let combos=[[]];
+    groups.forEach(g=>{const n=[];combos.forEach(c=>g.forEach(p=>{if(n.length<5000)n.push(c.concat(p))}));combos=n;});
+    if(same) combos=combos.filter(c=>c.every(p=>norm(p.reac)===norm(c[0].reac)));
+    const cs={H:3,M:2,L:1};
+    let res=combos.filter(c=>c.length===sel.length).map(c=>{
+      let [lo,hi]=overlapOf(c); if(budget!=null)hi=Math.min(hi,budget);
+      // 분해 온도 여유를 반영한 실효 상한
+      const decHi=Math.min(...c.map(p=>p.tdec!=null?p.tdec-15:Infinity)); const effHi=Math.min(hi,decHi);
+      return {c,lo,hi,effHi,w:hi-lo,conf:Math.min(...c.map(p=>cs[p.conf]||1))};
+    }).sort((x,y)=>y.w-x.w||y.conf-x.conf);
+    const ok=res.filter(r=>r.w>=0);
+    $('o-count').textContent=`조합 ${res.length}개 중 공통 창 존재 ${ok.length}개`;
+    const show=(ok.length?ok:res).slice(0,6);
+    out.innerHTML=(ok.length?'':'<div class="notice" style="margin-bottom:10px">공통 창이 있는 조합이 없습니다. 간격이 가장 작은 조합을 보여줍니다. 한쪽 전구체를 고온 창 계열(Cp, 염화물)로 바꾸거나 플라즈마 공정을 검토해 보세요.</div>')+
+      '<div style="display:flex;flex-direction:column;gap:10px">'+show.map((r,i)=>{
+        const has=r.w>=0; const mid=Math.round((r.lo+Math.min(r.hi,r.effHi))/2/5)*5;
+        return `<div class="combo"><div class="combo-head">
+          <div><span class="pill ${has?(r.w>=40?'ok':'warn'):'fail'}">${has?(r.w>=40?'넓음':'좁음'):'겹침 없음'}</span>
+          <b style="margin-left:6px">${has?`${r.lo}–${r.hi} °C (폭 ${r.w})`:`간격 ${-r.w} °C`}</b></div>
+          ${has?`<span class="small-t muted">권장 ≈ <span class="mono">${mid} °C</span>${r.effHi<r.hi?` · 분해 고려 시 상한 ${r.effHi} °C`:''}</span>`:''}</div>
+          ${OS&&has?`<div class="small-t">${esc(OS.name)} 위 첫 층: ${r.c.map(p=>{const a=assessSub(p,OS,mid);return `${esc(p.film)} <span class="pill ${a.level}" title="${esc(a.msgs.join(' '))}">${a.level==='ok'?'가능':a.level==='warn'?'주의':'불가'}</span>`}).join(' · ')}</div>`:''}
+          ${chart(r.c.map(p=>toRow(p,{title:p.film,sub:procLabel(p)+' · '+p.mode})),{overlap:has?[r.lo,r.hi]:null,budget,T:has?mid:null,click:true})}
+        </div>`;}).join('')+'</div>';
+    fitOverlays(out); bindGo(out);
+  }
+  // 수동 비교
+  const man=allProcs().filter(p=>st.checked.has(p.id)); const mb=$('o-manual');
+  if(man.length<2){mb.innerHTML='<div class="empty">‘공정 DB’ 표에서 비교할 공정을 2개 이상 체크하세요.</div>';}
+  else{
+    const [lo,hi]=overlapOf(man); const has=hi>=lo;
+    mb.innerHTML=`<div class="row" style="margin-bottom:8px"><span class="pill ${has?'ok':'fail'}">${has?'공통 창 있음':'겹침 없음'}</span><b class="mono">${has?`${lo}–${hi} °C`:`간격 ${lo-hi} °C`}</b><button type="button" class="ghost small" id="o-clear">선택 해제</button></div>`+
+      chart(man.map(p=>toRow(p)),{overlap:has?[lo,hi]:null,budget,click:true});
+    fitOverlays(mb); bindGo(mb);
+    $('o-clear').addEventListener('click',()=>{st.checked.clear();renderOverlap();});
+  }
+}
+
+/* ───── 데이터 관리 ───── */
+const FORM_KEYS=['film','cls','prec','precName','reac','mode','tmin','tmax','gpc','tdec','tsrc','state','conf','src','note'];
+function formFill(p){FORM_KEYS.forEach(k=>{$('e-'+k).value=p&&p[k]!=null?p[k]:(k==='conf'?'M':(k==='cls'?'산화물':(k==='mode'?'열':(k==='state'?'액체':''))))});$('e-id').value=p?p.id:'';
+  $('e-title').textContent=p?`공정 수정 · ${p.film} ${procLabel(p)}`:'공정 추가';$('e-submit').textContent=p?'수정 저장':'추가';$('e-cancel').hidden=!p;}
+function cleanEntry(o){
+  const e={}; FORM_KEYS.forEach(k=>e[k]=o[k]);
+  ['tmin','tmax','tdec','tsrc'].forEach(k=>e[k]=numOrNull(e[k]));
+  ['film','prec','reac','precName','gpc','src','note'].forEach(k=>e[k]=e[k]==null?'':String(e[k]).trim());
+  if(!['열','플라즈마'].includes(e.mode)) e.mode=/plasma|플라즈마|pe/i.test(e.mode||e.reac)?'플라즈마':'열';
+  if(!['H','M','L'].includes(e.conf)) e.conf='M';
+  if(!e.cls) e.cls='기타'; if(!e.state) e.state='액체';
+  return e;
+}
+function validEntry(e){return e.film&&e.prec&&e.reac&&e.tmin!=null&&e.tmax!=null&&e.tmax>=e.tmin}
+$('e-form').addEventListener('submit',ev=>{
+  ev.preventDefault();
+  const raw={}; FORM_KEYS.forEach(k=>raw[k]=$('e-'+k).value); const e=cleanEntry(raw);
+  if(!validEntry(e)){$('e-msg').textContent='박막·전구체·반응물과 창 하한·상한(상한 ≥ 하한)을 입력하세요.';return;}
+  const id=$('e-id').value||('u'+Date.now().toString(36));
+  e.id=id; const i=user.entries.findIndex(x=>x.id===id); if(i>=0)user.entries[i]=e; else user.entries.push(e);
+  saveLocal(); formFill(null); $('e-msg').textContent=`${e.film} ${e.prec} + ${e.reac} 저장됨.`; renderAll();
+});
+$('e-cancel').addEventListener('click',()=>{formFill(null);$('e-msg').textContent='';});
+function renderUser(){
+  const list=allProcs().filter(p=>p.origin==='user'); const box=$('u-list');
+  const hiddenN=user.hidden.length;
+  box.innerHTML=(list.length?`<div style="display:flex;flex-direction:column;gap:8px">${list.map(p=>`<div class="combo"><div class="combo-head">
+    <div><b>${esc(p.film)}</b> ${esc(procLabel(p))} <span class="pill user">${p.override?'기본 공정 수정':'내 공정'}</span></div>
+    <div class="row"><button type="button" class="ghost small" data-edit="${esc(p.id)}">편집</button><button type="button" class="ghost small" data-del="${esc(p.id)}">${p.override?'원래 값으로':'삭제'}</button></div></div>
+    <div class="small-t muted mono">${p.tmin}–${p.tmax} °C · GPC ${esc(p.gpc||'—')} · ${esc(p.src||'출처 없음')}</div></div>`).join('')}</div>`:'<div class="empty">아직 추가한 공정이 없습니다. 위 폼에서 추가하거나, DB에서 기본 공정을 골라 편집하세요.</div>')+
+    `<div class="row" style="margin-top:12px"><label class="f" for="u-pick" style="flex:1;min-width:220px">기본 공정 편집·숨기기<select id="u-pick"><option value="">기본 공정 선택…</option>${BASE_OBJ.filter(b=>!user.hidden.includes(b.id)&&!user.entries.some(e=>e.id===b.id)).map(b=>`<option value="${b.id}">${esc(b.film+' · '+procLabel(b))}</option>`).join('')}</select></label>
+    <button type="button" class="ghost small" id="u-edit">편집</button><button type="button" class="ghost small" id="u-hide">숨기기</button></div>
+    ${hiddenN?`<p class="small-t muted">숨긴 기본 공정 ${hiddenN}개</p>`:''}`;
+  box.querySelectorAll('[data-edit]').forEach(b=>b.addEventListener('click',()=>{formFill(allProcs().find(p=>p.id===b.dataset.edit));$('e-form').scrollIntoView({behavior:'smooth'});}));
+  box.querySelectorAll('[data-del]').forEach(b=>b.addEventListener('click',()=>{user.entries=user.entries.filter(e=>e.id!==b.dataset.del);saveLocal();renderAll();}));
+  $('u-edit').addEventListener('click',()=>{const b=BASE_OBJ.find(x=>x.id===$('u-pick').value); if(b){formFill(b);$('e-form').scrollIntoView({behavior:'smooth'});}});
+  $('u-hide').addEventListener('click',()=>{const id=$('u-pick').value; if(id){user.hidden.push(id);st.checked.delete(id);saveLocal();renderAll();}});
+}
+/* 기판 폼 */
+const BOOL_SUB=['ox','oxMild','halide','plasma'];
+function subFill(s){
+  ['name','cat','term','tmax','twarn','twarnNote','oxNote','conf','note'].forEach(k=>{$('b-'+k).value=s&&s[k]!=null?s[k]:({cat:'반도체',term:'OH',conf:'M'}[k]||'')});
+  BOOL_SUB.forEach(k=>$('b-'+k).checked=!!(s&&s[k]));
+  $('b-id').value=s?s.id:''; $('b-title').textContent=s?`기판 수정 · ${s.name}`:'기판 추가';
+  $('b-submit').textContent=s?'수정 저장':'기판 추가'; $('b-cancel').hidden=!s;
+}
+$('b-form').addEventListener('submit',ev=>{
+  ev.preventDefault();
+  const s={}; ['name','cat','term','twarnNote','oxNote','conf','note'].forEach(k=>s[k]=$('b-'+k).value.trim());
+  s.tmax=numOrNull($('b-tmax').value); s.twarn=numOrNull($('b-twarn').value); BOOL_SUB.forEach(k=>s[k]=$('b-'+k).checked);
+  const old=allSubs().find(x=>x.id===$('b-id').value); if(old&&old.selfClean)s.selfClean=true;
+  if(!s.name||s.tmax==null){$('b-msg').textContent='기판 이름과 허용 최고 온도를 입력하세요.';return;}
+  s.id=$('b-id').value||('t'+Date.now().toString(36));
+  const i=user.subs.findIndex(x=>x.id===s.id); if(i>=0)user.subs[i]=s; else user.subs.push(s);
+  saveLocal(); subFill(null); $('b-msg').textContent=`${s.name} 저장됨.`; renderAll();
+});
+$('b-cancel').addEventListener('click',()=>{subFill(null);$('b-msg').textContent='';});
+function renderSubList(){
+  const box=$('b-list');
+  box.innerHTML='<h3>등록된 기판</h3><div class="tablewrap"><table style="min-width:560px"><thead><tr><th>기판</th><th>표면</th><th>허용 °C</th><th>민감</th><th></th></tr></thead><tbody>'+
+    allSubs().map(s=>`<tr><td><b>${esc(s.name)}</b>${s.origin==='repo'?' <span class="pill mode">파일</span>':(s.origin==='user'?` <span class="pill user">${s.override?'수정':'내 기판'}</span>`:'')}</td>
+      <td class="small-t">${esc({OH:'OH 종단',H:'H 종단',semi:'자연산화막 반도체',metal:'도전체',polymer:'고분자',inert:'반응 사이트 부족'}[s.term]||s.term)}</td>
+      <td class="num">${s.tmax}${s.twarn!=null?` <span class="muted">(주의 ${s.twarn})</span>`:''}</td>
+      <td class="small-t">${[s.ox&&'산화',s.oxMild&&'H₂O',s.halide&&'할라이드',s.plasma&&'플라즈마'].filter(Boolean).join(' · ')||'—'}</td>
+      <td style="white-space:nowrap"><button type="button" class="ghost small" data-sedit="${esc(s.id)}">편집</button>${s.origin!=='user'?'':` <button type="button" class="ghost small" data-sdel="${esc(s.id)}">${s.override?'원래 값으로':'삭제'}</button>`}</td></tr>`).join('')+'</tbody></table></div>';
+  box.querySelectorAll('[data-sedit]').forEach(b=>b.addEventListener('click',()=>{subFill(allSubs().find(s=>s.id===b.dataset.sedit));$('b-form').scrollIntoView({behavior:'smooth'});}));
+  box.querySelectorAll('[data-sdel]').forEach(b=>b.addEventListener('click',()=>{user.subs=user.subs.filter(s=>s.id!==b.dataset.sdel);saveLocal();renderAll();}));
+}
+$('x-restore').addEventListener('click',()=>{user.hidden=[];saveLocal();renderAll();$('x-msg').textContent='숨긴 기본 공정을 되살렸습니다.';});
+
+/* CSV */
+function toCSV(list){
+  const q=v=>{v=v==null?'':String(v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
+  return [FORM_KEYS.join(',')].concat(list.map(p=>FORM_KEYS.map(k=>q(p[k])).join(','))).join('\n');
+}
+function parseCSV(t){
+  const rows=[];let row=[],cur='',inq=false;
+  for(let i=0;i<t.length;i++){const c=t[i];
+    if(inq){if(c==='"'){if(t[i+1]==='"'){cur+='"';i++}else inq=false}else cur+=c}
+    else if(c==='"')inq=true; else if(c===','){row.push(cur);cur=''} else if(c==='\n'||c==='\r'){if(c==='\r'&&t[i+1]==='\n')i++;row.push(cur);rows.push(row);row=[];cur=''} else cur+=c;}
+  if(cur!==''||row.length){row.push(cur);rows.push(row)}
+  const head=(rows.shift()||[]).map(h=>h.trim().replace(/^﻿/,''));
+  return rows.filter(r=>r.some(x=>x.trim())).map(r=>{const o={};head.forEach((h,i)=>o[h]=r[i]);return o;});
+}
+let downloads=null, artifact=null;
+async function saveFile(name,data,mime){
+  if(downloads){try{await downloads.save({filename:name,data:new Blob([data],{type:mime})});$('x-msg').textContent=`${name} 저장 요청됨.`;return}catch(e){$('x-msg').textContent='다운로드가 취소되었거나 허용되지 않았습니다. MD 복사를 이용하세요.';return}}
+  try{
+    const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([data],{type:mime})); a.download=name;
+    document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+    $('x-msg').textContent=`${name} 다운로드를 시작했습니다. 받아지지 않으면 MD 복사를 이용하세요.`;
+  }catch(e){$('x-msg').textContent='이 화면에서는 다운로드를 쓸 수 없습니다. MD 복사를 이용하세요.';}
+}
+/* ───── DB 파일 형식 (MD · Excel · CSV 공통 열) ───── */
+const PCOLS=[['id','id'],['film','박막'],['cls','분류'],['prec','전구체'],['precName','전구체 화학식'],['reac','반응물'],['mode','방식'],['tmin','창 하한 (°C)'],['tmax','창 상한 (°C)'],['gpc','GPC (Å/cy)'],['tdec','분해 시작 (°C)'],['tsrc','소스 온도 (°C)'],['state','상태'],['conf','신뢰도'],['src','출처'],['note','메모'],['hide','숨김']];
+const SCOLS=[['id','id'],['name','기판'],['cat','분류'],['term','표면'],['tmax','허용 온도 (°C)'],['twarn','주의 온도 (°C)'],['twarnNote','주의 이유'],['ox','산화제에 산화'],['oxMild','H₂O에 산화'],['halide','할라이드 부식'],['plasma','플라즈마 손상'],['selfClean','TMA 셀프클리닝'],['oxNote','산화 영향'],['conf','신뢰도'],['note','메모'],['hide','숨김']];
+const PX={film:['막','material'],prec:['precursor'],precName:['화학식','formula','전구체정식명'],reac:['reactant','coreactant'],mode:['type'],tmin:['하한','창하한'],tmax:['상한','창상한'],tdec:['분해온도','분해'],tsrc:['소스온도','캐니스터온도'],conf:['confidence'],src:['출처','doi','ref','reference'],note:['비고'],hide:['hidden']};
+const SX={name:['기판이름','substrate'],term:['표면상태','surface'],tmax:['허용최고온도','최고온도'],twarn:['주의시작온도'],twarnNote:['주의온도이유'],oxMild:['h2o산화'],selfClean:['셀프클리닝'],note:['비고'],hide:['hidden']};
+const hn=h=>norm(h).replace(/\(.*?\)/g,'').replace(/[()°]/g,'').replace(/c$/,m=>m);
+function lookupOf(cols,extra){const m=new Map();cols.forEach(([k,l])=>{m.set(k.toLowerCase(),k);m.set(hn(l),k);(extra[k]||[]).forEach(a=>m.set(hn(a),k));});return m;}
+const PL=lookupOf(PCOLS,PX), SL=lookupOf(SCOLS,SX);
+const isTrue=v=>/^(y|yes|o|true|1|예|✓|✔|v|x)$/i.test(String(v==null?'':v).trim());
+const CONF_IN={'높음':'H','중간':'M','낮음':'L',high:'H',medium:'M',mid:'M',low:'L'};
+const TERM_IN={oh:'OH','oh종단':'OH','산화물':'OH',h:'H','h종단':'H',semi:'semi','자연산화막반도체':'semi','자연산화막':'semi',metal:'metal','도전체':'metal','금속':'metal',polymer:'polymer','고분자':'polymer',inert:'inert','반응사이트부족':'inert','2d':'inert'};
+function classify(headers){
+  const hp=new Set(headers.map(h=>PL.get(hn(h))).filter(Boolean)), hs=new Set(headers.map(h=>SL.get(hn(h))).filter(Boolean));
+  if(hp.has('film')&&hp.has('prec')) return 'proc';
+  if(hs.has('name')&&!hp.has('film')) return 'sub';
+  return null;
+}
+function mapRow(o,L){const r={};Object.keys(o).forEach(h=>{const k=L.get(hn(h));if(k&&o[h]!==''&&o[h]!=null)r[k]=o[h];});return r;}
+function procFromRow(o){
+  const r=mapRow(o,PL); if(r.conf)r.conf=CONF_IN[String(r.conf).trim().toLowerCase()]||CONF_IN[String(r.conf).trim()]||String(r.conf).trim().toUpperCase();
+  const e=cleanEntry(r); e.id=r.id?String(r.id).trim():''; if(isTrue(r.hide))e.hide=true;
+  const ok=!!(e.film&&e.prec&&e.reac)&&(e.tmin==null||e.tmax==null||e.tmax>=e.tmin);
+  FORM_KEYS.forEach(k=>{if(!(k in r)&&k!=='mode')delete e[k];});
+  return (e.hide&&(e.id||e.film))||ok?e:null;
+}
+function subFromRow(o){
+  const r=mapRow(o,SL); const s={id:r.id?String(r.id).trim():''};
+  ['name','cat','twarnNote','oxNote','note'].forEach(k=>{if(k in r)s[k]=String(r[k]).trim();});
+  if('term' in r)s.term=TERM_IN[norm(r.term)]||String(r.term).trim();
+  if('tmax' in r)s.tmax=numOrNull(r.tmax); if('twarn' in r)s.twarn=numOrNull(r.twarn);
+  ['ox','oxMild','halide','plasma','selfClean'].forEach(k=>{if(k in r)s[k]=isTrue(r[k]);});
+  if('conf' in r){const c=String(r.conf).trim(); s.conf=CONF_IN[c.toLowerCase()]||CONF_IN[c]||(/^[HML]$/i.test(c)?c.toUpperCase():'M');}
+  if(isTrue(r.hide))s.hide=true;
+  return (s.hide&&(s.id||s.name))||s.name?s:null;
+}
+function ingestTable(headers,rows){
+  const t=classify(headers); const out={procs:[],subs:[],bad:0};
+  if(!t) return out;
+  rows.forEach(o=>{const x=t==='proc'?procFromRow(o):subFromRow(o); if(x)(t==='proc'?out.procs:out.subs).push(x); else out.bad++;});
+  return out;
+}
+function mergeRes(a,b){a.procs.push(...b.procs);a.subs.push(...b.subs);a.bad+=b.bad;return a;}
+function parseMD(txt){
+  const lines=txt.split(/\r?\n/); const res={procs:[],subs:[],bad:0}; let blk=[];
+  const splitRow=l=>{let s=l.trim();if(s.startsWith('|'))s=s.slice(1);if(s.endsWith('|')&&!s.endsWith('\\|'))s=s.slice(0,-1);
+    return s.split(/(?<!\\)\|/).map(c=>c.trim().replace(/\\\|/g,'|').replace(/<br\s*\/?>/gi,' '));};
+  const flush=()=>{
+    if(blk.length>=2){const head=splitRow(blk[0]); const body=blk.slice(1).filter(l=>!/^\s*\|?\s*:?-{2,}/.test(l));
+      const rows=body.map(l=>{const c=splitRow(l);const o={};head.forEach((h,i)=>o[h]=c[i]==null?'':c[i]);return o;});
+      mergeRes(res,ingestTable(head,rows));}
+    blk=[];
+  };
+  lines.forEach(l=>{if(/^\s*\|/.test(l))blk.push(l);else flush();}); flush();
+  return res;
+}
+function rowsFromObjs(objs){const h=objs.length?Object.keys(objs[0]):[];return ingestTable(h,objs);}
+let XLSXlib=null;
+function loadXLSX(){
+  if(window.XLSX) return Promise.resolve(window.XLSX);
+  if(XLSXlib) return XLSXlib;
+  XLSXlib=new Promise((ok,no)=>{const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';s.onload=()=>ok(window.XLSX);s.onerror=()=>{XLSXlib=null;no(new Error('xlsx'))};document.head.appendChild(s);});
+  return XLSXlib;
+}
+async function parseFile(f){
+  const name=f.name.toLowerCase();
+  if(/\.(xlsx|xls)$/.test(name)){
+    const X=await loadXLSX(); const wb=X.read(await f.arrayBuffer(),{type:'array'}); const res={procs:[],subs:[],bad:0};
+    wb.SheetNames.forEach(sn=>{const objs=X.utils.sheet_to_json(wb.Sheets[sn],{defval:'',raw:false});if(objs.length)mergeRes(res,rowsFromObjs(objs));});
+    return res;
+  }
+  const txt=await f.text();
+  if(/\.json$/.test(name)||/^\s*[\[{]/.test(txt)){
+    const j=JSON.parse(txt); const res={procs:[],subs:[],bad:0};
+    const arr=Array.isArray(j)?j:(j.entries||[]);
+    arr.forEach(o=>{const e=cleanEntry(o);e.id=o.id?String(o.id):'';if(validEntry(e))res.procs.push(e);else res.bad++;});
+    (j.subs||[]).forEach(s=>{if(s&&s.name&&s.tmax!=null)res.subs.push(s);});
+    if(Array.isArray(j.hidden))user.hidden=[...new Set(user.hidden.concat(j.hidden))];
+    return res;
+  }
+  if(/\.csv$/.test(name)) return rowsFromObjs(parseCSV(txt));
+  return parseMD(txt);
+}
+function mergeInto(arr,items,keyFn,prefix){
+  let n=0;
+  items.forEach(x=>{
+    let i=x.id?arr.findIndex(a=>a.id===x.id):-1;
+    if(i<0) i=arr.findIndex(a=>keyFn(a)===keyFn(x));
+    if(!x.id){ const known=(prefix==='u'?allProcs():allSubs()).find(a=>keyFn(a)===keyFn(x)); x.id=known?known.id:(prefix+Date.now().toString(36)+n); }
+    if(i>=0) arr[i]=Object.assign({},arr[i],x); else arr.push(x); n++;
+  });
+  return n;
+}
+async function importFiles(files){
+  let np=0,ns=0,bad=0,fail=[];
+  for(const f of files){
+    try{const r=await parseFile(f); np+=mergeInto(user.entries,r.procs,pkey,'u'); ns+=mergeInto(user.subs,r.subs,skey,'t'); bad+=r.bad;}
+    catch(e){fail.push(f.name);}
+  }
+  if(np||ns) saveLocal();
+  renderAll();
+  $('x-msg').textContent=`공정 ${np}개, 기판 ${ns}개 불러옴`+(bad?` · 필수값 누락으로 ${bad}행 건너뜀`:'')+(fail.length?` · 읽지 못한 파일: ${fail.join(', ')}`:'')+(np||ns?'':' · 머리행(박막·전구체 / 기판·허용 온도)을 확인하세요')+'.';
+}
+$('x-file').addEventListener('change',async ev=>{await importFiles([...ev.target.files]);ev.target.value='';});
+const drop=$('x-drop');
+['dragenter','dragover'].forEach(t=>drop.addEventListener(t,e=>{e.preventDefault();drop.style.borderColor='var(--accent)';}));
+['dragleave','drop'].forEach(t=>drop.addEventListener(t,e=>{e.preventDefault();drop.style.borderColor='';}));
+drop.addEventListener('drop',e=>{if(e.dataTransfer&&e.dataTransfer.files.length)importFiles([...e.dataTransfer.files]);});
+
+/* 저장소 파일 자동 읽기 */
+const REPO_MD='data/ald_window_db.md';
+async function syncRepo(manual){
+  const pill=$('r-pill'), msg=$('r-msg');
+  try{
+    const r=await fetch(REPO_MD,{cache:'no-store'}); if(!r.ok) throw new Error(r.status);
+    const res=parseMD(await r.text()); if(!res.procs.length&&!res.subs.length) throw new Error('empty');
+    repo.procs=res.procs; repo.subs=res.subs; repo.loaded=true;
+    pill.className='pill ok'; pill.textContent='저장소 파일 연동됨';
+    msg.textContent=`${REPO_MD} · 공정 ${res.procs.length}개, 기판 ${res.subs.length}개`+(res.bad?` · ${res.bad}행 건너뜀`:'');
+  }catch(e){
+    pill.className='pill mode'; pill.textContent='저장소 파일 없음';
+    msg.textContent=manual?`${REPO_MD}를 찾지 못했습니다. 파일로 열었다면(file://) 브라우저가 막으니, 아래 ‘파일 불러오기’를 쓰거나 웹 서버로 여세요.`:'기본 데이터와 내 데이터만 사용 중입니다.';
+  }
+  renderAll();
+}
+$('r-sync').addEventListener('click',()=>syncRepo(true));
+
+/* 내보내기 */
+const cellStr=(k,v)=>{if(v==null||v===false)return '';if(v===true)return 'Y';if(k==='conf')return CONF_LABEL[v]||v;return String(v);};
+function tableRows(kind){
+  const cols=kind==='proc'?PCOLS:SCOLS; const items=kind==='proc'?allProcs():allSubs();
+  return [cols.map(c=>c[1])].concat(items.map(it=>cols.map(([k])=>k==='hide'?'':cellStr(k,it[k]))));
+}
+function toMD(){
+  const mdRow=r=>'| '+r.map(c=>String(c).replace(/\|/g,'\\|').replace(/\r?\n/g,' ')).join(' | ')+' |';
+  const tbl=rows=>[mdRow(rows[0]),'|'+rows[0].map(()=>'---').join('|')+'|'].concat(rows.slice(1).map(mdRow)).join('\n');
+  const d=new Date().toISOString().slice(0,10);
+  return `# ALD 공정 온도 창 DB\n\n내보낸 날짜: ${d}\n\n이 파일은 ALD 공정 온도 창 계산기의 원본 DB입니다. 표 두 개(공정, 기판)를 고치고 저장하면, 계산기가 다음에 열릴 때 읽거나 ‘파일 불러오기’로 넣을 수 있습니다.\n\n## 작성 규칙\n\n- 한 행이 공정 하나(또는 기판 하나)입니다. 표의 머리행 이름은 바꾸지 마세요.\n- 새 행은 id를 비워 두면 됩니다. 박막·전구체·반응물·방식이 같은 기존 행이 있으면 그 행을 덮어씁니다.\n- 방식: 열 / 플라즈마 · 신뢰도: 높음 / 중간 / 낮음 · 상태: 액체 / 고체 / 기체\n- 기판 표면: OH / H / semi / metal / polymer / inert (OH 종단, H 종단, 자연산화막 반도체, 도전체, 고분자, 반응 사이트 부족)\n- 예/아니오 칸(산화, 할라이드 등)은 Y 또는 빈칸, 숨김에 Y를 넣으면 그 행(기본 공정 포함)을 계산기에서 숨깁니다.\n- 칸 안에 | 문자를 쓰려면 \\| 로 적으세요. 모르는 값은 비워 두세요(추정값 금지).\n\n## 공정\n\n${tbl(tableRows('proc'))}\n\n## 기판\n\n${tbl(tableRows('sub'))}\n`;
+}
+$('x-md').addEventListener('click',()=>saveFile('ald_window_db.md',toMD(),'text/markdown'));
+$('x-copy').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(toMD());$('x-msg').textContent='MD를 복사했습니다. 저장소의 data/ald_window_db.md에 붙여넣으세요.';}catch(e){$('x-msg').textContent='클립보드 복사가 막혀 있습니다. MD로 내보내기를 쓰세요.';}});
+$('x-xlsx').addEventListener('click',async()=>{
+  try{const X=await loadXLSX(); const wb=X.utils.book_new();
+    [['공정','proc'],['기판','sub']].forEach(([n,k])=>{const ws=X.utils.aoa_to_sheet(tableRows(k));ws['!cols']=tableRows(k)[0].map(h=>({wch:Math.max(8,Math.min(40,h.length*2+4))}));X.utils.book_append_sheet(wb,ws,n);});
+    const buf=X.write(wb,{bookType:'xlsx',type:'array'});
+    await saveFile('ald_window_db.xlsx',buf,'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+  }catch(e){$('x-msg').textContent='Excel 라이브러리를 불러오지 못했습니다. MD로 내보내기를 쓰세요.';}
+});
+$('x-csv').addEventListener('click',()=>saveFile('ald_processes.csv','﻿'+tableRows('proc').map(r=>r.map(v=>/[",\n]/.test(v)?'"'+String(v).replace(/"/g,'""')+'"':v).join(',')).join('\n'),'text/csv'));
+$('x-json').addEventListener('click',()=>saveFile('ald_user_data.json',JSON.stringify(user,null,1),'application/json'));
+window.__ald={toMD,parseMD};
+
+/* 페이지에 영구 저장 */
+function buildDoc(){
+  const r=PRISTINE.cloneNode(true);
+  [...r.attributes].forEach(a=>{if(a.name!=='lang')r.removeAttribute(a.name)});
+  r.querySelectorAll(':scope > head > *, :scope > body > *').forEach(el=>{if(!el.hasAttribute('data-own'))el.remove()});
+  [...r.children].forEach(el=>{if(!el.hasAttribute('data-own'))el.remove()});
+  r.querySelector('#ald-user').textContent=JSON.stringify(user).replace(/</g,'\\u003c');
+  return '<!DOCTYPE html>\n'+r.outerHTML;
+}
+function updateSaveUI(){
+  if(artifact){$('s-publish').hidden=false;$('s-publish').disabled=!dirty;
+    $('s-desc').textContent='추가·수정한 공정은 이 브라우저에 바로 저장됩니다. ‘페이지에 영구 저장’을 누르면 데이터가 페이지 자체에 기록되어 다른 기기와 공유 대상에서도 보입니다.';
+    $('s-msg').textContent=dirty?'페이지에 아직 저장하지 않은 변경이 있습니다.':'페이지와 동기화됨.';}
+  else{$('s-desc').textContent='추가·수정한 공정은 이 브라우저에만 저장됩니다. 다른 기기로 옮길 때는 JSON 내보내기 후 가져오기를 쓰세요.';}
+}
+$('s-publish').addEventListener('click',async()=>{
+  if(!artifact)return; $('s-publish').disabled=true; $('s-msg').textContent='저장 중…';
+  try{await artifact.publish(buildDoc()); dirty=false; $('s-msg').textContent='페이지에 저장했습니다.';}
+  catch(e){const c=e&&(e.code||e.name||'');
+    $('s-msg').textContent=/not_granted|not_writer/.test(c)?'이 페이지를 수정할 권한이 없습니다. 데이터는 이 브라우저에만 저장됩니다.':(/conflict/.test(c)?'다른 곳에서 먼저 저장되어 새 버전을 불러옵니다.':'저장하지 못했습니다. 잠시 후 다시 시도하세요.');
+    $('s-publish').disabled=false;}
+});
+
+/* ───── 이벤트 & 라우팅 ───── */
+$('d-film').addEventListener('change',e=>{st.film=e.target.value;st.prec='';st.reac='';renderDiag()});
+$('d-prec').addEventListener('change',e=>{st.prec=e.target.value;st.reac='';renderDiag()});
+$('d-reac').addEventListener('change',e=>{st.reac=e.target.value;renderDiag()});
+$('d-Trange').addEventListener('input',e=>{st.T=Number(e.target.value);renderDiag()});
+$('d-T').addEventListener('input',e=>{const v=numOrNull(e.target.value);if(v!=null){st.T=v;$('d-Trange').value=Math.min(v,600);const p=currentProc();if(p)renderDiag();}});
+$('d-budget').addEventListener('input',e=>{st.budget=numOrNull(e.target.value);renderDiag()});
+['q-text','q-cls','q-mode','q-T','q-conf'].forEach(id=>$(id).addEventListener('input',renderDB));
+['o-budget','o-mode','o-same'].forEach(id=>$(id).addEventListener('input',renderOverlap));
+$('o-sub').addEventListener('change',e=>{st.osub=e.target.value;renderOverlap()});
+$('d-sub').addEventListener('change',e=>{st.sub=e.target.value;renderDiag()});
+document.querySelectorAll('th[data-sort]').forEach(th=>th.addEventListener('click',()=>{const k=th.dataset.sort;if(st.sort===k)st.dir*=-1;else{st.sort=k;st.dir=1}renderDB()}));
+
+const VIEWS=['diagnose','database','overlap','data'];
+function route(){
+  const h=(location.hash||'').slice(1); const v=VIEWS.includes(h)?h:'diagnose';
+  VIEWS.forEach(x=>$('v-'+x).classList.toggle('on',x===v));
+  document.querySelectorAll('nav.tabs a').forEach(a=>{if(a.getAttribute('href')==='#'+v)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')});
+  renderView(v);
+}
+function renderView(v){ if(v==='diagnose')renderDiag(); else if(v==='database')renderDB(); else if(v==='overlap')renderOverlap(); else {renderUser();renderSubList();} }
+function renderAll(){ const h=(location.hash||'').slice(1); renderView(VIEWS.includes(h)?h:'diagnose'); }
+window.addEventListener('hashchange',route);
+window.addEventListener('resize',()=>fitOverlays(document));
+formFill(null); subFill(null); route(); updateSaveUI(); syncRepo(false);
+
+/* 기능 연결 (없으면 그대로 동작) */
+(function connect(n){
+  if(window.claude && typeof window.claude.use==='function'){
+    window.claude.use('artifact').then(a=>{artifact=a;updateSaveUI();}).catch(()=>{});
+    window.claude.use('downloads').then(d=>{downloads=d;}).catch(()=>{});
+  } else if(n<20) setTimeout(()=>connect(n+1),250);
+})(0);
+})();
+</script>
+</body>
+</html>
