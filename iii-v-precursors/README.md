@@ -20,6 +20,8 @@ Three ligand assignments are uncertain (highlighted in the workbook): In(dpguan)
 
 Key process finding: with standard TMIn/AsH3 (340–400 °C) and TMGa/AsH3 (445–485 °C) there is no common ALE temperature; TMIn·DMEA adduct (350–500 °C) gave (InAs)1(GaAs)1 at 460 °C.
 
+Update 2026-11-10 (blank fill): 23 more CAS numbers and melting/boiling points (InCl3, InCp, In(acac)3, DADI, GaI3, Ga(acac)3, Ga(thd)3, Ga(OiPr)3, TDMAG, TDMAAs, TMAs, TEAs, TDMAP, P(SiMe3)3, P(tBu)3 and others); 10 previously blank process temperatures filled and 13 processes added (chloride ALE of InGaP/GaP/InP, GaAs special-nozzle ALE 470–560 °C, GaAs–GaP SLS at 500 °C, GaP epitaxy on Si at 380 °C, GaI3/O3 and Ga-triazenide/H2O Ga2O3, In(acac)3/H2S In2S3). Sources now S1–S157. Remaining blanks are values no source reported.
+
 The v1 CSVs below (2026-11-09) are kept unchanged; their verified values were merged into v2 with source labels "이전 세션 확인".
 
 ---

@@ -33,9 +33,9 @@ def add(**k):
 add(id="In-01", nota="InMe3", abbr="TMIn", name="Trimethylindium", metal="In", nM=1, ox="+3",
     f="C3H9In", lig_class="Alkyl", lig="Me ×3", bonds="In–C ×3", donor="없음", betaH="없음 (Me)",
     state="고체 (승화성)", mp="88 (88.0–88.8)", bp="134 (101 °C 이상 분해)", vpA=3204, vpB=10.98,
-    vp_note="log P(Torr)=10.98−3204/T, 30–100 °C 유효; 고체라 사용량에 따라 실효 증기압 변동",
+    vp_note="log P(Torr)=10.98−3204/T, 30–100 °C 유효; 다른 측정: 20 °C 1.41 hPa; 고체라 사용량에 따라 실효 증기압 변동",
     thermal="101 °C 이상에서 분해 보고; 상압 OMVPE에서 400 °C 미만에선 느리게 분해 (저온용으로는 너무 안정)",
-    pyro="자연발화 (H250, H260)", cas="3385-78-2", cert="확정", src="S2; S16", oxygen=False)
+    pyro="자연발화 (H250, H260)", cas="3385-78-2", cert="확정", src="S2; S16; S113", oxygen=False)
 add(id="In-02", nota="InEt3", abbr="TEIn", name="Triethylindium", metal="In", nM=1, ox="+3",
     f="C6H15In", lig_class="Alkyl", lig="Et ×3", bonds="In–C ×3", donor="없음", betaH="있음 (Et)",
     state="액체", mp="−32", bp="144 (상압) / 92 @10 mmHg", vpA=None, vpB=None,
@@ -44,9 +44,9 @@ add(id="In-02", nota="InEt3", abbr="TEIn", name="Triethylindium", metal="In", nM
     pyro="자연발화 (H250), 물과 격렬 반응", cas="923-34-2", cert="확정", src="S3; S16; S17; S61", oxygen=False)
 add(id="In-03", nota="InMe2(PrNMe2)", abbr="DADI", name="[3-(Dimethylamino)propyl]dimethylindium", metal="In", nM=1, ox="+3",
     f="C7H18InN", lig_class="Alkyl + 분자내 아민 donor (chelate)", lig="Me ×2, (CH2)3NMe2", bonds="In–C ×3, In←N ×1 (분자내)",
-    donor="분자내 N donor", betaH="propyl 사슬 (분자내 배위로 안정화)", state="액체", mp="", bp="", vpA=None, vpB=None,
-    vp_note="", thermal="H2O로 275 °C에서 ALD (0.6 Å/cycle)", pyro="", cas="", cert="확정 (약어·구조 문헌 확인)",
-    src="S18; S22; S23; S26", oxygen=False)
+    donor="분자내 N donor", betaH="propyl 사슬 (분자내 배위로 안정화)", state="액체 (무색)", mp="", bp="80 @5 mbar (증류 조건)", vpA=None, vpB=None,
+    vp_note="20 °C에서 0.29 hPa (≈0.22 Torr); 268–323 K 정적법 측정 보고 있음 (식 미확보)", thermal="H2O로 275 °C에서 ALD (0.6 Å/cycle)", pyro="물과 격렬 반응 (H225, H314, H332)", cas="120441-92-1", cert="확정 (약어·구조 문헌 확인)",
+    src="S18; S22; S23; S26; S112; S113; S114", oxygen=False)
 add(id="In-04", nota="InMe3(NMe2Bu)", abbr="DATI", name="(N,N-Dimethylbutylamine)trimethylindium", metal="In", nM=1, ox="+3",
     f="C9H24InN", lig_class="Alkyl + 아민 adduct", lig="Me ×3 · NMe2Bu", bonds="In–C ×3, In←N ×1 (adduct)",
     donor="외부 아민 adduct", betaH="없음 (Me)", state="액체", mp="", bp="", vpA=None, vpB=None, vp_note="",
@@ -82,17 +82,17 @@ add(id="In-10", nota="In(triaz)3", abbr="In(triaz)3", name="Tris(1,3-diisopropyl
     cert="추정 — 치환기(iPr)는 동 그룹 Ga 유사체 표기 기준; 원문 확인 필요", src="S18", oxygen=False)
 add(id="In-11", nota="InCp", abbr="InCp", name="Cyclopentadienylindium(I)", metal="In", nM=1, ox="+1",
     f="C5H5In", lig_class="Cyclopentadienyl", lig="C5H5 ×1", bonds="In–Cp (η5)", donor="없음", betaH="해당 없음",
-    state="고체", mp="", bp="", vpA=None, vpB=None, vp_note="0.01 mmHg에서 ~50 °C 승화 (판매처); ALD 버블러 40 °C, 배관 200 °C 유지",
-    thermal="O3와 200–450 °C ALD; 500 °C에선 대부분 분해 (CVD화); Cp 부산물로 C 불순물 증가 우려", pyro="", cas="", cert="확정", src="S19; S20; S21; S62", oxygen=False)
+    state="고체 (공기·열·빛 민감)", mp="", bp="0.01 mmHg에서 50 °C 승화", vpA=None, vpB=None, vp_note="0.01 mmHg에서 ~50 °C 승화 (판매처); ALD 버블러 40 °C, 배관 200 °C 유지",
+    thermal="O3와 200–450 °C ALD; 500 °C에선 대부분 분해 (CVD화); Cp 부산물로 C 불순물 증가 우려", pyro="인화성 고체 (H228)", cas="34822-89-4", cert="확정", src="S19; S20; S21; S62", oxygen=False)
 add(id="In-12", nota="In(EtCp)", abbr="InEtCp", name="Ethylcyclopentadienylindium(I)", metal="In", nM=1, ox="+1",
     f="C7H9In", lig_class="Cyclopentadienyl", lig="C5H4Et ×1", bonds="In–Cp (η5)", donor="없음", betaH="해당 없음",
-    state="", mp="", bp="", vpA=None, vpB=None, vp_note="", thermal="", pyro="", cas="", cert="확정 (표기 기준)",
-    src="S1", oxygen=False)
+    state="액체", mp="", bp="", vpA=None, vpB=None, vp_note="증기압 비교적 높음 (저자 서술)", thermal="250 °C까지 열안정; H2O→O2 plasma 순서로 200 °C 자기제한 (펄스 0.1/2/14 s)", pyro="", cas="", cert="확정 (표기 기준)",
+    src="S1; S115; S116", oxygen=False)
 add(id="In-13", nota="InCl3", abbr="InCl3", name="Indium(III) chloride", metal="In", nM=1, ox="+3",
     f="InCl3", lig_class="Halide", lig="Cl ×3", bonds="In–Cl ×3", donor="없음", betaH="해당 없음",
-    state="고체", mp="", bp="", vpA=None, vpB=None, vp_note="증기압 매우 낮음 — 평면 기판 포화에도 소스 285 °C 필요",
-    thermal="H2O/H2O2와 300–500 °C, GPC 0.25–0.40 Å; HCl 부산물이 장비·막 식각", pyro="불연", cas="",
-    cert="확정", src="S18; S19; S58", oxygen=False)
+    state="고체 (흡습성)", mp="586", bp="800", vpA=None, vpB=None, vp_note="증기압 매우 낮음 — 평면 기판 포화에도 소스 285 °C 필요",
+    thermal="H2O/H2O2와 300–500 °C, GPC 0.25–0.40 Å; HCl 부산물이 장비·막 식각", pyro="불연", cas="10025-82-8",
+    cert="확정", src="S18; S19; S58; S117", oxygen=False)
 add(id="In-14", nota="InCl", abbr="InCl", name="Indium(I) chloride (반응기 내 생성)", metal="In", nM=1, ox="+1",
     f="InCl", lig_class="Halide (Ga/In 금속 + HCl 현장 생성)", lig="Cl ×1", bonds="In–Cl", donor="없음", betaH="해당 없음",
     state="기상 (in situ)", mp="", bp="", vpA=None, vpB=None, vp_note="외부 공급원이 아니라 hydride/chloride VPE 반응기 안에서 생성",
@@ -104,8 +104,8 @@ add(id="In-15", nota="InClMe2", abbr="DMInCl", name="Dimethylindium chloride", m
 # O-containing In
 add(id="In-16", nota="In(acac)3", abbr="In(acac)3", name="Indium(III) acetylacetonate", metal="In", nM=1, ox="+3",
     f="C15H21InO6", lig_class="β-Diketonate", lig="acac ×3", bonds="In–O ×6", donor="κ2-O,O chelate ×3", betaH="해당 없음",
-    state="고체", mp="", bp="", vpA=None, vpB=None, vp_note="", thermal="H2O 165–220 °C / O3 160–225 °C", pyro="",
-    cas="", cert="확정", src="S18", oxygen=True)
+    state="고체 (분말)", mp="186–189", bp="260–280 (판매처 값)", vpA=None, vpB=None, vp_note="ALAM에서 캐니스터 142 °C", thermal="H2O 165–220 °C / O3 160–225 °C; H2S와 In2S3 130–260 °C", pyro="",
+    cas="14405-45-9", cert="확정", src="S18; S118; S153", oxygen=True)
 add(id="In-17", nota="In(thd)3", abbr="In(tmhd)3", name="Tris(2,2,6,6-tetramethyl-3,5-heptanedionato)indium", metal="In", nM=1, ox="+3",
     f="C33H57InO6", lig_class="β-Diketonate", lig="thd ×3", bonds="In–O ×6", donor="κ2-O,O chelate ×3", betaH="해당 없음",
     state="고체", mp="175", bp="", vpA=None, vpB=None, vp_note="In(acac)3보다 휘발성 낮음; MOCVD 버블러 ~200 °C", thermal="O2 plasma 100–400 °C, GPC 매우 낮음 (0.014 nm/cycle)",
@@ -151,8 +151,8 @@ add(id="Ga-03", nota="GaEt2Me", abbr="", name="Diethylmethylgallium", metal="Ga"
     src="S1", oxygen=False)
 add(id="Ga-04", nota="GaiBu3", abbr="TIBGa", name="Triisobutylgallium", metal="Ga", nM=1, ox="+3",
     f="C12H27Ga", lig_class="Alkyl", lig="iBu ×3", bonds="Ga–C ×3", donor="없음", betaH="있음 (iBu)",
-    state="액체", mp="", bp="73 @5.25 mmHg", vpA=None, vpB=None, vp_note="", thermal="GaAs ALE (Ozeki); MOMBE에서 저온 효율이 TEGa보다 좋고 C 적음", pyro="자연발화 (H250)", cas="", cert="확정",
-    src="S1; S65", oxygen=False)
+    state="액체", mp="", bp="73 @5.25 mmHg", vpA=None, vpB=None, vp_note="", thermal="GaAs ALE (Ozeki); MOMBE에서 저온 효율이 TEGa보다 좋고 C 적음", pyro="자연발화 (H250, H260)", cas="17150-84-4", cert="확정",
+    src="S1; S65; S119", oxygen=False)
 add(id="Ga-05", nota="GaNp3", abbr="TNGa", name="Trineopentylgallium", metal="Ga", nM=1, ox="+3",
     f="C15H33Ga", lig_class="Alkyl", lig="CH2CMe3 ×3", bonds="Ga–C ×3", donor="없음", betaH="없음 (neopentyl)",
     state="", mp="", bp="", vpA=None, vpB=None, vp_note="", thermal="β-H 제거 없이 TMGa처럼 homolysis 분해; GaAs ALE 430–500 °C, TMGa처럼 뚜렷한 self-limiting, C 감소는 크지 않음", pyro="", cas="",
@@ -161,7 +161,7 @@ add(id="Ga-06", nota="GaEt2Cl", abbr="DEGaCl", name="Diethylgallium chloride", m
     f="C4H10ClGa", lig_class="Alkyl + halide", lig="Et ×2, Cl", bonds="Ga–C ×2, Ga–Cl ×1", donor="없음 (기상 이량체 우세)",
     betaH="있음 (Et)", state="액체 (수분과 매우 빠르게 반응)", mp="", bp="60–62 (판매처 값)", vpA=3080, vpB=8.943,
     vp_note="log P(Torr)=8.943−3080/T, 5–60 °C 측정; 기상은 이량체 우세", thermal="분해 생성물 GaCl이 self-limiting 담당; 고온일수록 C 감소, 600 °C에서 고이동도; hot-wall MOVPE 350–700 °C (0.1–10 Torr)",
-    pyro="", cas="", cert="확정", src="S10; S40; S41; S67", oxygen=False)
+    pyro="자연발화 (H250)", cas="30914-08-0", cert="확정", src="S10; S40; S41; S67", oxygen=False)
 add(id="Ga-07", nota="GaCl3", abbr="GaCl3", name="Gallium(III) chloride", metal="Ga", nM=1, ox="+3",
     f="GaCl3", lig_class="Halide", lig="Cl ×3", bonds="Ga–Cl ×3 (고체/기상 Ga2Cl6 이량체)", donor="없음", betaH="해당 없음",
     state="고체 (조해성)", mp="77.9", bp="201", vpA=None, vpB=None, vp_note="48 °C에서 1 Torr",
@@ -181,13 +181,13 @@ add(id="Ga-10", nota="GaI", abbr="GaI", name="Gallium(I) iodide (in situ)", meta
     cert="확정", src="S1", oxygen=False)
 add(id="Ga-11", nota="GaI3", abbr="GaI3", name="Gallium(III) iodide", metal="Ga", nM=1, ox="+3",
     f="GaI3", lig_class="Halide", lig="I ×3", bonds="Ga–I ×3", donor="없음", betaH="해당 없음",
-    state="고체", mp="", bp="", vpA=None, vpB=None, vp_note="", thermal="O3와 Ga2O3 (Aarik)", pyro="", cas="", cert="확정",
-    src="S1", oxygen=False)
+    state="고체 (Ga2I6 이량체, 수분·빛 민감)", mp="212", bp="340–345 (승화)", vpA=None, vpB=None, vp_note="ALD 소스 130 °C", thermal="O3와 Ga2O3 200–550 °C, 기판에 따라 κ/ε/α 결정상", pyro="부식성 (H314)", cas="13450-91-4", cert="확정",
+    src="S1; S120; S121", oxygen=False)
 add(id="Ga-12", nota="Ga2(NMe2)6", abbr="[Ga(NMe2)3]2", name="Hexakis(dimethylamido)digallium", metal="Ga", nM=2, ox="+3",
     f="C12H36Ga2N6", lig_class="Dialkylamide", lig="NMe2 ×6 (μ-NMe2 가교 이량체)", bonds="Ga–N ×8 (말단 4 + 가교 4)",
-    donor="이량체", betaH="해당 없음", state="고체 (이량체), 수분 민감", mp="101–104", bp="", vpA=None, vpB=None, vp_note="",
-    thermal="H2O 170–250 °C (좁은 창); O2 plasma 60–160 °C, 1.5 Å/cycle, C·N <2 at.%; NH3 plasma GaN 130–250 °C, 1.4 Å/cycle", pyro="", cas="", cert="확정",
-    src="S28; S29; S68", oxygen=False)
+    donor="이량체", betaH="해당 없음", state="고체 (이량체), 수분 민감", mp="91 (Fisher) / 101–105.5 (다른 판매처)", bp="0.01 mmHg에서 125 °C 승화", vpA=None, vpB=None, vp_note="",
+    thermal="H2O 170–250 °C (좁은 창); O2 plasma 60–160 °C, 1.5 Å/cycle, C·N <2 at.%; NH3 plasma GaN 130–250 °C, 1.4 Å/cycle", pyro="인화성 고체·부식성 (H228, H314)", cas="57731-40-5", cert="확정",
+    src="S28; S29; S68; S122", oxygen=False)
 add(id="Ga-13", nota="(GaMe2NH2)3", abbr="[Me2GaNH2]3", name="Dimethylgallium amide trimer", metal="Ga", nM=3, ox="+3",
     f="C6H24Ga3N3", lig_class="Alkyl + amide (삼량체)", lig="Me ×6, μ-NH2 ×3", bonds="Ga–C ×6, Ga–N ×6 (가교)",
     donor="삼량체", betaH="없음 (Me)", state="", mp="", bp="", vpA=None, vpB=None, vp_note="",
@@ -198,25 +198,25 @@ add(id="Ga-14", nota="GaMe2NH2", abbr="", name="Dimethylgallium amide (DB 별도
     pyro="", cas="", cert="확정 (단량체 표기)", src="S1", oxygen=False)
 add(id="Ga-15", nota="Ga(iPr-triaz)3", abbr="Ga(triaz)3", name="Tris(1,3-diisopropyltriazenide)gallium", metal="Ga", nM=1, ox="+3",
     f="C18H42GaN9", lig_class="Triazenide (homoleptic)", lig="iPrN=N–NiPr ×3", bonds="Ga–N ×6", donor="κ2-N,N chelate ×3",
-    betaH="해당 없음", state="", mp="", bp="", vpA=None, vpB=None, vp_note="", thermal="H2O와 Ga2O3 (Mushore)", pyro="", cas="",
-    cert="확정 (표기 기준)", src="S1", oxygen=False)
+    betaH="해당 없음", state="", mp="", bp="", vpA=None, vpB=None, vp_note="버블러 160 °C, 배관 170–180 °C", thermal="H2O ALD 창 400–415 °C (좁음), ~1.5 Å/cycle, 핵생성 지연 ~15 cycle; NH3 plasma로 GaN·InGaN", pyro="", cas="",
+    cert="확정 (Mushore 2026에서 tris(1,3-diisopropyltriazenide) 확인)", src="S1; S123", oxygen=False)
 add(id="Ga-16", nota="Ga(CpMe5)", abbr="GaCp*", name="Pentamethylcyclopentadienylgallium(I)", metal="Ga", nM=1, ox="+1",
     f="C10H15Ga", lig_class="Cyclopentadienyl", lig="C5Me5 ×1", bonds="Ga–Cp* (η5)", donor="없음", betaH="해당 없음",
-    state="", mp="", bp="", vpA=None, vpB=None, vp_note="", thermal="H2O+O2 plasma (Mizutani) — InEtCp와 같은 그룹 공정",
-    pyro="", cas="", cert="확정", src="S1", oxygen=False)
+    state="", mp="", bp="", vpA=None, vpB=None, vp_note="", thermal="GaCp*/H2O/O2 plasma ABC 공정 200 °C, 0.06 nm/cycle; O2 plasma 없이는 성장 안 됨",
+    pyro="", cas="", cert="확정", src="S1; S115", oxygen=False)
 # O-containing Ga
 add(id="Ga-17", nota="Ga(acac)3", abbr="Ga(acac)3", name="Gallium(III) acetylacetonate", metal="Ga", nM=1, ox="+3",
     f="C15H21GaO6", lig_class="β-Diketonate", lig="acac ×3", bonds="Ga–O ×6", donor="κ2-O,O chelate ×3", betaH="해당 없음",
-    state="고체", mp="", bp="", vpA=None, vpB=None, vp_note="", thermal="고온(~370 °C) 필요, O3에서만 조성 양호 (2차 인용)",
-    pyro="", cas="", cert="확정", src="S29", oxygen=True)
+    state="고체 (분말)", mp="196–198 (분해)", bp="140 @10 mmHg (판매처 값)", vpA=None, vpB=None, vp_note="", thermal="고온(>370 °C) 필요, O3에서만 조성 양호 (2차 인용)",
+    pyro="", cas="14405-43-7", cert="확정", src="S29; S124", oxygen=True)
 add(id="Ga-18", nota="Ga(thd)3", abbr="Ga(TMHD)3", name="Tris(2,2,6,6-tetramethyl-3,5-heptanedionato)gallium", metal="Ga", nM=1, ox="+3",
     f="C33H57GaO6", lig_class="β-Diketonate", lig="thd ×3", bonds="Ga–O ×6", donor="κ2-O,O chelate ×3", betaH="해당 없음",
-    state="고체", mp="", bp="", vpA=None, vpB=None, vp_note="", thermal="O2 plasma 100–400 °C, 0.1 Å/cycle; H2O·O3로는 300 °C에서 거의 성장 없음",
-    pyro="", cas="", cert="확정", src="S29", oxygen=True)
+    state="고체 (결정, 흡습성)", mp="219–220", bp="360 (판매처 값)", vpA=None, vpB=None, vp_note="", thermal="O2 plasma 100–400 °C, 0.1 Å/cycle; H2O·O3로는 300 °C에서 거의 성장 없음",
+    pyro="", cas="34228-15-4", cert="확정", src="S29; S125", oxygen=True)
 add(id="Ga-19", nota="Ga(OiPr)3", abbr="GTIP", name="Gallium triisopropoxide", metal="Ga", nM=1, ox="+3",
     f="C9H21GaO3", lig_class="Alkoxide", lig="OiPr ×3", bonds="Ga–O ×3 (실제 올리고머 가능)", donor="", betaH="해당 없음",
-    state="", mp="", bp="", vpA=None, vpB=None, vp_note="", thermal="H2O 150–250 °C (2차 인용)", pyro="", cas="", cert="확정",
-    src="S29; S33", oxygen=True)
+    state="액체 (올리고머 혼합물, 수분 민감)", mp="72", bp="120 @1 mmHg", vpA=None, vpB=None, vp_note="", thermal="H2O 150–250 °C (2차 인용)", pyro="인화성 (H226)", cas="4452-61-3", cert="확정",
+    src="S29; S33; S126", oxygen=True)
 add(id="Ga-20", nota="GaMe2(OiPr)", abbr="DMGIP", name="Dimethylgallium isopropoxide", metal="Ga", nM=1, ox="+3",
     f="C5H13GaO", lig_class="Alkyl + alkoxide", lig="Me ×2, OiPr", bonds="Ga–C ×2, Ga–O ×1", donor="μ-O 가교 가능", betaH="없음 (Me)",
     state="액체", mp="", bp="", vpA=None, vpB=None, vp_note="상온 약 3 Torr",
@@ -240,17 +240,18 @@ A = [
       state="액체", mp="−1", bp="65–68", vp="96 Torr (10 °C)",
       decomp="분해 개시 ~350 °C, GaAs 표면에서 최대 200 °C 낮아짐; AsH3보다 저온에서 빨리 분해 → V/III ≈ 1에서도 GaAs 형태 양호",
       tox="H250 (자연발화), H330 (흡입 시 치명) — 고압가스인 AsH3보다 취급 안전; 상온 저장 중 소량 AsH3로 분해 보고",
-      carbon="추가 C 혼입 없음 보고", note="TMGa/TBAs vacuum ALE: 1 ML/cycle, 창 폭 70 °C; MOVPE: GaAs(TEGa) 350–700 °C, InAs(TMIn) 480–540 °C, (Ga,In)As/InP 570–650 °C",
-      cas="4262-43-5", src="S11; S12; S44; S53; S54; S70"),
+      carbon="추가 C 혼입 없음 보고 (UHV 320–540 °C 노출에서 C 종 미검출)", note="TMGa/TBAs vacuum ALE: 1 ML/cycle, 창 폭 70 °C; ALE·LALE GaAs QW 레이저 문턱 300·520 A/cm²; MOVPE: GaAs(TEGa) 350–700 °C, InAs(TMIn) 480–540 °C, (Ga,In)As/InP 570–650 °C",
+      cas="4262-43-5", src="S11; S12; S44; S53; S54; S70; S133; S134"),
  dict(id="As-03", nota="EtAsH2", abbr="EtAs", name="Ethylarsine", f="C2H7As", cls="Monoalkyl arsine", bonds="As–C ×1, As–H ×2", VH=2, inDB="예",
-      state="", mp="", bp="", vp="", decomp="", tox="", carbon="모노·디알킬 아르신은 트리알킬보다 C 혼입 적음 (계열 일반론)",
-      note="TMGa와 GaAs ALE (Maa)", cas="", src="S1; S53"),
+      state="", mp="", bp="", vp="", decomp="GaAs(001) Ga-rich 면에서 AsHx 중간체 생성, As–에틸 결합이 쉽게 끊어짐; 노출 늘리면 As 원자 생성, 고온에서 As-rich 2×4",
+      tox="", carbon="모노·디알킬 아르신은 트리알킬보다 C 혼입 적음 (계열 일반론)",
+      note="TMGa와 GaAs ALE (Maa) — ALE As 원 후보로 평가됨", cas="", src="S1; S53; S127"),
  dict(id="As-04", nota="As(NMe2)3", abbr="TDMAAs", name="Tris(dimethylamino)arsenic", f="C6H18AsN3", cls="Amino arsine", bonds="As–N ×3", VH=0, inDB="예",
-      state="액체 (수분 민감)", mp="−53", bp="55 @10 mmHg", vp="",
+      state="액체 (수분 민감)", mp="−53", bp="55 @10 mmHg (상압 ~185, 계산값)", vp="0.72 mmHg @25 °C (계산값)",
       decomp="사전 크래킹 불필요; 아민 종이 Ga·As 표면에 흡착해 self-limiting 기여 → TEGa ALE 온도 범위 크게 확장",
       tox="AsH3 대비 안전한 대체원 (As–H 없음)", carbon="C 혼입 적음 보고",
       note="TMGa와 500 °C ALE (GaAs/GaMnAs); TEGa+TDMAAs CBE 470 °C에서 선택성 확보(AsH3·As4는 600 °C); 480 °C에서 GaAs 자연산화막 제거(열 탈착보다 110 °C 낮음); InAs/GaAs ALE·초격자",
-      cas="", src="S45; S46; S47; S52; S71; S72"),
+      cas="6596-96-9", src="S45; S46; S47; S52; S71; S72; S128"),
  dict(id="As-05", nota="(Et3Si)3As", abbr="", name="Tris(triethylsilyl)arsine", f="C18H45AsSi3", cls="Silyl arsine", bonds="As–Si ×3", VH=0, inDB="예",
       state="", mp="", bp="", vp="As 소스 50–70 °C로 사용", decomp="할라이드(GaCl3)와 dehalosilylation 반응 → Et3SiCl 부산물",
       tox="", carbon="Si·C 혼입 확인 필요", note="GaCl3와 GaAs ALD 창 175–200 °C, 비정질·화학량론 막; 특허 예 100·120 °C에서 0.5–0.7 Å/cycle (Ga0.58As0.42)",
@@ -260,13 +261,13 @@ A = [
       tox="As 화합물 독성", carbon="C·H 없음", note="GaCl3·GaEt2Cl과 GaAs ALE (Kobayashi, Sasaoka)", cas="", src="S1; S55"),
  dict(id="As-07", nota="(Me3Si)3As (DB 미수록)", abbr="", name="Tris(trimethylsilyl)arsine", f="C9H27AsSi3", cls="Silyl arsine", bonds="As–Si ×3", VH=0, inDB="미수록",
       state="", mp="", bp="82–84 @4 Torr", vp="", decomp="MX3와 반응해 MAs + 3 Me3SiX", tox="공기·수분 민감", carbon="",
-      note="GaCl3/GaMe3와 상압 CVD GaAs (기판 온도 미확인)", cas="", src="S74"),
+      note="GaCl3/GaMe3와 상압 CVD GaAs (기판 온도 미확인)", cas="17729-30-5", src="S74; S129"),
  dict(id="As-08", nota="AsMe3 (DB 미수록)", abbr="TMAs", name="Trimethylarsine", f="C3H9As", cls="Trialkyl arsine", bonds="As–C ×3", VH=0, inDB="미수록",
-      state="액체", mp="−87.3", bp="56", vp="", decomp="", tox="인화점 −25 °C", carbon="C 오염 심함 (트리알킬 공통)",
-      note="GaAs MOVPE 550–800 °C, InAsP 700 °C — ALE용 아님 (참고)", cas="", src="S53; S75"),
+      state="액체", mp="−87.3", bp="51–56", vp="~240 mmHg (판매처 SDS) / 265 mmHg @25 °C (계산값)", decomp="", tox="인화점 −25 °C; H301/H311/H331, H340, H350", carbon="C 오염 심함 (트리알킬 공통)",
+      note="GaAs MOVPE 550–800 °C, InAsP 700 °C — ALE용 아님 (참고)", cas="593-88-4", src="S53; S75; S130"),
  dict(id="As-09", nota="AsEt3 (DB 미수록)", abbr="TEAs", name="Triethylarsine", f="C6H15As", cls="Trialkyl arsine", bonds="As–C ×3", VH=0, inDB="미수록",
-      state="액체", mp="", bp="140 (판매처 값)", vp="", decomp="", tox="", carbon="C 오염된 GaAs",
-      note="GaAs 상압 OMCVD 560–590 °C (참고)", cas="", src="S53; S76"),
+      state="액체 (공기 민감)", mp="−91", bp="140", vp="8.9 mmHg @25 °C (계산값)", decomp="", tox="", carbon="C 오염된 GaAs (C·Si 불순물)",
+      note="GaAs 상압 OMCVD 560–590 °C; TMGa와 540–650 °C에서 경면 n형 GaAs (참고)", cas="617-75-4", src="S53; S76; S131; S132"),
  dict(id="As-10", nota="Et2AsH (DB 미수록)", abbr="DEAs", name="Diethylarsine", f="C4H11As", cls="Dialkyl arsine", bonds="As–C ×2, As–H ×1", VH=1, inDB="미수록",
       state="액체", mp="", bp="105", vp="", decomp="", tox="", carbon="As–H 1개 있어 고품질 GaAs 가능 (리뷰)",
       note="GaAs MOVPE 550–800 °C (참고)", cas="", src="S54; S77"),
@@ -289,15 +290,15 @@ PX = [
       carbon="TBP 기인 C 오염 없음 보고; GaAsP에서 As/P 비 제어가 PH3보다 쉬움", note="InP OMVPE에서 PH3보다 낮은 V/III로 고품질; TEIn/TBP UHV 분자층 에피 320–340 °C",
       cas="2501-94-2", src="S54; S83; S84; S85; S86; S87"),
  dict(id="P-03", nota="P(NMe2)3", abbr="TDMAP", name="Tris(dimethylamino)phosphine", f="C6H18N3P", cls="Amino phosphine", bonds="P–N ×3", VH=0, inDB="문헌",
-      state="액체", mp="", bp="", vp="", decomp="", tox="P–H 없음", carbon="",
-      note="TMGa와 GaP ALD 보고 (320 °C 초과 필요); AlPO4 ALD P 원; GaP/GaAs pulse-jet ALE (Haraguchi)", cas="", src="S52; S88; S89"),
+      state="액체", mp="−44", bp="162–164 (상압) / 49 @11 Torr", vp="", decomp="", tox="인화성 (H226), 인화점 26–37 °C; P–H 없음", carbon="",
+      note="TMGa와 GaP ALD 보고 (320 °C 초과 필요); AlPO4 ALD P 원; GaP/GaAs pulse-jet ALE (Haraguchi)", cas="1608-26-0", src="S52; S88; S89; S135"),
  dict(id="P-04", nota="P(SiMe3)3", abbr="TMS3P", name="Tris(trimethylsilyl)phosphine", f="C9H27PSi3", cls="Silyl phosphine", bonds="P–Si ×3", VH=0, inDB="문헌",
-      state="액체", mp="", bp="", vp="상압에서도 증류 가능할 만큼 휘발성 (저자 서술)", decomp="InX3 (X=Cl, Br, I)와 반응해 InP 생성 (Me3SiX 이탈)",
-      tox="공기·수분 민감", carbon="Si 혼입 확인 필요",
-      note="InP 양자점 표준 P 원; Co2P ALD 보고; InP/GaP ALD는 2022년 시점 미보고 (저자 서술)", cas="", src="S89; S90; S91"),
+      state="액체", mp="24", bp="243–244 (상압) / 102–105 @16 mmHg", vp="상압에서도 증류 가능할 만큼 휘발성 (저자 서술)", decomp="InX3 (X=Cl, Br, I)와 반응해 InP 생성 (Me3SiX 이탈); 가수분해 시 PH3 생성",
+      tox="공기 중 자연발화 (H250), 수분 민감", carbon="Si 혼입 확인 필요",
+      note="InP 양자점 표준 P 원; Co2P ALD 보고; InP/GaP ALD는 2022년 시점 미보고 (저자 서술)", cas="15573-38-3", src="S89; S90; S91; S136"),
  dict(id="P-05", nota="P(tBu)3", abbr="tri-TBP", name="Tri-tert-butylphosphine", f="C12H27P", cls="Trialkyl phosphine", bonds="P–C ×3", VH=0, inDB="문헌",
-      state="", mp="", bp="", vp="", decomp="", tox="", carbon="P-rich GaP 막",
-      note="TEGa + tri-TBP + 원자 H로 GaP PE-ALD (2.7 Å/cycle); 원자 H+tri-TBP로 Si 표면 기능화가 핵생성 핵심", cas="", src="S92"),
+      state="저융점 고체", mp="30–35", bp="102–103 @13 mmHg", vp="", decomp="", tox="자연발화 (H250), 부식성 (H314)", carbon="P-rich GaP 막",
+      note="TEGa + tri-TBP + 원자 H로 GaP PE-ALD (2.7 Å/cycle); 원자 H+tri-TBP로 Si 표면 기능화가 핵생성 핵심", cas="13716-12-6", src="S92; S137"),
  dict(id="P-06", nota="tBuP(NMe2)2", abbr="TBBDMAP", name="tert-Butylbis(dimethylamino)phosphine", f="C8H21N2P", cls="Alkyl amino phosphine", bonds="P–C ×1, P–N ×2", VH=0, inDB="문헌",
       state="", mp="", bp="", vp="", decomp="TBP보다 낮은 열분해 온도를 목표로 개발 (특허)", tox="", carbon="",
       note="OMVPE/CBE용 (특허) — ALD 보고 미확인", cas="", src="S93"),
@@ -322,18 +323,20 @@ pr("In2O3","InCl3","H2O","", "Thermal ALD",300,500,"0.25–0.40 Å/cycle","HCl �
    srcT="InCl3 285 °C", reactor="ALE 반응기 (400·500 °C 성장 보고)")
 pr("In2O3","InCl3","H2O2","", "Thermal ALD",300,500,"","","Ritala et al.","S18")
 pr("In2O3","InMe3","H2O","", "Thermal ALD",200,250,"~0.39 Å/cycle","200 °C 이상에서만 성장","Ott, Lee, Niu 외","S18; S24")
-pr("In2O3","InMe3","O3","", "Thermal ALD",100,200,"","","Salami, Shan, Zhu 외","S18")
-pr("In2O3","InMe3","O2 plasma","", "PEALD","","","","","Lim, Mahmoodinezhad, Shi 외","")
+pr("In2O3","InMe3","O3","", "Thermal ALD",100,200,"0.46 Å/cycle","O2·H2O·H2O2로는 지속 성장 안 됨, O3만 유효; 고온에선 TMIn 열분해로 GPC 증가","Salami, Shan, Zhu 외","S18; S148",
+   props="비저항 최저 3.2×10⁻³ Ω·cm, 운반자 7.0×10¹⁹ cm⁻³", reactor="관형 ALD (45 cm 길이 두께 편차 <0.3%)")
+pr("In2O3","InMe3","O2 plasma","", "PEALD",100,150,"0.56 Å/cycle","연구 범위 80–200 °C","Lim, Mahmoodinezhad, Shi 외","S149",
+   sub="Si(100), 4인치 (두께 불균일 ≤1.2%)", cryst="150 °C부터 결정화", comp="C 불순물 없음, 온도 의존 산소 공공")
 pr("In2O3","InCp","O3","", "Thermal ALD",200,450,"1.2–1.4 Å/cycle (창 내); 사이클 수에 따라 1.3→2.0","200 °C 미만 급감(O3 분해 임계), 500 °C 전구체 분해","Elam, Martinson","S19",
    srcT="InCp 버블러 40 °C, 배관 200 °C", reactor="점성류 ALD, N2 60 sccm", seq="InCp 2 s – 퍼지 4 s – O3 2 s – 퍼지 2 s; O3 ~10% (O2 400 sccm)",
    cryst="입방정 나노결정 In2O3", props="투명 전도성")
 pr("In2O3","InCp","H2O","O2", "Thermal ALD",100,350,"","H2O·O2 단독으로는 성장 거의 없음, 둘 다 필요","Libera, Keller","S18; S21",
-   seq="동시 노출/H2O→O2/O2→H2O 세 모드 비교 (100–250 °C)")
+   seq="동시 노출/H2O→O2/O2→H2O 세 모드 비교 (100–250 °C)", props="GPC 1.0–1.6 Å/cycle (100–250 °C); ~140 °C에서 결정화; 12×18인치 대면적 균일")
 pr("In2O3","InCp","H2O2","", "Thermal ALD",160,200,"~1.46 Å/cycle","","Ma et al.","S20",
    sub="Si; TFT는 Al2O3/p+Si", comp="200 °C: In:O = 1:1.36, C 미검출", props="Eg 3.42→3.75 eV (150→200 °C); TFT 이동도 7.8 cm²/V·s (300 °C 공기 열처리 후)")
 pr("In2O3","InCp","O2 plasma","", "PEALD",225,275,"","","Zhao, Zhang","S18")
-pr("In2O3","In(EtCp)","H2O","O2 plasma", "PEALD","","","","","Mizutani et al.","")
-pr("In2O3","In(EtCp)","H2O","O2", "Thermal ALD","","","","","Mizutani et al.","")
+pr("In2O3","In(EtCp)","H2O","O2 plasma", "PEALD",200,200,"0.3–0.4 Å/cycle (특허 인용)","H2O로 리간드 제거, O2 plasma로 산화","Mizutani et al.","S115; S116", seq="InEtCp 0.1 s – H2O 2.0 s – O2 plasma 14 s")
+pr("In2O3","In(EtCp)","H2O","O2", "Thermal ALD","","","0.9 Å/cycle (특허 인용)","O2 가스는 O2 plasma보다 산화력 약함","Mizutani et al.","S115; S116")
 pr("In2O3","In(EtCp)","O2 plasma","", "PEALD","","","","","Mizutani et al.","")
 pr("In2O3","In(EtCp)","H2O","O3", "Thermal ALD","","","","","Kobayashi et al.","")
 pr("In2O3","In(acac)3","H2O","", "Thermal ALD",165,220,"","","Nilsen et al.","S18")
@@ -370,7 +373,10 @@ pr("In2O3","InMe2(NtBu(CH2)2(CH3)2OMe)","O2 plasma","", "PEALD","","","","","Cho
 pr("In2O3","InMe3(MeO(CH2)2NHtBu)","H2O","", "Thermal ALD",150,200,"","","Lee et al.","S18")
 pr("In2O3","InMe3(NMe2Bu)","O2 plasma","", "PEALD",100,200,"DADI보다 높음","","Choi, Kim","S18; S26",
    cryst="DADI보다 결정성 우수, 결함 적음", props="FET 이동도 115.8 cm²/V·s, Vth −0.12 V, SS <70 mV/dec")
-pr("In2S3","In(acac)3","H2S","", "Thermal ALD","","","","붙여주신 목록이 여기서 잘림","Yousfi 외","")
+pr("In2S3","In(acac)3","H2S","", "Thermal ALD",130,260,"최대 ~0.7 Å/cycle (180 °C)","붙여주신 목록이 여기서 잘림","Yousfi 외","S151",
+   sub="소다라임 유리, SnO2 코팅 유리")
+pr("In2S3","In(acac)3","H2S","", "Thermal ALD",160,200,"평균 0.84 Å/cycle","ALD 창은 '추정적'이라고 저자 서술; 전구체 펄스 늘려도 포화 안 보임","Bugot et al.","S152",
+   seq="In(acac)3 0.1 s – N2 5 s – H2S 0.1 s – N2 5 s")
 pr("In2S3","In(acac)3","H2S plasma","", "PEALD","","","","","Van den Hoek et al.","")
 pr("In2S3","In(iPrAMD)3 (DB 표기 외)","H2S","", "Thermal ALD","","","","특허; 전구체 190 °C 공급","—","S64", srcT="150 °C 승화, 190 °C 공급")
 # Ga2O3
@@ -378,9 +384,11 @@ pr("Ga2O3","(GaMe2NH2)3","O2 plasma","", "PEALD",200,200,"","200 °C 부근으�
 pr("Ga2O3","GaMe2NH2","O2 plasma","", "PEALD","","","","","Seong et al.","")
 pr("Ga2O3","Ga(acac)3","O3","", "Thermal ALD",370,370,"","고온(~370 °C) 필요, 2차 인용","Nieminen, Utriainen 외","S29")
 pr("Ga2O3","Ga(acac)3","H2O","", "Thermal ALD","","","","","Nieminen et al.","")
-pr("Ga2O3","Ga(CpMe5)","H2O","O2 plasma", "PEALD","","","","","Mizutani et al.","")
+pr("Ga2O3","Ga(CpMe5)","H2O","O2 plasma", "PEALD",200,200,"0.06 nm/cycle","O2 plasma 없이는 H2O·O2 어떤 조합으로도 성장 안 됨","Mizutani et al.","S115", seq="GaCp* 0.1 s – H2O 3.0 s – O2 plasma 50 s")
 pr("Ga2O3","Ga(CpMe5)","O2 plasma","", "PEALD","","","","","Mizutani et al.","")
-pr("Ga2O3","Ga(iPr-triaz)3","H2O","", "Thermal ALD","","","","","Mushore et al.","")
+pr("Ga2O3","Ga(iPr-triaz)3","H2O","", "Thermal ALD",400,415,"~1.5 Å/cycle","좁은 창, 핵생성 지연 ~15 cycle","Mushore et al.","S123",
+   sub="p형 Si(100) (자연산화막)", srcT="버블러 160 °C, 배관 170–180 °C", seq="Ga(triaz)3 2 s – N2 10 s – H2O 2 s – N2 10 s",
+   cryst="증착 시 비정질 → 700 °C 열처리로 β-Ga2O3", comp="C·H·N·Cl 합 <3.5 at.%", props="투과율 >96%, Eg ~3.74→~4.0 eV (열처리), 전도도 ~3→30 mS/cm")
 pr("Ga2O3","Ga(OiPr)3","H2O","", "Thermal ALD",150,250,"","2차 인용","Choi et al.","S29; S33")
 pr("Ga2O3","Ga(thd)3","O2 plasma","", "PEALD",100,400,"0.1 Å/cycle","H2O·O3로는 300 °C에서 거의 성장 없음","Ramachandran, Wei","S29",
    sub="SiO2/Si", seq="전구체 5 s – O2 plasma 5 s (퍼지 가스 없음), 300 W", cryst="비정질", comp="화학량론, C 미검출")
@@ -394,16 +402,21 @@ pr("Ga2O3","GaEt3","Ar+O2 plasma","", "PEALD",150,240,"0.69–1.31 Å/cycle","�
    sub="Si, 사파이어, 유리", reactor="hollow-cathode 플라스마, 30–300 W", seq="매 사이클 후 in situ Ar plasma 20 s (50–300 W)",
    cryst="Ar plasma 없으면 비정질, 250 W Ar plasma로 β-Ga2O3", comp="O/Ga ~1.44, C ~5 at.%")
 pr("Ga2O3","GaEt3","O3","", "Thermal ALD","","","","","Wang, Li, Zhang 외","")
-pr("Ga2O3","GaI3","O3","", "Thermal ALD","","","","","Aarik et al.","")
+pr("Ga2O3","GaI3","O3","", "Thermal ALD",200,550,"결정화 시 GPC 증가","연구 범위; 결정상은 기판 의존","Aarik et al.","S121; S156",
+   sub="Si(100), SiO2, α-Cr2O3 시드, Ru, TiN", srcT="GaI3 130 °C", seq="GaI3 2 s – 퍼지 2 s – O3 2 s – 퍼지 2 s",
+   cryst="Si·SiO2: 450–550 °C κ(ε); α-Cr2O3 위: 275–550 °C α; Ru·TiN 위: ≥325 °C κ/ε, 맨 Si는 ≥425 °C 필요", comp="잔류 불순물 매우 낮음",
+   props="Eg 비정질 4.96 / κ·ε 5.22–5.28 / α 5.28 eV (직접); 375–450 °C 막: 누설 10⁻⁹ A/cm², 파괴장 6.5 MV/cm, εr 최대 22")
 pr("Ga2O3","GaMe2(OiPr)","H2O","", "Thermal ALD",280,300,"~0.3 Å/cycle","","Lee et al.","S30",
    sub="Si(001)", srcT="상온 (~3 Torr)", cryst="비정질", comp="화학량론")
-pr("Ga2O3","GaMe3","O3","", "Thermal ALD",250,300,"0.4 (250 °C), 0.5 Å/cycle (300 °C)","보고 온도 (창 정의 아님)","Comstock, Allen, Hiller 외","S33")
+pr("Ga2O3","GaMe3","O3","", "Thermal ALD",200,375,"~0.52 Å/cycle","O3만 유효 (다른 산소원 불가); Hiller: 250 °C 0.4, 300 °C 0.5 Å/cycle","Comstock, Allen, Hiller 외","S154; S33",
+   sub="Si(100), 용융 SiO2", cryst="증착 시 비정질 → 900 °C 열처리로 β-Ga2O3", comp="화학량론, 잔류 C 없음", props="트렌치 단차 피복 양호")
 pr("Ga2O3","GaMe3","O2 plasma","", "PEALD",100,400,"~0.53 Å/cycle","","Donmez, Allen, Ma 외","S31")
 pr("Ga2O3","GaMe3","O2 plasma","", "PEALD",80,250,"~0.6 Å/cycle","같은 공정, 다른 그룹 (2500 W)","—","S33",
    sub="Si, 사파이어", srcT="TMGa 0 °C", seq="TMGa 0.2 s – N2 퍼지 4 s – O2 plasma 28 s – N2 퍼지 4 s", reactor="2500 W 플라스마")
 pr("Ga2O3","GaMe3","O2 plasma","", "PEALD",200,200,"0.65–0.70 Å/cycle","O2 plasma 3–30 s 비교","—","S96",
    sub="Si(100)", cryst="비정질", comp="계면 SiOx 재성장 0.27 nm로 제한 (첫 3사이클)", props="플라스마 노출 길수록 누설전류 5자릿수 감소, εr ~14.2")
-pr("Ga2O3","GaMe3","H2O","", "Thermal ALD","","","","","Hou, Yang","")
+pr("Ga2O3","GaMe3","H2O","", "Thermal ALD",150,300,"","연구 범위 (창 정의 아님)","Hou, Yang","S155", sub="Si, TiO2, Al2O3, RuO2")
+pr("Ga2O3","GaMe3","H2O+O2 원격 plasma","", "PEALD (상온)",25,25,"0.042 nm/cycle","상온 ALD (IRAS로 흡착·산화 확인)","—","S157", sub="Si")
 pr("Ga2O3","GaMe3","N2O plasma","", "PEALD","","","","","Uvarov et al.","")
 pr("Ga2O3","GaMe3(CH3OCH2CH2NHtBu)","O2 plasma","", "PEALD","","","","","Hong et al.","")
 pr("GaN","[Ga(NMe2)3]2","NH3 plasma","", "PEALD",130,250,"1.4 Å/cycle","붙여주신 목록이 여기서 잘림","Rouf et al.","S68",
@@ -415,10 +428,12 @@ pr("GaAs","GaMe3","AsH3","", "ALE (MOVPE형)",445,485,"1 ML/cycle","표준 반�
 pr("GaAs","GaMe3","AsH3","", "ALE (특수 반응기)",450,700,"1 ML/cycle","노출 시간 단축으로 기상 분해 억제","Reid, Urdianyk, Bedair","S36",
    reactor="기체 가열 최소화, 짧은 노출, 급차단 가능한 ALE 반응기", comp="노출 시간·온도로 C 도핑 10¹⁵–10²⁰ cm⁻³ 조절")
 pr("GaAs","GaMe3","AsH3","", "ALE",400,400,"1 ML/cycle","TMGa 10 s 노출로 400 °C 포화","—","S38", seq="TMGa 10 s")
-pr("GaAs","GaMe3","(AsH3 없이 흡착만)","", "UHV 흡착 연구",440,530,"Ga 1 ML 포화","320 °C에서는 반응 매우 느림","Maa & Dapkus","S37",
+pr("GaAs","GaMe3","(AsH3 없이 흡착만)","", "UHV 흡착 연구",440,530,"Ga 1 ML 포화","320 °C에서는 반응 매우 느림; RDS 연구에선 360–530 °C에서 1 원자층 포화(2×4→4×6)","Maa & Dapkus","S37; S138",
    sub="As 안정화 GaAs(001)", reactor="UHV, TMGa 10⁻⁷–5×10⁻⁶ Torr, 5–15 s", comp="XPS로 C 미검출", cryst="2×4 → 4×1/4×2 Ga 안정화")
-pr("GaAs","GaMe3","tBuAsH2","", "Vacuum ALE","","","1 ML/cycle","창 폭 70 °C (양 끝 온도 미확인)","Maa, Chen 외","S44",
-   reactor="진공 ALE", props="모두 p형, 운반자 농도는 노출 조건에 의존")
+pr("GaAs","GaMe3","tBuAsH2","", "Vacuum ALE","","","1 ML/cycle","창 폭 70 °C (양 끝 온도 미확인)","Maa, Chen 외","S44; S134",
+   reactor="진공 ALE", props="모두 p형, 운반자 농도는 노출 조건에 의존; ALE·LALE QW 레이저 문턱 300·520 A/cm²")
+pr("GaAs","(TMGa 없이)","tBuAsH2","", "UHV 흡착 연구",320,540,"","320 °C에서 AsHx 흡착종, 고온일수록 As-rich 2×4","Maa & Dapkus","S133",
+   sub="GaAs(001)", comp="전 범위에서 C 관련 종 미검출 (XPS)")
 pr("GaAs","GaMe3","EtAsH2","", "ALE","","","","","Maa et al.","")
 pr("GaAs","GaMe3","(Me2N)3As","", "ALE (pulse-jet)",500,500,"","보고 온도 (GaAs/GaMnAs)","—","S71")
 pr("GaAs","GaEt3","AsH3","", "ALE (상압 MOVPE)","","","","좁은 온도·공급량 범위에서만 ALE; 일부 연구는 ALE 안 됨","Mochizuki, Meguro, Ohno 외","S39; S40",
@@ -438,7 +453,11 @@ pr("GaAs","GaCl3","AsH3","", "ALE (할라이드 수송)",200,500,"300 °C 1 ML �
 pr("GaAs","GaCl3","As","", "ALE","","","","","Kobayashi et al.","")
 pr("GaAs","GaCl3","(Et3Si)3As","", "ALD (dehalosilylation)",175,200,"0.5–0.7 Å/cycle (특허 100·120 °C)","특허 예는 100·120 °C","Sarnet et al.","S69",
    srcT="As 소스 50–70 °C", cryst="비정질", comp="화학량론 (특허 예 Ga0.58As0.42)")
-pr("GaAs","GaCl","AsH3","", "Chloride ALE","","","","흡착 GaCl + H → HCl 이탈","Usui, Koukitu 외 (16편)","S40")
+pr("GaAs","GaCl","AsH3","", "Chloride ALE",520,520,"","흡착 GaCl + H → HCl 이탈; 520 °C에서 GaCl 노출면은 Ga 안정화면 (SPA)","Usui, Koukitu 외 (16편)","S40; S140")
+pr("GaAs","GaCl","As4","", "Hydride VPE ALE (이중 챔버)","","","","기판을 두 챔버 사이로 옮기며 GaCl과 As4에 교대 노출","Usui & Sunakawa (1986)","S141")
+pr("GaAs","GaMe3","AsH3","", "ALE (특수 분사 장치)",470,560,"1 분자층/cycle (2.83 Å)","500 °C에서 7–60 Torr 범위 1 분자층, ~4 s에 포화 (특허)","—","S101",
+   reactor="원료를 기판에 분사하는 특수 장치")
+pr("GaAs","GaMe3","AsH3","", "교대 공급 (N2 캐리어)","","","","N2 캐리어로 III족 원료 분해를 억제해 ALE 창을 고온 쪽으로 확장","Shinohara (NTT)","S144", reactor="N2 vs H2 캐리어 비교")
 pr("GaAs","GaBr","AsH3","", "ALE","","","","","Taki et al.","")
 pr("GaAs","GaI","AsH3","", "ALE","","","","","Taki et al.","")
 pr("GaAs","TEGa·DEA adduct (TEGDEA, DB 미수록)","AsH3","", "ALE",400,"","1 ML/cycle","400 °C를 넘는 온도에서 self-limiting (특허)","—","S98",
@@ -491,7 +510,18 @@ pr("GaP","GaEt3","P(tBu)3","원자 H", "PE-ALD","","","2.7 Å/cycle","Si 표면�
 pr("GaP","GaMe3","P(NMe2)3","", "Thermal ALD","","","","320 °C 초과 필요","—","S88")
 pr("GaP / GaAs","GaMe3","P(NMe2)3 / PH3","", "Pulse-jet ALE","","","","GaP/GaP(001), GaP/GaAs(001) — 격자 불일치가 self-limiting에 영향","Haraguchi, Ozeki","S52",
    sub="GaP(001), GaAs(001)")
-pr("GaAs-GaP SLS","GaMe3","AsH3 / PH3","", "ALE","","","","GaAs–GaP 변형층 초격자","Ozeki et al.","S110")
+pr("GaAs-GaP SLS","GaMe3","AsH3 / PH3","", "Pulsed-jet ALE",500,500,"self-limiting","(GaAs)m(GaP)n 초격자가 500 °C에서 이상적 self-limiting","Ozeki et al.","S110; S139",
+   sub="2인치 웨이퍼 (두께 편차 1% 이내)")
+pr("InAs/InP SLS","InMe3","AsH3 / PH3","", "ALE","","","","InAs/InP 단주기 변형층 초격자를 ALE로 최초 성장","Sakuma, Ozeki 외","S145")
+pr("InGaAs:Be","InMe3 + GaEt3","AsH3","", "저온 ALE","","","","InP 기판 위 InGaAs에 초고농도 Be 도핑","Ozeki 외","S145", sub="InP")
+pr("InGaP","InCl + GaCl","PH3 (원문 미확인)","", "Chloride ALE","",450,"1 분자층 단위","450 °C 미만에서 광특성 우수한 InGaP; InGaP/GaAs 양자우물·측벽 성장","Sunakawa, Usui, Kato","S142; S143",
+   sub="GaAs (facet 측벽 포함)")
+pr("GaP","GaCl","PH3 (원문 미확인)","", "Chloride ALE","","","","self-limiting 기구가 GaP에서 매우 효과적","Sunakawa, Usui, Kato","S142")
+pr("InP","InCl","PH3 (원문 미확인)","", "Chloride ALE","","","","1 분자층 성장은 가능하나 온도·HCl 등 방해 요인 많음","Sunakawa, Usui, Kato","S142")
+pr("GaP","GaMe3","PH3","H2 plasma", "PE-ALD (에피)",380,380,"","Si 위 처음 20–30 nm GaP 에피 성장 (TEM·SAED)","—","S146",
+   sub="Si (Shiraki 세정 + HF 딥)", reactor="Oxford Plasmalab 100", cryst="에피택셜")
+pr("GaP","GaEt3","tBuPH2","", "Flow-modulated epitaxy (핵생성층)",450,450,"","450 °C 교대 펄스(TBP 먼저)로 10–40 ML 핵생성 후 580–600 °C 연속 성장 (2단계)","Volz 외 방식","S147",
+   sub="Si", seq="TBP 펄스부터 시작, 이후 TBP 안정화하며 580 °C로 승온", comp="적층결함·APB 억제가 목적")
 pr("InGaP","InMe3 + GaMe3","PH3","", "Pulse-jet ALE","","","","3원계 PJE 성장 (학위논문)","Sakuma","S111")
 pr("GaP","GaMe3","P (원격 H2 plasma)","", "Remote PECVD (참고)",590,"","","ALD 아님; GaP·Si 위 에피","Choi et al.","S94", sub="GaP, Si")
 # other As
@@ -612,6 +642,51 @@ SRC = [
 ("S109","Gudovskikh et al., J. Renew. Sustain. Energy 10 (2018) – Si-doped GaP PE-ALD","https://hal.archives-ouvertes.fr/hal-01738008"),
 ("S110","Ozeki et al., JVST B 8, 741 (1990) – GaAs-GaP SLS by ALE","https://data.zhenzhi.com/details/1/1008049075"),
 ("S111","Sakuma, PhD thesis, Osaka Univ. (1997) – ALE of III-V (InGaAs·InGaP PJE)","https://ir.library.osaka-u.ac.jp/repo/ouka/all/2668/13490_Dissertation.pdf"),
+("S112","American Elements – (3-Dimethylaminopropyl)dimethylindium (DADI)","https://americanelements.com/3-dimethylaminopropyl-dimethylindium-120441-92-1"),
+("S113","TMIn·NMe3 adduct 연구 – TMIn/TMIn·NMe3/DADI 20 °C 증기압 비교","https://scite.ai/reports/3nLd04d"),
+("S114","US Patent 10,239,892 – DADI 합성 (80 °C, 5 mbar 증류)","https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/10239892"),
+("S115","Mizutani 외 – InEtCp·GaCp* ALD (scite 저자 요약)","https://scite.ai/authors/shintaro-higashi-AxMRrZ"),
+("S116","US Patent 12,435,413 – In(EtCp) ALD GPC 인용 (ALD2017·2018)","https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/12435413"),
+("S117","Wikipedia – Indium(III) chloride","https://en.wikipedia.org/wiki/Indium(III)_chloride"),
+("S118","ChemicalBook – Indium acetylacetonate 14405-45-9","https://chemicalbook.com/CASEN_14405-45-9.htm"),
+("S119","DECHEMA – Triisobutylgallium 17150-84-4","https://i-systems.dechema.de/dbOverview.php?DSI=12009"),
+("S120","Wikipedia – Gallium(III) iodide","https://en.wikipedia.org/wiki/Gallium(III)_iodide"),
+("S121","Aarik et al., J. Mater. Chem. C 12, 10562 (2024) – GaI3/O3 Ga2O3 광학 특성","https://pubs.rsc.org/en/content/articlehtml/2024/tc/d4tc01846j"),
+("S122","Thermo Fisher – Tris(dimethylamino)gallium(III) dimer 57731-40-5","https://fishersci.co.uk/shop/products/tris-dimethylamino-gallium-iii-dimer-99-9-metals-basis-1/11368398"),
+("S123","Mushore et al., Mater. Adv. 7, 2874 (2026) – Ga triazenide + H2O ALD","https://pubs.rsc.org/en/content/articlehtml/2026/ma/d5ma01213a"),
+("S124","ChemicalBook – Gallium(III) 2,4-pentanedionate 14405-43-7","https://chemicalbook.com/ChemicalProductProperty_EN_CB7674789.htm"),
+("S125","ChemicalBook – Ga(TMHD)3 34228-15-4","https://www.chemicalbook.com/CASEN_34228-15-4.htm"),
+("S126","Thermo Fisher – Gallium(III) isopropoxide 4452-61-3","https://www.fishersci.ca/shop/products/gallium-iii-isopropoxide-mixture-oligomers-99-thermo-scientific-1/AA3658303"),
+("S127","Maa & Dapkus, APL (1991) – Surface reactions in GaAs ALE using monoethylarsine","https://ouci.dntb.gov.ua/works/27PZRD1l"),
+("S128","ChemNet – Tris(dimethylamino)arsine 6596-96-9 (계산 물성)","https://chemnet.com/cas/en/6596-96-9/Tris-(dimethylamino)-arsine.html"),
+("S129","ChemicalBook – [Tris(trimethylsilyl)]arsenide 17729-30-5","https://m.chemicalbook.com/ChemicalProductProperty_EN_CB3853216.htm"),
+("S130","American Elements – Trimethylarsine SDS 593-88-4","https://www.americanelements.com/cas/593-88-4"),
+("S131","ChemicalBook – Triethylarsine 617-75-4","https://www.chemicalbook.com/CASEN_617-75-4.htm"),
+("S132","DTIC ADA184976 – APOCVD GaAs using triethylarsenic","https://apps.dtic.mil/sti/html/tr/ADA184976/index.html"),
+("S133","Maa & Dapkus, J. Electron. Mater. 20, 589 (1991) – TBAs on GaAs(001)","https://link.springer.com/article/10.1007/BF02669522"),
+("S134","Use of TBAs in ALE and laser-assisted ALE of device quality GaAs","https://scilit.com/publications/bf8dc667e2d61ae4339497dc6cd159d4"),
+("S135","Wikipedia / Thermo Fisher – Tris(dimethylamino)phosphine 1608-26-0","https://en.wikipedia.org/wiki/Tris(dimethylamino)phosphine"),
+("S136","Wikipedia / Thermo Fisher – Tris(trimethylsilyl)phosphine 15573-38-3","https://en.wikipedia.org/wiki/Tris(trimethylsilyl)phosphine"),
+("S137","ChemicalBook – Tri-tert-butylphosphine 13716-12-6","https://www.chemicalbook.com/CASEN_13716-12-6.htm"),
+("S138","Maa & Dapkus, MRS Proc. – TMGa surface reactions on GaAs(001), RDS","https://www.cambridge.org/core/product/4732876216931359C9B56F6F5267B1B6"),
+("S139","Ozeki, Ohtsuka, Sakuma, Kodama (1991) – Pulsed jet epitaxy of III-V (ResearchGate 목록 초록)","https://www.researchgate.net/publication/339579525_Investigation_of_GaAs_and_AlAs_atomic-layer_epitaxial_growth_mechanism_based_on_experimental_results_and_first-principles_total_energy_calculation"),
+("S140","Nishi, Usui, Sakaki, APL 61, 31 (1992) – SPA of GaAs under GaCl/AsH3","https://data.zhenzhi.com/details/1/983854054/1/2"),
+("S141","Usui & Sunakawa, JJAP 25, L212 (1986) – GaAs ALE by hydride VPE","https://scilit.com/publications/36a3451ca4b82e33564e244f5349055d"),
+("S142","Sunakawa, Usui, Kato (NEC, 1990) – Chloride ALE of III-V","https://www.osti.gov/etdeweb/biblio/6880560"),
+("S143","Usui et al., APL (1990) – InGaP/GaAs SQW on facet walls by chloride ALE","https://data.zhenzhi.com/details/1/984240556"),
+("S144","Shinohara (NTT), MRS Proc. – Alternate gas supply GaAs, H2 vs N2 carrier","https://resolve.cambridge.org/core/journals/mrs-online-proceedings-library-archive/article/abs/growth-rate-limiting-and-carbon-reduction-processes-for-gaas-grown-by-alternate-gas-supply-using-h2-and-n2-carrier-gases/953889701409A98D02BD42D1EED8E0D0"),
+("S145","ScienceDirect – Masashi Ozeki 저자 페이지 (InAs/InP SLS ALE, InGaAs Be 도핑 ALE)","https://www.sciencedirect.com/author/7103258393/masashi-ozeki"),
+("S146","HAL – Low temperature epitaxial growth of GaP on Si by PEALD (380 °C)","https://hal.science/hal-02946512v1/document"),
+("S147","OSTI 1592087 – GaP on Si nucleation (TEGa/TBP, 450 °C)","https://www.osti.gov/pages/servlets/purl/1592087"),
+("S148","Mane, Allen, Kanjolia, Elam, J. Phys. Chem. C 120, 9874 (2016) – TMIn/O3","https://opact.sdu.edu.tr/vufind/SummonRecord/FETCH-LOGICAL-a373t-8d47fd96b929c8fad19d041916665c8c1de50797b64baff830cf7bfdf53af7b63"),
+("S149","JVST A 39 (2021) – Low-T PEALD In2O3 using TMIn and O2 plasma","https://opus4.kobv.de/opus4-UBICO/export/index/bibtex/searchtype/authorsearch/author/Meyer%2C+Robert"),
+("S151","Naghavi et al., Appl. Surf. Sci. 222 (2004) – In2S3 ALD In(acac)3/H2S","https://researchportal.ip-paris.fr/en/publications/growth-studies-and-characterisation-of-in-sub2sub-s-sub3sub-thin-/"),
+("S152","Bugot et al., Beilstein J. Nanotechnol. 4 (2013) – In2(S,O)3 ALD","https://beilstein-journals.org/bjnano/articles/4/85"),
+("S153","Chemistry Africa 9 (2026) – ALAM of In2S3 (In(acac)3 142 °C)","https://link.springer.com/article/10.1007/s42250-025-01521-8"),
+("S154","ALD of Ga2O3 using TMGa and ozone (HERO 기록)","https://hero.epa.gov/hero/index.cfm/reference/details/reference_id/4248665"),
+("S155","Choudhury 외 – Ga2O3 ALD TMGa/H2O 150–300 °C (학회 초록)","https://opus4.kobv.de/opus4-UBICO/export/index/ris/searchtype/authorsearch/author/Choudhury%2C+Sakeb+Hasan"),
+("S156","Aarik et al., J. Mater. Chem. C 14, 6870 (2026) – GaI3/O3 Ga2O3 on Ru·TiN","https://pubs.rsc.org/en/content/articlehtml/2026/tc/d5tc04544d"),
+("S157","IEICE Tech. Rep. (2014) – RT Ga2O3 ALD TMGa + H2O/O2 remote plasma","https://ken.ieice.org/ken/paper/201409059BqO/eng/"),
 ]
 
 # ---------------------------------------------------------------- styles

@@ -109,3 +109,48 @@ S108,"Morozov et al., J. Phys. Conf. Ser. 741 (2016) – Thin film GaP",https://
 S109,"Gudovskikh et al., J. Renew. Sustain. Energy 10 (2018) – Si-doped GaP PE-ALD",https://hal.archives-ouvertes.fr/hal-01738008
 S110,"Ozeki et al., JVST B 8, 741 (1990) – GaAs-GaP SLS by ALE",https://data.zhenzhi.com/details/1/1008049075
 S111,"Sakuma, PhD thesis, Osaka Univ. (1997) – ALE of III-V (InGaAs·InGaP PJE)",https://ir.library.osaka-u.ac.jp/repo/ouka/all/2668/13490_Dissertation.pdf
+S112,American Elements – (3-Dimethylaminopropyl)dimethylindium (DADI),https://americanelements.com/3-dimethylaminopropyl-dimethylindium-120441-92-1
+S113,TMIn·NMe3 adduct 연구 – TMIn/TMIn·NMe3/DADI 20 °C 증기압 비교,https://scite.ai/reports/3nLd04d
+S114,"US Patent 10,239,892 – DADI 합성 (80 °C, 5 mbar 증류)",https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/10239892
+S115,Mizutani 외 – InEtCp·GaCp* ALD (scite 저자 요약),https://scite.ai/authors/shintaro-higashi-AxMRrZ
+S116,"US Patent 12,435,413 – In(EtCp) ALD GPC 인용 (ALD2017·2018)",https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/12435413
+S117,Wikipedia – Indium(III) chloride,https://en.wikipedia.org/wiki/Indium(III)_chloride
+S118,ChemicalBook – Indium acetylacetonate 14405-45-9,https://chemicalbook.com/CASEN_14405-45-9.htm
+S119,DECHEMA – Triisobutylgallium 17150-84-4,https://i-systems.dechema.de/dbOverview.php?DSI=12009
+S120,Wikipedia – Gallium(III) iodide,https://en.wikipedia.org/wiki/Gallium(III)_iodide
+S121,"Aarik et al., J. Mater. Chem. C 12, 10562 (2024) – GaI3/O3 Ga2O3 광학 특성",https://pubs.rsc.org/en/content/articlehtml/2024/tc/d4tc01846j
+S122,Thermo Fisher – Tris(dimethylamino)gallium(III) dimer 57731-40-5,https://fishersci.co.uk/shop/products/tris-dimethylamino-gallium-iii-dimer-99-9-metals-basis-1/11368398
+S123,"Mushore et al., Mater. Adv. 7, 2874 (2026) – Ga triazenide + H2O ALD",https://pubs.rsc.org/en/content/articlehtml/2026/ma/d5ma01213a
+S124,"ChemicalBook – Gallium(III) 2,4-pentanedionate 14405-43-7",https://chemicalbook.com/ChemicalProductProperty_EN_CB7674789.htm
+S125,ChemicalBook – Ga(TMHD)3 34228-15-4,https://www.chemicalbook.com/CASEN_34228-15-4.htm
+S126,Thermo Fisher – Gallium(III) isopropoxide 4452-61-3,https://www.fishersci.ca/shop/products/gallium-iii-isopropoxide-mixture-oligomers-99-thermo-scientific-1/AA3658303
+S127,"Maa & Dapkus, APL (1991) – Surface reactions in GaAs ALE using monoethylarsine",https://ouci.dntb.gov.ua/works/27PZRD1l
+S128,ChemNet – Tris(dimethylamino)arsine 6596-96-9 (계산 물성),https://chemnet.com/cas/en/6596-96-9/Tris-(dimethylamino)-arsine.html
+S129,ChemicalBook – [Tris(trimethylsilyl)]arsenide 17729-30-5,https://m.chemicalbook.com/ChemicalProductProperty_EN_CB3853216.htm
+S130,American Elements – Trimethylarsine SDS 593-88-4,https://www.americanelements.com/cas/593-88-4
+S131,ChemicalBook – Triethylarsine 617-75-4,https://www.chemicalbook.com/CASEN_617-75-4.htm
+S132,DTIC ADA184976 – APOCVD GaAs using triethylarsenic,https://apps.dtic.mil/sti/html/tr/ADA184976/index.html
+S133,"Maa & Dapkus, J. Electron. Mater. 20, 589 (1991) – TBAs on GaAs(001)",https://link.springer.com/article/10.1007/BF02669522
+S134,Use of TBAs in ALE and laser-assisted ALE of device quality GaAs,https://scilit.com/publications/bf8dc667e2d61ae4339497dc6cd159d4
+S135,Wikipedia / Thermo Fisher – Tris(dimethylamino)phosphine 1608-26-0,https://en.wikipedia.org/wiki/Tris(dimethylamino)phosphine
+S136,Wikipedia / Thermo Fisher – Tris(trimethylsilyl)phosphine 15573-38-3,https://en.wikipedia.org/wiki/Tris(trimethylsilyl)phosphine
+S137,ChemicalBook – Tri-tert-butylphosphine 13716-12-6,https://www.chemicalbook.com/CASEN_13716-12-6.htm
+S138,"Maa & Dapkus, MRS Proc. – TMGa surface reactions on GaAs(001), RDS",https://www.cambridge.org/core/product/4732876216931359C9B56F6F5267B1B6
+S139,"Ozeki, Ohtsuka, Sakuma, Kodama (1991) – Pulsed jet epitaxy of III-V (ResearchGate 목록 초록)",https://www.researchgate.net/publication/339579525_Investigation_of_GaAs_and_AlAs_atomic-layer_epitaxial_growth_mechanism_based_on_experimental_results_and_first-principles_total_energy_calculation
+S140,"Nishi, Usui, Sakaki, APL 61, 31 (1992) – SPA of GaAs under GaCl/AsH3",https://data.zhenzhi.com/details/1/983854054/1/2
+S141,"Usui & Sunakawa, JJAP 25, L212 (1986) – GaAs ALE by hydride VPE",https://scilit.com/publications/36a3451ca4b82e33564e244f5349055d
+S142,"Sunakawa, Usui, Kato (NEC, 1990) – Chloride ALE of III-V",https://www.osti.gov/etdeweb/biblio/6880560
+S143,"Usui et al., APL (1990) – InGaP/GaAs SQW on facet walls by chloride ALE",https://data.zhenzhi.com/details/1/984240556
+S144,"Shinohara (NTT), MRS Proc. – Alternate gas supply GaAs, H2 vs N2 carrier",https://resolve.cambridge.org/core/journals/mrs-online-proceedings-library-archive/article/abs/growth-rate-limiting-and-carbon-reduction-processes-for-gaas-grown-by-alternate-gas-supply-using-h2-and-n2-carrier-gases/953889701409A98D02BD42D1EED8E0D0
+S145,"ScienceDirect – Masashi Ozeki 저자 페이지 (InAs/InP SLS ALE, InGaAs Be 도핑 ALE)",https://www.sciencedirect.com/author/7103258393/masashi-ozeki
+S146,HAL – Low temperature epitaxial growth of GaP on Si by PEALD (380 °C),https://hal.science/hal-02946512v1/document
+S147,"OSTI 1592087 – GaP on Si nucleation (TEGa/TBP, 450 °C)",https://www.osti.gov/pages/servlets/purl/1592087
+S148,"Mane, Allen, Kanjolia, Elam, J. Phys. Chem. C 120, 9874 (2016) – TMIn/O3",https://opact.sdu.edu.tr/vufind/SummonRecord/FETCH-LOGICAL-a373t-8d47fd96b929c8fad19d041916665c8c1de50797b64baff830cf7bfdf53af7b63
+S149,JVST A 39 (2021) – Low-T PEALD In2O3 using TMIn and O2 plasma,https://opus4.kobv.de/opus4-UBICO/export/index/bibtex/searchtype/authorsearch/author/Meyer%2C+Robert
+S151,"Naghavi et al., Appl. Surf. Sci. 222 (2004) – In2S3 ALD In(acac)3/H2S",https://researchportal.ip-paris.fr/en/publications/growth-studies-and-characterisation-of-in-sub2sub-s-sub3sub-thin-/
+S152,"Bugot et al., Beilstein J. Nanotechnol. 4 (2013) – In2(S,O)3 ALD",https://beilstein-journals.org/bjnano/articles/4/85
+S153,Chemistry Africa 9 (2026) – ALAM of In2S3 (In(acac)3 142 °C),https://link.springer.com/article/10.1007/s42250-025-01521-8
+S154,ALD of Ga2O3 using TMGa and ozone (HERO 기록),https://hero.epa.gov/hero/index.cfm/reference/details/reference_id/4248665
+S155,Choudhury 외 – Ga2O3 ALD TMGa/H2O 150–300 °C (학회 초록),https://opus4.kobv.de/opus4-UBICO/export/index/ris/searchtype/authorsearch/author/Choudhury%2C+Sakeb+Hasan
+S156,"Aarik et al., J. Mater. Chem. C 14, 6870 (2026) – GaI3/O3 Ga2O3 on Ru·TiN",https://pubs.rsc.org/en/content/articlehtml/2026/tc/d5tc04544d
+S157,IEICE Tech. Rep. (2014) – RT Ga2O3 ALD TMGa + H2O/O2 remote plasma,https://ken.ieice.org/ken/paper/201409059BqO/eng/
