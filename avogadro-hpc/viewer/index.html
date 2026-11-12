@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>HPC Structure Viewer</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="lib/3Dmol-min.js"></script>
+<style>
+  :root { --bg:#f6f7f9; --panel:#ffffff; --line:#d9dce1; --text:#1d2330; --muted:#6b7280; --accent:#2563eb; }
+  * { box-sizing: border-box; }
+  html, body { margin:0; height:100%; font-family: "Liberation Sans", Arial, sans-serif; font-size:13px; color:var(--text); background:var(--bg); }
+  #app { display:grid; grid-template-columns: 280px 1fr 250px; height:100vh; }
+  aside { background:var(--panel); border-right:1px solid var(--line); display:flex; flex-direction:column; min-height:0; }
+  aside.right { border-right:none; border-left:1px solid var(--line); overflow-y:auto; }
+  header { padding:10px 12px; border-bottom:1px solid var(--line); }
+  header b { font-size:14px; }
+  header .sub { color:var(--muted); font-size:11px; margin-top:3px; word-break:break-all; }
+  #filter { width:100%; margin-top:8px; padding:6px 8px; border:1px solid var(--line); border-radius:4px; }
+  #files { list-style:none; margin:0; padding:0; overflow-y:auto; flex:1; }
+  #files li { padding:5px 12px; cursor:pointer; border-bottom:1px solid #f0f1f3; word-break:break-all; }
+  #files li:hover { background:#eef3ff; }
+  #files li.active { background:#dbe7ff; }
+  #files li.off { color:#aaa; cursor:not-allowed; }
+  #files li small { color:var(--muted); margin-left:4px; }
+  #drop { margin:8px 12px 12px; padding:10px; border:1.5px dashed var(--line); border-radius:6px; text-align:center; color:var(--muted); }
+  #drop.hover { border-color:var(--accent); color:var(--accent); }
+  main { position:relative; min-width:0; }
+  #viewer { position:absolute; inset:0; }
+  #title { position:absolute; left:10px; top:8px; z-index:5; background:rgba(255,255,255,.85); padding:3px 8px; border-radius:4px; font-weight:bold; pointer-events:none; }
+  #msg { position:absolute; left:50%; top:45%; transform:translate(-50%,-50%); color:var(--muted); text-align:center; z-index:4; pointer-events:none; }
+  .sec { padding:10px 12px; border-bottom:1px solid var(--line); }
+  .sec h4 { margin:0 0 6px; font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:.04em; }
+  .row { display:flex; gap:6px; align-items:center; margin:4px 0; flex-wrap:wrap; }
+  button, select, input[type=number] { font:inherit; padding:4px 7px; border:1px solid var(--line); border-radius:4px; background:#fff; }
+  button { cursor:pointer; }
+  button:hover { border-color:var(--accent); }
+  button.on { background:var(--accent); color:#fff; border-color:var(--accent); }
+  input[type=number] { width:48px; }
+  input[type=range] { width:100%; }
+  #info, #measure { font-family: "Liberation Mono", monospace; font-size:12px; white-space:pre-wrap; word-break:break-all; }
+  label { user-select:none; }
+</style>
+</head>
+<body>
+<div id="app">
+  <aside>
+    <header>
+      <b>HPC Structure Viewer</b>
+      <div class="sub" id="rootinfo">서버 연결 중…</div>
+      <input id="filter" placeholder="파일 이름 필터 (예: CONTCAR)">
+    </header>
+    <ul id="files"></ul>
+    <div id="drop">데스크톱 파일을 여기로 드래그<br>또는 <label style="color:var(--accent);cursor:pointer"><u>파일 선택</u><input type="file" id="pick" hidden></label></div>
+  </aside>
+
+  <main>
+    <div id="viewer"></div>
+    <div id="title"></div>
+    <div id="msg">왼쪽에서 구조 파일을 선택하세요<br><small>POSCAR · CONTCAR · XDATCAR · xyz/extxyz · cif · pdb · cube · mol2 · sdf</small></div>
+  </main>
+
+  <aside class="right">
+    <div class="sec">
+      <h4>표시 스타일</h4>
+      <div class="row">
+        <select id="style">
+          <option value="ballstick">Ball &amp; stick</option>
+          <option value="stick">Stick</option>
+          <option value="sphere">Space filling</option>
+          <option value="line">Line (가벼움)</option>
+        </select>
+      </div>
+      <div class="row">
+        <label><input type="checkbox" id="cell" checked> 단위 셀</label>
+        <label><input type="checkbox" id="labels"> 원소 라벨</label>
+      </div>
+      <div class="row">
+        <label><input type="checkbox" id="dark"> 어두운 배경</label>
+      </div>
+    </div>
+
+    <div class="sec">
+      <h4>Supercell</h4>
+      <div class="row">
+        <input type="number" id="na" min="1" max="6" value="1">×
+        <input type="number" id="nb" min="1" max="6" value="1">×
+        <input type="number" id="nc" min="1" max="6" value="1">
+        <button id="applySC">적용</button>
+      </div>
+    </div>
+
+    <div class="sec" id="framesec" style="display:none">
+      <h4>Frames</h4>
+      <div class="row"><input type="range" id="frame" min="0" max="0" value="0"></div>
+      <div class="row"><button id="play">▶ 재생</button><span id="frameno"></span></div>
+    </div>
+
+    <div class="sec" id="isosec" style="display:none">
+      <h4>Cube isosurface</h4>
+      <div class="row">±<input type="number" id="iso" step="0.005" value="0.02" style="width:70px"><button id="applyIso">적용</button></div>
+      <div class="row"><label>투명도 <input type="range" id="isoop" min="0.2" max="1" step="0.05" value="0.75" style="width:110px"></label></div>
+    </div>
+
+    <div class="sec">
+      <h4>측정 (원자 클릭)</h4>
+      <div class="row"><button id="clearM">측정 초기화</button></div>
+      <div id="measure">원자 2개: 거리, 3개: 각도</div>
+    </div>
+
+    <div class="sec">
+      <h4>보기</h4>
+      <div class="row">
+        <button id="reset">시점 초기화</button>
+        <button id="png">PNG 저장</button>
+      </div>
+      <div class="row">
+        <button data-view="a">a축</button><button data-view="b">b축</button><button data-view="c">c축</button>
+      </div>
+    </div>
+
+    <div class="sec">
+      <h4>정보</h4>
+      <div id="info">-</div>
+    </div>
+  </aside>
+</div>
+
+<script>
+"use strict";
+// ------------------------------------------------------------------ state
+const viewer = $3Dmol.createViewer(document.getElementById("viewer"), { backgroundColor: "white", antialias: true });
+const S = {
+  name: "", fmt: "", text: "",
+  ownFrames: null,      // frames parsed by this page: [{lattice, symbols, cart}]
+  nativeModel: null,    // 3Dmol model for native formats
+  volume: null,         // cube VolumeData
+  sc: [1, 1, 1],
+  picks: [], shapes: [],
+  playing: false,
+  serverOk: false,
+};
+
+// ------------------------------------------------------------------ math helpers
+const dot = (a, b) => a[0]*b[0] + a[1]*b[1] + a[2]*b[2];
+const norm = a => Math.sqrt(dot(a, a));
+const sub = (a, b) => [a[0]-b[0], a[1]-b[1], a[2]-b[2]];
+const add = (a, b) => [a[0]+b[0], a[1]+b[1], a[2]+b[2]];
+const scl = (a, s) => [a[0]*s, a[1]*s, a[2]*s];
+const cross = (a, b) => [a[1]*b[2]-a[2]*b[1], a[2]*b[0]-a[0]*b[2], a[0]*b[1]-a[1]*b[0]];
+const fracToCart = (f, L) => [
+  f[0]*L[0][0] + f[1]*L[1][0] + f[2]*L[2][0],
+  f[0]*L[0][1] + f[1]*L[1][1] + f[2]*L[2][1],
+  f[0]*L[0][2] + f[1]*L[1][2] + f[2]*L[2][2]];
+function cellParams(L) {
+  const a = norm(L[0]), b = norm(L[1]), c = norm(L[2]);
+  const ang = (u, v) => Math.acos(dot(u, v) / (norm(u) * norm(v))) * 180 / Math.PI;
+  return { a, b, c, alpha: ang(L[1], L[2]), beta: ang(L[0], L[2]), gamma: ang(L[0], L[1]),
+           vol: Math.abs(dot(L[0], cross(L[1], L[2]))) };
+}
+
+// ------------------------------------------------------------------ format detection
+function detectFormat(name) {
+  const base = name.split("/").pop();
+  const low = base.toLowerCase();
+  const up = base.toUpperCase();
+  if (up.includes("XDATCAR")) return "xdatcar";
+  if (up.includes("POSCAR") || up.includes("CONTCAR") || low.endsWith(".vasp")) return "vasp";
+  const ext = low.includes(".") ? low.split(".").pop() : "";
+  const map = { xyz: "xyz", extxyz: "xyz", pdb: "pdb", ent: "pdb", cif: "cif", mol2: "mol2", sdf: "sdf", mol: "sdf",
+                cube: "cube", cub: "cube", gro: "gro", pqr: "pqr" };
+  return map[ext] || null;
+}
+
+// ------------------------------------------------------------------ VASP parsers (POSCAR/CONTCAR/XDATCAR)
+function parseVaspHeader(lines, i) {
+  const comment = (lines[i] || "").trim();
+  let scale = parseFloat(lines[i + 1]);
+  let L = [2, 3, 4].map(k => lines[i + k].trim().split(/\s+/).slice(0, 3).map(Number));
+  let tok = lines[i + 5].trim().split(/\s+/);
+  let symbols, counts, next;
+  if (tok.every(t => /^\d+$/.test(t))) {           // VASP4: no element line
+    counts = tok.map(Number);
+    const guess = comment.split(/\s+/).filter(t => /^[A-Z][a-z]?$/.test(t));
+    symbols = counts.map((_, k) => guess[k] || "X");
+    next = i + 6;
+  } else {
+    symbols = tok.map(t => t.split(/[_/]/)[0]);      // "Hf_pv" or "Hf/abc" -> "Hf"
+    counts = lines[i + 6].trim().split(/\s+/).map(Number);
+    next = i + 7;
+  }
+  if (scale < 0) {                                  // negative = target volume
+    const v = Math.abs(dot(L[0], cross(L[1], L[2])));
+    scale = Math.cbrt(-scale / v);
+  }
+  L = L.map(v => scl(v, scale));
+  const species = [];
+  symbols.forEach((s, k) => { for (let n = 0; n < counts[k]; n++) species.push(s); });
+  return { comment, L, species, next, scale };
+}
+
+function parsePoscar(text) {
+  const lines = text.replace(/\r/g, "").split("\n");
+  const h = parseVaspHeader(lines, 0);
+  let i = h.next;
+  if (/^\s*s/i.test(lines[i])) i++;                 // Selective dynamics
+  const cart = /^\s*[ck]/i.test(lines[i]);
+  i++;
+  const pos = [];
+  for (let n = 0; n < h.species.length; n++, i++) {
+    const v = lines[i].trim().split(/\s+/).slice(0, 3).map(Number);
+    pos.push(cart ? scl(v, h.scale) : fracToCart(v, h.L));
+  }
+  return [{ lattice: h.L, symbols: h.species, cart: pos, comment: h.comment }];
+}
+
+function parseXdatcar(text) {
+  const lines = text.replace(/\r/g, "").split("\n");
+  const frames = [];
+  let h = parseVaspHeader(lines, 0);
+  let i = h.next;
+  while (i < lines.length) {
+    const line = lines[i] || "";
+    if (/configuration/i.test(line)) {
+      const cart = /^\s*[ck]/i.test(line);
+      i++;
+      const pos = [];
+      for (let n = 0; n < h.species.length; n++, i++) {
+        const v = (lines[i] || "").trim().split(/\s+/).slice(0, 3).map(Number);
+        pos.push(cart ? v : fracToCart(v, h.L));
+      }
+      if (pos.every(p => p.every(Number.isFinite))) frames.push({ lattice: h.L, symbols: h.species, cart: pos });
+    } else if (line.trim() === "") {
+      i++;
+    } else {                                        // variable-cell XDATCAR: header repeats
+      try { h = parseVaspHeader(lines, i); i = h.next; } catch (e) { break; }
+    }
+  }
+  return frames;
+}
+
+// extended xyz with Lattice="..." in the comment line (single or multi frame)
+function parseExtXyz(text) {
+  const lines = text.replace(/\r/g, "").split("\n");
+  const frames = [];
+  let i = 0;
+  while (i < lines.length) {
+    const n = parseInt(lines[i]);
+    if (!Number.isFinite(n) || n <= 0) { i++; continue; }
+    const comment = lines[i + 1] || "";
+    const m = comment.match(/Lattice\s*=\s*"([^"]+)"/i);
+    const symbols = [], cart = [];
+    for (let k = 0; k < n; k++) {
+      const t = (lines[i + 2 + k] || "").trim().split(/\s+/);
+      symbols.push(t[0]);
+      cart.push(t.slice(1, 4).map(Number));
+    }
+    let lattice = null;
+    if (m) {
+      const v = m[1].trim().split(/\s+/).map(Number);
+      if (v.length === 9) lattice = [v.slice(0, 3), v.slice(3, 6), v.slice(6, 9)];
+    }
+    frames.push({ lattice, symbols, cart });
+    i += n + 2;
+  }
+  return frames;
+}
+
+function framesToXyz(frames, sc) {
+  let out = "";
+  for (const f of frames) {
+    const atoms = [];
+    const [na, nb, nc] = f.lattice ? sc : [1, 1, 1];
+    for (let a = 0; a < na; a++) for (let b = 0; b < nb; b++) for (let c = 0; c < nc; c++) {
+      const shift = f.lattice ? fracToCart([a, b, c], f.lattice) : [0, 0, 0];
+      f.symbols.forEach((s, k) => atoms.push([s, add(f.cart[k], shift)]));
+    }
+    out += atoms.length + "\nframe\n";
+    for (const [s, p] of atoms) out += `${s} ${p[0].toFixed(6)} ${p[1].toFixed(6)} ${p[2].toFixed(6)}\n`;
+  }
+  return out;
+}
+
+// ------------------------------------------------------------------ drawing helpers
+function styleSpec() {
+  const v = document.getElementById("style").value;
+  const cs = "Jmol";
+  if (v === "stick") return { stick: { radius: 0.15, colorscheme: cs } };
+  if (v === "sphere") return { sphere: { scale: 1.0, colorscheme: cs } };
+  if (v === "line") return { line: { colorscheme: cs } };
+  return { stick: { radius: 0.12, colorscheme: cs }, sphere: { scale: 0.28, colorscheme: cs } };
+}
+
+function drawOwnCell(L, sc) {
+  const A = scl(L[0], sc[0]), B = scl(L[1], sc[1]), C = scl(L[2], sc[2]);
+  const o = [0, 0, 0];
+  const corners = [o, A, B, C, add(A, B), add(A, C), add(B, C), add(add(A, B), C)];
+  const edges = [[0,1],[0,2],[0,3],[1,4],[1,5],[2,4],[2,6],[3,5],[3,6],[4,7],[5,7],[6,7]];
+  const col = document.getElementById("dark").checked ? "#cccccc" : "#333333";
+  for (const [p, q] of edges) {
+    const s = viewer.addCylinder({ start: xyz(corners[p]), end: xyz(corners[q]), radius: 0.03, color: col, fromCap: 1, toCap: 1 });
+    S.shapes.push(s);
+  }
+  // axis labels
+  [["a", L[0], "#d62728"], ["b", L[1], "#2ca02c"], ["c", L[2], "#1f77b4"]].forEach(([t, v, c]) => {
+    const p = add(scl(v, 1.08), [0, 0, 0]);
+    viewer.addLabel(t, { position: xyz(p), fontColor: c, backgroundOpacity: 0, fontSize: 14, inFront: true }, null, true);
+  });
+}
+const xyz = p => ({ x: p[0], y: p[1], z: p[2] });
+
+function currentLattice() {
+  if (S.ownFrames && S.ownFrames[0].lattice) return S.ownFrames[0].lattice;
+  const m = S.nativeModel;
+  const cd = m && m.getCrystData ? m.getCrystData() : null;
+  if (cd && [cd.a, cd.b, cd.c, cd.alpha, cd.beta, cd.gamma].every(v => Number.isFinite(v) && v > 0)) {
+    // build lattice vectors from cell parameters (a along x, b in xy plane)
+    const r = Math.PI / 180, al = cd.alpha * r, be = cd.beta * r, ga = cd.gamma * r;
+    const cx = cd.c * Math.cos(be), cy = cd.c * (Math.cos(al) - Math.cos(be) * Math.cos(ga)) / Math.sin(ga);
+    return [[cd.a, 0, 0], [cd.b * Math.cos(ga), cd.b * Math.sin(ga), 0], [cx, cy, Math.sqrt(Math.max(0, cd.c * cd.c - cx * cx - cy * cy))]];
+  }
+  return null;
+}
+
+// ------------------------------------------------------------------ main render
+function render(keepView) {
+  const view = keepView ? viewer.getView() : null;
+  stopPlay();
+  viewer.clear();
+  S.shapes = []; S.picks = []; S.nativeModel = null; S.volume = null;
+  updateMeasure();
+  document.getElementById("msg").style.display = "none";
+  viewer.setBackgroundColor(document.getElementById("dark").checked ? "#111418" : "white");
+
+  const fmt = S.fmt;
+  let model, nframes = 1;
+  if (S.ownFrames) {
+    const xyzText = framesToXyz(S.ownFrames, S.sc);
+    if (S.ownFrames.length > 1) { model = viewer.addModelsAsFrames(xyzText, "xyz"); }
+    else { model = viewer.addModel(xyzText, "xyz"); }
+    nframes = S.ownFrames.length;
+    if (document.getElementById("cell").checked && S.ownFrames[0].lattice) drawOwnCell(S.ownFrames[0].lattice, S.sc);
+  } else {
+    const multi = (fmt === "pdb" && (S.text.match(/^MODEL/mg) || []).length > 1) ||
+                  (fmt === "xyz" && countXyzFrames(S.text) > 1);
+    model = multi ? viewer.addModelsAsFrames(S.text, fmt) : viewer.addModel(S.text, fmt);
+    S.nativeModel = model;
+    if (multi) nframes = viewer.getNumFrames();
+    const hasCell = !!currentLattice();
+    if (hasCell) {
+      if (S.sc.some(v => v > 1)) viewer.replicateUnitCell(S.sc[0], S.sc[1], S.sc[2], model, true);
+      if (document.getElementById("cell").checked) viewer.addUnitCell(model, { box: { color: document.getElementById("dark").checked ? "#cccccc" : "black" } });
+    }
+    if (fmt === "cube") {
+      S.volume = new $3Dmol.VolumeData(S.text, "cube");
+      drawIso();
+    }
+  }
+  viewer.setStyle({}, styleSpec());
+  if (document.getElementById("labels").checked) drawLabels();
+  viewer.setClickable({}, true, onPick);
+
+  // frames UI
+  const fs = document.getElementById("framesec");
+  fs.style.display = nframes > 1 ? "" : "none";
+  const fr = document.getElementById("frame");
+  fr.max = Math.max(0, nframes - 1); fr.value = 0;
+  document.getElementById("frameno").textContent = nframes > 1 ? `1 / ${nframes}` : "";
+  document.getElementById("isosec").style.display = fmt === "cube" ? "" : "none";
+
+  if (view) viewer.setView(view); else viewer.zoomTo();
+  viewer.render();
+  updateInfo(nframes);
+}
+
+function countXyzFrames(text) {
+  const lines = text.replace(/\r/g, "").split("\n");
+  let i = 0, n = 0;
+  while (i < lines.length) {
+    const k = parseInt(lines[i]);
+    if (!Number.isFinite(k) || k <= 0) { i++; continue; }
+    n++; i += k + 2;
+  }
+  return n;
+}
+
+function drawIso() {
+  if (!S.volume) return;
+  viewer.removeAllShapes(); S.shapes = [];
+  const iso = Math.abs(parseFloat(document.getElementById("iso").value) || 0.02);
+  const op = parseFloat(document.getElementById("isoop").value);
+  viewer.addIsosurface(S.volume, { isoval: iso, color: "#1f77b4", opacity: op, smoothness: 2 });
+  viewer.addIsosurface(S.volume, { isoval: -iso, color: "#d62728", opacity: op, smoothness: 2 });
+}
+
+function drawLabels() {
+  const atoms = viewer.selectedAtoms({});
+  if (atoms.length > 600) { setInfoNote("원자 600개 초과: 라벨 생략"); return; }
+  viewer.addPropertyLabels("elem", {}, { fontSize: 11, fontColor: "black", backgroundColor: "white", backgroundOpacity: 0.6, inFront: true, alignment: "center" });
+}
+
+// ------------------------------------------------------------------ info / measurement
+let infoNote = "";
+function setInfoNote(s) { infoNote = s; }
+function updateInfo(nframes) {
+  const atoms = viewer.selectedAtoms({ frame: 0 });
+  const all = atoms.length ? atoms : viewer.selectedAtoms({});
+  const comp = {};
+  for (const a of all) comp[a.elem] = (comp[a.elem] || 0) + 1;
+  let s = `파일   : ${S.name}\n형식   : ${S.fmt}\n원자수 : ${all.length}${S.sc.some(v => v > 1) ? `  (supercell ${S.sc.join("×")})` : ""}\n조성   : ` +
+          Object.entries(comp).sort().map(([e, n]) => e + n).join(" ");
+  if (nframes > 1) s += `\n프레임 : ${nframes}`;
+  const L = currentLattice();
+  if (L) {
+    const p = cellParams(L);
+    s += `\n\na=${p.a.toFixed(3)}  b=${p.b.toFixed(3)}  c=${p.c.toFixed(3)} Å\nα=${p.alpha.toFixed(2)}  β=${p.beta.toFixed(2)}  γ=${p.gamma.toFixed(2)}°\nV=${p.vol.toFixed(2)} Å³`;
+  }
+  if (infoNote) s += `\n\n${infoNote}`;
+  infoNote = "";
+  document.getElementById("info").textContent = s;
+}
+
+function onPick(atom) {
+  S.picks.push(atom);
+  if (S.picks.length > 3) S.picks = [atom];
+  viewer.removeAllLabels();
+  if (document.getElementById("labels").checked) drawLabels();
+  S.picks.forEach((a, k) => viewer.addLabel(`${k + 1}:${a.elem}${a.serial ?? a.index}`, { position: a, fontSize: 12, backgroundColor: "#2563eb", fontColor: "white", inFront: true }));
+  updateMeasure();
+  viewer.render();
+}
+
+function updateMeasure() {
+  const P = S.picks.map(a => [a.x, a.y, a.z]);
+  let s = "";
+  S.picks.forEach((a, k) => { s += `${k + 1}: ${a.elem}  (${a.x.toFixed(3)}, ${a.y.toFixed(3)}, ${a.z.toFixed(3)})\n`; });
+  if (P.length >= 2) s += `\nd(1-2) = ${norm(sub(P[0], P[1])).toFixed(4)} Å`;
+  if (P.length === 3) {
+    s += `\nd(2-3) = ${norm(sub(P[1], P[2])).toFixed(4)} Å`;
+    const u = sub(P[0], P[1]), v = sub(P[2], P[1]);
+    s += `\n∠1-2-3 = ${(Math.acos(dot(u, v) / (norm(u) * norm(v))) * 180 / Math.PI).toFixed(2)}°`;
+  }
+  document.getElementById("measure").textContent = s || "원자 2개: 거리, 3개: 각도";
+}
+
+// ------------------------------------------------------------------ loading
+function loadText(name, text, fmtHint) {
+  const fmt = fmtHint || detectFormat(name);
+  if (!fmt) { showMsg(`지원하지 않는 형식: ${name}`); return; }
+  S.name = name; S.text = text; S.sc = [1, 1, 1]; S.ownFrames = null;
+  ["na", "nb", "nc"].forEach(id => document.getElementById(id).value = 1);
+  try {
+    if (fmt === "vasp") { S.ownFrames = parsePoscar(text); S.fmt = "POSCAR"; }
+    else if (fmt === "xdatcar") { S.ownFrames = parseXdatcar(text); S.fmt = "XDATCAR"; if (!S.ownFrames.length) throw new Error("프레임 없음"); }
+    else if (fmt === "xyz" && /Lattice\s*=/i.test(text.split("\n").slice(0, 3).join("\n"))) { S.ownFrames = parseExtXyz(text); S.fmt = "extxyz"; }
+    else { S.fmt = fmt; }
+    document.getElementById("title").textContent = name;
+    render(false);
+  } catch (e) {
+    console.error(e);
+    showMsg(`읽기 실패: ${name}<br><small>${e.message}</small>`);
+  }
+}
+
+function showMsg(html) {
+  viewer.clear(); viewer.render();
+  const m = document.getElementById("msg");
+  m.innerHTML = html; m.style.display = "";
+}
+
+async function loadFromServer(item, li) {
+  document.querySelectorAll("#files li").forEach(x => x.classList.remove("active"));
+  li.classList.add("active");
+  showMsg("불러오는 중…");
+  try {
+    const r = await fetch("api/file?path=" + encodeURIComponent(item.path));
+    const t = await r.text();
+    if (!r.ok) { showMsg(`서버 오류 (${r.status})<br><small>${t}</small>`); return; }
+    const fmt = r.headers.get("X-Format") || null;
+    loadText(item.path, t, fmt === "vasp" || fmt === "xdatcar" ? fmt : (item.how === "ase" ? "pdb" : null));
+  } catch (e) { showMsg("서버 연결 실패: " + e.message); }
+}
+
+async function initServer() {
+  try {
+    const info = await (await fetch("api/info")).json();
+    const list = await (await fetch("api/list")).json();
+    S.serverOk = true;
+    document.getElementById("rootinfo").textContent = `${info.root}  ·  ${list.length}개  ·  ASE ${info.ase ? "on" : "off"}`;
+    const ul = document.getElementById("files");
+    for (const it of list) {
+      const li = document.createElement("li");
+      li.dataset.path = it.path.toLowerCase();
+      const kb = it.size > 1048576 ? (it.size / 1048576).toFixed(1) + " MB" : Math.max(1, Math.round(it.size / 1024)) + " KB";
+      li.innerHTML = `${escapeHtml(it.path)}<small>${kb}${it.available ? "" : " · ASE 필요"}</small>`;
+      if (!it.available) li.classList.add("off");
+      else li.onclick = () => loadFromServer(it, li);
+      ul.appendChild(li);
+    }
+  } catch (e) {
+    document.getElementById("rootinfo").textContent = "서버 없음 (로컬 파일 드래그로 사용 가능)";
+  }
+}
+const escapeHtml = s => s.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+function readLocal(file) {
+  const fr = new FileReader();
+  fr.onload = () => { document.querySelectorAll("#files li").forEach(x => x.classList.remove("active")); loadText(file.name, fr.result); };
+  fr.readAsText(file);
+}
+
+// ------------------------------------------------------------------ playback
+function stopPlay() {
+  if (S.playing) { viewer.stopAnimate(); S.playing = false; }
+  document.getElementById("play").textContent = "▶ 재생";
+}
+
+// ------------------------------------------------------------------ events
+document.getElementById("filter").oninput = e => {
+  const q = e.target.value.toLowerCase();
+  document.querySelectorAll("#files li").forEach(li => li.style.display = li.dataset.path.includes(q) ? "" : "none");
+};
+document.getElementById("pick").onchange = e => { if (e.target.files[0]) readLocal(e.target.files[0]); };
+const drop = document.getElementById("drop");
+["dragenter", "dragover"].forEach(ev => document.addEventListener(ev, e => { e.preventDefault(); drop.classList.add("hover"); }));
+["dragleave", "drop"].forEach(ev => document.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove("hover"); }));
+document.addEventListener("drop", e => { const f = e.dataTransfer.files[0]; if (f) readLocal(f); });
+
+["style"].forEach(id => document.getElementById(id).onchange = () => { if (S.name) { viewer.setStyle({}, styleSpec()); viewer.render(); } });
+["cell", "labels", "dark"].forEach(id => document.getElementById(id).onchange = () => { if (S.name) render(true); else viewer.setBackgroundColor(document.getElementById("dark").checked ? "#111418" : "white"); });
+document.getElementById("applySC").onclick = () => {
+  if (!S.name) return;
+  S.sc = ["na", "nb", "nc"].map(id => Math.min(6, Math.max(1, parseInt(document.getElementById(id).value) || 1)));
+  if (!currentLattice() && S.sc.some(v => v > 1)) { setInfoNote("셀 정보가 없는 파일이라 supercell 불가"); S.sc = [1, 1, 1]; }
+  render(false);
+};
+document.getElementById("applyIso").onclick = () => { drawIso(); viewer.render(); };
+document.getElementById("isoop").oninput = () => { drawIso(); viewer.render(); };
+document.getElementById("frame").oninput = e => {
+  stopPlay();
+  const i = parseInt(e.target.value);
+  Promise.resolve(viewer.setFrame(i)).then(() => viewer.render());
+  document.getElementById("frameno").textContent = `${i + 1} / ${viewer.getNumFrames()}`;
+};
+document.getElementById("play").onclick = () => {
+  if (S.playing) { stopPlay(); return; }
+  S.playing = true;
+  document.getElementById("play").textContent = "⏸ 정지";
+  viewer.animate({ loop: "forward", reps: 0, interval: 80 });
+};
+document.getElementById("clearM").onclick = () => { S.picks = []; viewer.removeAllLabels(); if (document.getElementById("labels").checked) drawLabels(); updateMeasure(); viewer.render(); };
+document.getElementById("reset").onclick = () => { viewer.zoomTo(); viewer.render(); };
+document.getElementById("png").onclick = () => {
+  const a = document.createElement("a");
+  a.href = viewer.pngURI();
+  a.download = (S.name.split("/").pop() || "structure") + ".png";
+  a.click();
+};
+document.querySelectorAll("[data-view]").forEach(btn => btn.onclick = () => {
+  const L = currentLattice();
+  if (!L) { viewer.zoomTo(); viewer.render(); return; }
+  // look down the chosen lattice vector
+  const idx = { a: 0, b: 1, c: 2 }[btn.dataset.view];
+  const d = L[idx], n = norm(d);
+  const z = [0, 0, 1], target = scl(d, 1 / n);
+  const axis = cross(target, z), s = norm(axis), c = dot(target, z);
+  let q = [0, 0, 0, 1];
+  if (s > 1e-8) { const ang = Math.atan2(s, c) / 2, k = Math.sin(ang) / s; q = [axis[0] * k, axis[1] * k, axis[2] * k, Math.cos(ang)]; }
+  else if (c < 0) q = [1, 0, 0, 0];
+  viewer.zoomTo();
+  const v = viewer.getView();
+  v[4] = q[0]; v[5] = q[1]; v[6] = q[2]; v[7] = q[3];
+  viewer.setView(v);
+  viewer.render();
+});
+window.addEventListener("resize", () => viewer.resize());
+
+initServer();
+</script>
+</body>
+</html>
