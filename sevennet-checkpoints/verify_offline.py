@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 """격리 서버에서 체크포인트가 제대로 반입됐는지 확인 (인터넷 불필요).
 
-1) SHA256SUMS와 해시 비교   2) 체크포인트 로드
+0) ckpt/*.partNN 조각을 .pth로 합침   1) SHA256SUMS와 해시 비교   2) 체크포인트 로드
 3) H2O/Pt(111) 흡착 에너지를 modal별로 계산해 숫자가 나오는지 확인
 
-    python verify_offline.py --dir /data/sevennet_ckpt
-    python verify_offline.py --dir /data/sevennet_ckpt --install   # 키워드 경로에도 복사
+    python verify_offline.py --dir ckpt
+    python verify_offline.py --dir ckpt --install   # 키워드 경로에도 복사
 """
 import argparse
 import hashlib
@@ -47,6 +47,18 @@ def main():
         for line in f:
             h, name = line.split()
             sums[name] = h
+
+    # GitHub 100 MB 제한 때문에 나눠 둔 .partNN 조각을 합침
+    import glob
+    for name in sums:
+        path = os.path.join(args.dir, name)
+        parts = sorted(glob.glob(path + ".part*"))
+        if parts and not os.path.exists(path):
+            with open(path, "wb") as out:
+                for p in parts:
+                    with open(p, "rb") as f:
+                        shutil.copyfileobj(f, out)
+            print(f"[합침] {name} ← {len(parts)}개 조각")
 
     from sevenn.calculator import SevenNetCalculator
     import sevenn

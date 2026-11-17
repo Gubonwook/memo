@@ -2,7 +2,7 @@
 
 2026-11-17 · sevenn 0.13.0 기준 · 용도: **ALD 전구체 흡착 에너지·반쪽반응 에너지**
 
-`.pth` 파일은 100 MB가 넘어 git에 넣을 수 없으므로 이 저장소의 **Release `sevennet-ckpt-2026-11`** 에 첨부했습니다. 원본은 [MDIL-SNU/SevenNet Releases](https://github.com/MDIL-SNU/SevenNet/releases)의 `v0.11.0.cp`, `v0.12.0.cp`, `v0.12.1.cp` 태그이고, 받은 파일의 해시는 [`SHA256SUMS`](SHA256SUMS)에 적어 두었습니다.
+GitHub은 100 MB가 넘는 파일을 받지 않으므로, `.pth`를 **45 MB 조각(`ckpt/*.pth.partNN`)으로 나눠** 넣었습니다. `verify_offline.py`가 조각을 합치고 해시까지 확인합니다. 원본은 [MDIL-SNU/SevenNet Releases](https://github.com/MDIL-SNU/SevenNet/releases)의 `v0.11.0.cp`, `v0.12.0.cp`, `v0.12.1.cp` 태그이고, 원본 해시는 [`ckpt/SHA256SUMS`](ckpt/SHA256SUMS)에 적어 두었습니다.
 
 | 파일 | 크기 | 용도 | modal |
 |---|---|---|---|
@@ -15,19 +15,23 @@ Omni·Omni-i8의 modal은 `sevenn cp`로 직접 확인했습니다: `omat24, mpa
 | 파일 | 내용 |
 |---|---|
 | [`reaction_energy.py`](reaction_energy.py) | 흡착·반응 에너지 계산. 여러 modal을 한 번에 비교하고 결과를 CSV로 저장 |
-| [`verify_offline.py`](verify_offline.py) | 반입 후 해시 확인, 로드 테스트, 키워드 경로 설치(`--install`) |
+| [`verify_offline.py`](verify_offline.py) | 반입 후 조각 합치기, 해시 확인, 로드 테스트, 키워드 경로 설치(`--install`) |
+| [`ckpt/`](ckpt) | 체크포인트 조각 11개 + `SHA256SUMS` |
 
 ## 1. 반입 절차
 
 ```bash
-# (인터넷 PC) Release에서 받기: 브라우저로 받거나 gh CLI 사용
-gh release download sevennet-ckpt-2026-11 -R Gubonwook/memo -D sevennet_ckpt
-#   → .pth 3개 + SHA256SUMS + 스크립트를 USB나 내부 반입 경로로 HPC에 복사
+# (인터넷 PC) 저장소 받기: git clone 또는 GitHub의 Code → Download ZIP
+git clone --depth 1 https://github.com/Gubonwook/memo
+#   → sevennet-checkpoints/ 폴더 전체(약 430 MB)를 HPC로 반입
 
 # (격리 서버)
-python verify_offline.py --dir /data/sevennet_ckpt            # 해시 확인 + 로드 테스트
-python verify_offline.py --dir /data/sevennet_ckpt --install  # model='7net-omni' 키워드로도 사용
+cd sevennet-checkpoints
+python verify_offline.py --dir ckpt            # 조각 합치기 + 해시 확인 + 로드 테스트
+python verify_offline.py --dir ckpt --install  # model='7net-omni' 키워드로도 사용
 ```
+
+Python 없이 합치려면 `cat ckpt/checkpoint_sevennet_omni.pth.part* > checkpoint_sevennet_omni.pth`를 실행한 뒤 `sha256sum`으로 확인하세요(Windows는 `copy /b a.part00+a.part01+a.part02 a.pth`). 합친 뒤에는 `.part` 파일을 지워도 됩니다.
 
 sevenn 자체가 서버에 없다면 인터넷 PC에서 `pip download sevenn -d pkgs`로 받아 옮긴 뒤, 서버에서 `pip install --no-index --find-links pkgs sevenn`으로 설치합니다. torch는 서버의 CUDA 버전에 맞는 휠을 따로 받으세요.
 
