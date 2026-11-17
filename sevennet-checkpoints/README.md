@@ -17,6 +17,9 @@ Omni·Omni-i8의 modal은 `sevenn cp`로 직접 확인했습니다: `omat24, mpa
 | [`reaction_energy.py`](reaction_energy.py) | 흡착·반응 에너지 계산. 여러 modal을 한 번에 비교하고 결과를 CSV로 저장 |
 | [`verify_offline.py`](verify_offline.py) | 반입 후 조각 합치기, 해시 확인, 로드 테스트, 키워드 경로 설치(`--install`) |
 | [`ckpt/`](ckpt) | 체크포인트 조각 11개 + `SHA256SUMS` |
+| [`CODE_GUIDE.md`](CODE_GUIDE.md) | **SevenNet 코드 분석·사용 가이드**: 설치, 오프라인 함정, API, NEB·MD·LAMMPS, fine-tuning |
+| [`neb_example.py`](neb_example.py) | NEB 장벽 계산 예시 |
+| [`finetune_omni.yaml`](finetune_omni.yaml) | 내 VASP 데이터로 Omni fine-tuning (0.13.0 버그 수정 반영) |
 
 ## 1. 반입 절차
 

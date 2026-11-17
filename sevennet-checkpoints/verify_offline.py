@@ -89,8 +89,11 @@ def main():
                   f"{e['ads'] - e['slab'] - e['mol']:+.3f} eV")
 
         if args.install:
-            dst = os.path.join(os.path.dirname(sevenn.__file__),
-                               "pretrained_potentials", KEYWORD_DIR[name], name)
+            # sevenn은 ① 패키지 안 pretrained_potentials/ ② ~/.cache/sevennet/ 순으로 찾음
+            # (util.pretrained_name_to_path). 패키지 폴더에 쓰기 권한이 없으면 ②에 복사
+            pkg = os.path.join(os.path.dirname(sevenn.__file__), "pretrained_potentials")
+            base = pkg if os.access(pkg, os.W_OK) else os.path.expanduser("~/.cache/sevennet")
+            dst = os.path.join(base, KEYWORD_DIR[name], name)
             os.makedirs(os.path.dirname(dst), exist_ok=True)
             shutil.copy2(path, dst)
             print(f"    키워드 경로에 복사: {dst}")

@@ -1,0 +1,112 @@
+# SevenNet-Omni fine-tuning 템플릿 (sevenn 0.13.0에서 CPU로 실제 학습 완료 확인)
+#   sevenn train finetune_omni.yaml -s
+#
+# ▶ model 블록: Omni 체크포인트 구조 그대로. 바꾸지 마세요.
+#   (Omni-i8은 층 수가 달라서 이 블록을 쓸 수 없음 →
+#    `sevenn cp checkpoint_sevennet_omni_i8.pth --get_yaml continue`로 다시 뽑고 README 6절의 수정 4가지 적용)
+# ▶ 바꿀 곳은 [수정] 표시된 줄뿐입니다.
+
+model:
+  cutoff: 6.0
+  channel: 128
+  irreps_manual:
+  - 128x0e
+  - 128x0e+64x1o+32x2e+32x3o
+  - 128x0e+64x1o+64x1e+32x2o+32x2e+32x3o+32x3e
+  - 128x0o+128x0e+64x1o+64x1e+32x2o+32x2e+32x3o+32x3e
+  - 128x0e+64x1o+32x2e+32x3o
+  - 128x0e
+  lmax: 3
+  lmax_edge: -1
+  lmax_node: -1
+  is_parity: true
+  num_convolution_layer: 5
+  radial_basis:
+    radial_basis_name: bessel
+    bessel_basis_num: 8
+  cutoff_function:
+    cutoff_function_name: XPLOR
+    cutoff_on: 5.5
+  act_radial: silu
+  weight_nn_hidden_neurons:
+  - 64
+  - 64
+  act_scalar:
+    e: silu
+    o: tanh
+  act_gate:
+    e: silu
+    o: tanh
+  train_denominator: false
+  train_shift_scale: false
+  use_bias_in_linear: false
+  use_modal_node_embedding: false
+  use_modal_self_inter_intro: true
+  use_modal_self_inter_outro: true
+  use_modal_output_block: true
+  readout_as_fcn: false
+  self_connection_type:
+  - nequip
+  - nequip
+  - nequip
+  - nequip
+  - nequip
+  interaction_type: nequip
+  cuequivariance_config: {}
+  use_flash_tp: false
+  use_oeq: false
+  chemical_species: univ
+train:
+  random_seed: 777
+  epoch: 50                     # [수정] 데이터 수백 개 기준 30~100
+  loss: Huber                   # Omni yaml의 dict형 loss는 0.13.0에서 파싱 안 됨 → Huber 사용
+  loss_param:
+    delta: 0.01
+  optimizer: adamw
+  optim_param:
+    lr: 0.0001                  # [수정] 사전학습 지식 보존을 위해 작게 (1e-4 ~ 2e-4)
+    weight_decay: 0.001
+  scheduler: exponentiallr
+  scheduler_param:
+    gamma: 0.99
+  force_loss_weight: 1.0
+  stress_loss_weight: 0.01
+  per_epoch: 10                 # 10 epoch마다 checkpoint_N.pth 저장
+  csv_log: log.csv
+  num_workers: 0
+  is_train_stress: false        # slab·분자 상자 데이터는 stress가 의미 없으므로 끔
+  train_shuffle: true
+  error_record:
+  - [Energy, MAE]
+  - [Force, MAE]
+  - [TotalLoss, None]
+  best_metric: TotalLoss
+  use_weight: false
+  use_modality: true
+  continue:
+    checkpoint: ./checkpoint_sevennet_omni.pth   # [수정] 경로. 새 modal을 붙였다면 checkpoint_modal_appended.pth
+    reset_optimizer: true
+    reset_scheduler: true
+    reset_epoch: true
+data:
+  dtype: single
+  data_format: ase
+  data_format_args: {}          # modal별 dict 입력에서는 index 같은 인자를 넣으면 오류남
+  data_divide_ratio: 0.1
+  batch_size: 4                 # [수정] GPU 메모리에 맞게
+  preprocess_num_cores: 1
+  compute_statistics: true
+  dataset_type: graph           # get_yaml 출력의 'custom'은 무효값 → graph
+  use_modal_wise_shift: true
+  use_modal_wise_scale: false
+  # 새 modal을 붙일 때만(CODE_GUIDE 6-B) 아래 두 줄 주석 해제
+  # shift: per_atom_energy_mean   # 조성이 다양한 데이터면 elemwise_reference_energies 권장(이건 미검증)
+  # scale: force_rms
+  load_trainset_path:
+  - data_modality: oc22         # [수정] 기존 modal 이름 또는 새 modal 이름(예: my_vasp)
+    file_list:
+    - file: ./train.extxyz      # [수정] ASE가 읽는 파일: extxyz, OUTCAR, vasprun.xml 등. 여러 개 나열 가능
+  load_validset_path:
+  - data_modality: oc22         # [수정] trainset과 같은 이름
+    file_list:
+    - file: ./valid.extxyz      # [수정]
